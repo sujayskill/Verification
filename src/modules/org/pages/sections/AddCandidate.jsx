@@ -368,7 +368,6 @@ export default function AddCandidate() {
               type="date"
               onChange={(e) => handleChange("End date", e.target.value)}
             />
-
             <label>Payslips</label>
             <input
               type="file"
