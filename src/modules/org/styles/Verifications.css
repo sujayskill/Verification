@@ -1,0 +1,24 @@
+.timeline {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.step {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #eee;
+  font-size: 12px;
+}
+
+.step.active {
+  background: #7c6cf6;
+  color: white;
+}
+
+.card {
+  padding: 15px;
+  border-radius: 15px;
+  background: white;
+  margin-bottom: 15px;
+}

@@ -1,0 +1,67 @@
+.dashboard {
+  margin-top: 20px;
+}
+
+/* TOP CARDS */
+.cards {
+  display: flex;
+  gap: 20px;
+}
+
+.card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.card.purple {
+  background: linear-gradient(135deg, #a78bfa, #7c6cf6);
+  color: white;
+}
+
+.card.blue {
+  background: linear-gradient(135deg, #60a5fa, #38bdf8);
+  color: white;
+}
+
+.card.light {
+  background: #e0f2fe;
+}
+
+/* BOTTOM */
+.bottom-section {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.chart-card {
+  flex: 2;
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.bars div {
+  width: 20px;
+  background: #7c6cf6;
+  border-radius: 5px;
+}
+
+/* PROMO */
+.promo-card {
+  flex: 1;
+  background: linear-gradient(135deg, #7c6cf6, #a78bfa);
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+}

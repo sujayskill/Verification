@@ -1,0 +1,106 @@
+.org-page {
+  padding: 10px;
+}
+
+/* HEADER */
+.org-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.org-header h2 {
+  margin: 0;
+}
+
+.org-header p {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* BUTTON */
+.primary-btn {
+  background: linear-gradient(135deg, #7c6cf6, #a78bfa);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+/* LIST */
+.org-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* CARD */
+.org-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 18px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  transition: 0.2s;
+}
+
+.org-card:hover {
+  transform: translateY(-2px);
+}
+
+.org-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.org-actions input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+/* INFO */
+.org-info h3 {
+  margin: 0;
+  cursor: pointer;
+}
+
+.org-info p {
+  margin: 4px 0;
+  color: #6b7280;
+}
+
+.org-info span {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* ACTIONS */
+.org-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btn {
+  background: #e0e7ff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: #fee2e2;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: #7c6cf6;
+}

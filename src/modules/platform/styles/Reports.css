@@ -1,0 +1,13 @@
+.reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.report-card {
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+}

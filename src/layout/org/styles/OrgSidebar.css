@@ -1,0 +1,91 @@
+.sidebar-container {
+  width: 240px;
+  background: #ffffff;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-right: 1px solid #eee;
+}
+
+/* 🔥 BRAND */
+.company-box {
+  margin-bottom: 30px;
+}
+
+.company-box h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.company-box p {
+  font-size: 12px;
+  color: #888;
+}
+
+/* MENU */
+.menu-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-item {
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menu-item:hover {
+  background: #f3f4f6;
+}
+
+.menu-item.active {
+  background: #7c6cf6;
+  color: white;
+}
+
+/* SETTINGS */
+.sidebar-footer {
+  position: relative;
+}
+
+.settings-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #f3f4f6;
+  cursor: pointer;
+}
+
+/* 🔥 PANEL */
+.settings-panel {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  width: 200px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-panel button {
+  padding: 10px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-panel button:hover {
+  background: #f3f4f6;
+}
+
+.logout-btn {
+  color: red;
+}

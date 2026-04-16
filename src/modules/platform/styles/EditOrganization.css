@@ -1,0 +1,17 @@
+.edit-container {
+  display: flex;
+  justify-content: center;
+}
+
+.edit-card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 600px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+}
+
+.edit-grid {
+  display: grid;
+  gap: 15px;
+}

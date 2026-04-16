@@ -1,0 +1,24 @@
+.page { padding: 20px; }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.list { display: flex; flex-direction: column; gap: 15px; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info h4 { margin: 0; }
+.status { color: #7c6cf6; font-size: 12px; }
+
+.actions button {
+  margin-left: 10px;
+}
+
+.danger { color: red; }
