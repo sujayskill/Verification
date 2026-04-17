@@ -18,6 +18,9 @@ import VerificationStatus from "../modules/platform/pages/sections/Status";
 import Metrics from "../modules/platform/pages/sections/Metrics";
 import Reports from "../modules/platform/pages/sections/Reports";
 import Profile from "../modules/platform/pages/accounts/Profile";
+import ReportsClients from "../modules/platform/pages/sections/ReportsClients";
+import ReportsClientsCandidates from "../modules/platform/pages/sections/ReportsClientsCandidates";
+
 
 export default function PlatformRoutes() {
   return (
@@ -40,6 +43,8 @@ export default function PlatformRoutes() {
         <Route path="verificationStatus" element={<VerificationStatus />} />
         <Route path="metrics" element={<Metrics />} />
         <Route path="reports" element={<Reports />} />
+        <Route path="reports/clients" element={<ReportsClients />} />
+        <Route path="reports/client/candidate/:id" element={<ReportsClientsCandidates />} />
         <Route path="settings" element={<Settings />} />
         <Route path="help&support" element={<HelpSupport />} />
         <Route path="profile" element={<Profile />} />

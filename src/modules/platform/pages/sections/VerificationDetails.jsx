@@ -9,7 +9,7 @@ export default function VerificationDetails() {
 
   const [verification, setVerification] = useState(null);
   const [candidate, setCandidate] = useState(null);
-  const [docs, setDocs] = useState([]); // 🔥 NEW
+  const [docs, setDocs] = useState([]);
 
   const [comment, setComment] = useState("");
   const [file, setFile] = useState(null);
@@ -21,11 +21,7 @@ export default function VerificationDetails() {
       setVerification(res.verification);
       setCandidate(res.candidate);
 
-      // 🔥 SAFE DOCUMENT HANDLING
       setDocs(Array.isArray(res.documents) ? res.documents : []);
-
-      console.log(docs.length);
-
     } catch (err) {
       console.error(err);
     }
@@ -35,20 +31,17 @@ export default function VerificationDetails() {
     fetchData();
   }, [id]);
 
-  // 🔥 STATUS UPDATE
   const updateStatus = async (status) => {
     await api.put(`/org/verifications/${id}/status?status=${status}`);
     fetchData();
   };
 
-  // 🔥 COMMENT
   const submitComment = async () => {
     await api.put(`/platform/verifications/${id}/comment?comment=${comment}`);
     setComment("");
     fetchData();
   };
 
-  // 🔥 FILE UPLOAD
   const uploadFile = async () => {
     const formData = new FormData();
     formData.append("file", file);
@@ -80,18 +73,6 @@ export default function VerificationDetails() {
         </select>
       </div>
 
-      {/* TIMELINE */}
-      <div className="timeline">
-        {["INITIATED", "IN_PROGRESS", "COMPLETED"].map((step) => (
-          <div
-            key={step}
-            className={`step ${verification.status === step ? "active" : ""}`}
-          >
-            {step}
-          </div>
-        ))}
-      </div>
-
       {/* BASIC */}
       <div className="card">
         <h2>{verification.candidateName}</h2>
@@ -102,48 +83,151 @@ export default function VerificationDetails() {
       {/* 👤 CANDIDATE */}
       <div className="card">
         <h3>Candidate Details</h3>
-        <p>{candidate.firstName} {candidate.lastName}</p>
+        <p>
+          {candidate.firstName} {candidate.lastName}
+        </p>
         <p>{candidate.email}</p>
         <p>{candidate.phone}</p>
       </div>
 
-      {/* 📄 DOCUMENTS (🔥 MAIN FEATURE) */}
+      {/* 🏠 ADDRESS */}
+      <div className="card">
+        <h3>Current Address</h3>
+        <p>{candidate.currentAddress?.street || "-"}</p>
+        <p>{candidate.currentAddress?.city || "-"}</p>
+        <p>{candidate.currentAddress?.state || "-"}</p>
+        <p>{candidate.currentAddress?.zipCode || "-"}</p>
+
+        <h3 style={{ marginTop: "10px" }}>Permanent Address</h3>
+        <p>{candidate.permanentAddress?.street || "-"}</p>
+        <p>{candidate.permanentAddress?.city || "-"}</p>
+        <p>{candidate.permanentAddress?.state || "-"}</p>
+        <p>{candidate.permanentAddress?.zipCode || "-"}</p>
+      </div>
+
+      {/* 🎓 EDUCATION */}
+      <div className="card">
+        <h3>Education</h3>
+
+        {candidate.educations?.length > 0 ? (
+          candidate.educations.map((edu, i) => (
+            <div key={i} className="sub-card">
+              <p>
+                <b>Degree:</b> {edu.degree}
+              </p>
+              <p>
+                <b>Institution:</b> {edu.institution}
+              </p>
+              <p>
+                <b>Year:</b> {edu.graduationYear}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>No education details</p>
+        )}
+      </div>
+
+      {/* 💼 EXPERIENCE */}
+      <div className="card">
+        <h3>Experience</h3>
+
+        {candidate.experiences?.length > 0 ? (
+          candidate.experiences.map((exp, i) => (
+            <div key={i} className="sub-card">
+              <p>
+                <b>Company:</b> {exp.companyName}
+              </p>
+              <p>
+                <b>Role:</b> {exp.role}
+              </p>
+              <p>
+                <b>Duration:</b> {exp.startDate || "-"} → {exp.endDate || "-"}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>No experience details</p>
+        )}
+      </div>
+
+      {/* 📄 DOCUMENTS */}
       <div className="card">
         <h3>Candidate Documents</h3>
 
-        {docs.length === 0 ? (
-          <p>No documents uploaded</p>
-        ) : (
-          docs.map((doc) => (
-            <div key={doc.id} className="doc-row">
-              <div>
-                <b>{doc.fileName}</b>
-                <p>{doc.fileType}</p>
+        {/* 🔥 GROUPING LOGIC */}
+        {(() => {
+          const kycDocs = docs.filter((d) =>
+            ["PAN", "AADHAR"].includes(d.fileType),
+          );
+
+          const eduDocs = docs.filter((d) =>
+            ["EDUCATION_CERTIFICATE", "MARKSHEET"].includes(d.fileType),
+          );
+
+          const expDocs = docs.filter((d) =>
+            ["PAYSLIP", "EXPERIENCE_LETTER", "RELIEVING_LETTER"].includes(
+              d.fileType,
+            ),
+          );
+
+          const renderDocs = (list) =>
+            list.length === 0 ? (
+              <p>No documents</p>
+            ) : (
+              list.map((doc) => (
+                <div key={doc.id} className="doc-row">
+                  <div>
+                    <b>{doc.fileName}</b>
+                    <p>{doc.fileType}</p>
+                  </div>
+
+                  <div className="doc-actions">
+                    <button
+                      onClick={() =>
+                        window.open(
+                          `http://localhost:8081/org/documents/preview/${doc.id}`,
+                          "_blank",
+                        )
+                      }
+                    >
+                      👁 Preview
+                    </button>
+
+                    <a
+                      href={`http://localhost:8081/org/documents/download/${doc.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      ⬇ Download
+                    </a>
+                  </div>
+                </div>
+              ))
+            );
+
+          return (
+            <>
+              {/* 🔹 KYC */}
+              <div className="sub-card">
+                <h4>🪪 KYC Documents</h4>
+                {renderDocs(kycDocs)}
               </div>
 
-              <div className="doc-actions">
-                <button
-                  onClick={() =>
-                    window.open(
-                      `http://localhost:8081/org/documents/preview/${doc.id}`,
-                      "_blank"
-                    )
-                  }
-                >
-                  👁 Preview
-                </button>
-
-                <a
-                  href={`http://localhost:8081/org/documents/download/${doc.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  ⬇ Download
-                </a>
+              {/* 🔹 EDUCATION */}
+              <div className="sub-card">
+                <h4>🎓 Education Documents</h4>
+                {renderDocs(eduDocs)}
               </div>
-            </div>
-          ))
-        )}
+
+              {/* 🔹 EXPERIENCE */}
+              <div className="sub-card">
+                <h4>💼 Experience Documents</h4>
+                {renderDocs(expDocs)}
+              </div>
+            </>
+          );
+        })()}
       </div>
 
       {/* COMMENT */}
@@ -151,10 +235,7 @@ export default function VerificationDetails() {
         <h3>Vendor Comments</h3>
         <p>{verification.comment || "No comments yet"}</p>
 
-        <input
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
+        <input value={comment} onChange={(e) => setComment(e.target.value)} />
         <button onClick={submitComment}>Submit</button>
       </div>
 
@@ -170,7 +251,9 @@ export default function VerificationDetails() {
 
       {/* SLA */}
       <div className="card">
-        <p><b>Due Date:</b> {verification.slaDeadline}</p>
+        <p>
+          <b>Due Date:</b> {verification.slaDeadline}
+        </p>
 
         {verification.breached && (
           <p style={{ color: "red" }}>⚠ SLA Breached</p>
