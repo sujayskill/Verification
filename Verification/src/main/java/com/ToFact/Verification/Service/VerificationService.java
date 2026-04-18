@@ -42,6 +42,7 @@ public class VerificationService {
 		if (!c.getClient().getOrgId().equals(orgId)) {
 			throw new RuntimeException("Unauthorized access");
 		}
+		
 
 		Client org = clientRepo.findByOrgId(orgId).orElseThrow(() -> new RuntimeException("Org not found"));
 

@@ -29,6 +29,14 @@ public class User {
 
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
+
+	@ManyToOne
+	@JoinColumn(name = "client_id")
+	private Client client;
 	
-	 private String orgId;
+	private String orgId;
+	
+    private boolean isActive = true;
+
+
 }

@@ -44,16 +44,15 @@ public class SecurityConfig {
 				// ✅ Route-level security (basic)
 				.authorizeHttpRequests(auth -> auth
 
-						// Preflight
-						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().requestMatchers("/auth/**").permitAll()
 
-						// Public
-						.requestMatchers("/auth/**").permitAll()
+						// ✅ ADD THIS
+						.requestMatchers("/users/**").hasAnyRole("VENDOR_ADMIN", "VENDOR", "CLIENT_ADMIN")
+						.requestMatchers("/users/create").hasAnyRole("VENDOR_ADMIN", "CLIENT_ADMIN")
 
-						// 🔥 SUPER ADMIN ONLY (optional global control)
 						.requestMatchers("/clients/update").hasRole("VENDOR_ADMIN")
 						.requestMatchers("/org/candidates/**").hasRole("CLIENT")
-						// Everything else
+
 						.anyRequest().authenticated())
 
 				// ✅ JWT Filter

@@ -9,6 +9,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.ToFact.Verification.Entity.User;
+import com.ToFact.Verification.Repository.UserRepository;
+
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtFilter extends OncePerRequestFilter {
 
 	private final JwtUtil jwtUtil;
+	private final UserRepository userRepo;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -41,6 +45,13 @@ public class JwtFilter extends OncePerRequestFilter {
 						List.of(new SimpleGrantedAuthority(role)));
 
 				// 🔥 Attach extra details
+				User user = userRepo.findByUsername(username).orElse(null);
+
+				if (user != null && !user.isActive()) {
+					response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+					response.getWriter().write("User is blocked");
+					return;
+				}
 				auth.setDetails(orgId);
 
 				SecurityContextHolder.getContext().setAuthentication(auth);
