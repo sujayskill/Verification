@@ -11,12 +11,12 @@ export default function PlatformSidebar() {
   const menu = [
     { name: "Home", path: "/platform/home" },
     { name: "Dashboard", path: "/platform/dashboard" },
-    { name: "Organizations", path: "/platform/organizations" },
+    { name: "Vendor", path: "/platform/organizations" },
     { name: "Verification", path: "/platform/verificationRequests" },
     { name: "Status", path: "/platform/verificationStatus" },
     { name: "Reports", path: "/platform/reports" },
     { name: "Metrics", path: "/platform/metrics" },
-    { name: "Sales", path: "/platform/metrics" },
+    { name: "Sales", path: "/platform/sales" },
   ];
 
   return (
@@ -55,7 +55,7 @@ export default function PlatformSidebar() {
         {/* 🔥 SLIDE PANEL */}
         {showSettings && (
           <div className="settings-panel">
-            <button onClick={() => navigate("/platform/myAccount")}>
+            <button onClick={() => navigate("/platform/manageAccounts")}>
               Manage Accounts
             </button>
 

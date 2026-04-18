@@ -10,28 +10,34 @@ export const api = {
       },
     });
 
+    // 🔥 HANDLE ERROR RESPONSE
+    if (!res.ok) {
+      console.error("API ERROR:", res.status);
+      return []; // prevent crash
+    }
+
     return res.json();
-  }, 
+  },
 
   post: async (url, body) => {
     const token = localStorage.getItem("token");
 
-    const headers = {
-      "Content-Type": "application/json",
-    };
-
-    // ✅ ONLY attach token if exists
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-
     const res = await fetch(BASE_URL + url, {
       method: "POST",
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
       body: JSON.stringify(body),
     });
 
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw { status: res.status, data };
+    }
+
+    return data;
   },
 
   put: async (url, body) => {

@@ -7,38 +7,48 @@ export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ username: "", password: "" });
 
+  const [error, setError] = useState("");
+
   const login = async () => {
     try {
       const res = await api.post("/auth/login", form);
+
       const token = res.token;
 
-      if (!token) {
-        alert("Invalid login response");
+      localStorage.setItem("token", token);
+
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const role = payload.role.replace("ROLE_", "");
+
+      localStorage.setItem("role", role);
+      localStorage.setItem("orgId", payload.orgId);
+
+      if (role === "VENDOR" || role === "VENDOR_ADMIN") {
+        navigate("/platform");
+      } else {
+        navigate("/org");
+      }
+    } catch (err) {
+      setError("Invalid username or password");
+      // 🚫 BLOCKED USER
+      if (err.status === 403 && err.data?.error === "ACCESS_DENIED") {
+        alert("Access denied. Please contact admin.");
         return;
       }
 
-      localStorage.setItem("token", token);
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      localStorage.setItem("role", payload.role);
-
-      if (payload.role === "ROLE_VENDOR" || payload.role === "ROLE_VENDOR_ADMIN") {
-        navigate("/platform");
-      } else if (payload.role === "ROLE_CLIENT") {
-        navigate("/org");
-      } else {
-        alert("Unknown role");
+      // ❌ INVALID PASSWORD
+      if (err.status === 401) {
+        alert("Invalid username or password");
+        return;
       }
-    } catch (err) {
-      console.error("LOGIN ERROR:", err);
-      alert("Login failed");
+
+      alert("Something went wrong");
     }
   };
 
   return (
     <div className="login-page">
-
       <div className="login-card">
-
         {/* LEFT PANEL */}
         <div className="login-left">
           <h1>ToFact</h1>
@@ -57,9 +67,10 @@ export default function Login() {
             <label>Username</label>
             <input
               placeholder="Enter your username"
-              onChange={(e) =>
-                setForm({ ...form, username: e.target.value })
-              }
+              onChange={(e) => {
+                setForm({ ...form, username: e.target.value });
+                setError("");
+              }}
             />
           </div>
 
@@ -68,9 +79,10 @@ export default function Login() {
             <input
               type="password"
               placeholder="Enter your password"
-              onChange={(e) =>
-                setForm({ ...form, password: e.target.value })
-              }
+              onChange={(e) => {
+                setForm({ ...form, password: e.target.value });
+                setError("");
+              }}
             />
           </div>
 
@@ -78,9 +90,11 @@ export default function Login() {
             Login
           </button>
 
+          {/* 🔥 ADD THIS HERE */}
+          {error && <p className="error-text">{error}</p>}
+
           <p className="forgot-link">Forgot password?</p>
         </div>
-
       </div>
     </div>
   );

@@ -122,3 +122,9 @@
 .forgot-link:hover {
   color: #ff7a7a;
 }
+
+.error-text {
+  color: #ef4444;
+  margin-top: 10px;
+  font-size: 14px;
+}

@@ -6,10 +6,10 @@ export default function PublicRoute({ children }) {
   const role = localStorage.getItem("role");
 
   if (token) {
-    if (role === "ROLE_ADMIN" || role === "ROLE_SUPER_ADMIN") {
+    if (role === "VENDOR" || role === "VENDOR_ADMIN") {
       return <Navigate to="/platform" replace />;
     }
-    if (role === "ROLE_CLIENT") {
+    if (role === "CLIENT" || role === "CLIENT_ADMIN") {
       return <Navigate to="/org" replace />;
     }
   }

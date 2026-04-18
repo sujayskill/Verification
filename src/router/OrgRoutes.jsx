@@ -17,6 +17,7 @@ import Verifications from "../modules/org/pages/sections/Verifications";
 import Reports from "../modules/org/pages/sections/Reports";
 import Notifications from "../modules/org/pages/accounts/Notifications";
 import Profile from "../modules/org/pages/accounts/Profile";
+import ManageAccounts from "../modules/org/pages/accounts/ManageAccounts"
 
 export default function OrgRoutes() {
   return (
@@ -42,6 +43,7 @@ export default function OrgRoutes() {
         <Route path="documents" element={<Documents />} />
         <Route path="notifications" element={<Notifications />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="manageAccounts" element={<ManageAccounts />} />
       </Route>
     </Routes>
   );

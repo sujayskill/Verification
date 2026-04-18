@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import PlatformLayout from "../layout/platform/platformComps/PlatformLayout";
+import PlatformLayout from "../layout/platform/VendorComps/PlatformLayout";
 
 // Pages
 import Organizations from "../modules/platform/pages/sections/Organizations";
@@ -20,7 +20,8 @@ import Reports from "../modules/platform/pages/sections/Reports";
 import Profile from "../modules/platform/pages/accounts/Profile";
 import ReportsClients from "../modules/platform/pages/sections/ReportsClients";
 import ReportsClientsCandidates from "../modules/platform/pages/sections/ReportsClientsCandidates";
-
+import ManageAccounts from "../modules/platform/pages/accounts/ManageAccounts";
+import Sales from "../modules/platform/pages/sections/Sales";
 
 export default function PlatformRoutes() {
   return (
@@ -44,10 +45,15 @@ export default function PlatformRoutes() {
         <Route path="metrics" element={<Metrics />} />
         <Route path="reports" element={<Reports />} />
         <Route path="reports/clients" element={<ReportsClients />} />
-        <Route path="reports/client/candidate/:id" element={<ReportsClientsCandidates />} />
+        <Route
+          path="reports/client/candidate/:id"
+          element={<ReportsClientsCandidates />}
+        />
         <Route path="settings" element={<Settings />} />
         <Route path="help&support" element={<HelpSupport />} />
+        <Route path="manageAccounts" element={<ManageAccounts />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="sales" element={<Sales />} />
       </Route>
     </Routes>
   );

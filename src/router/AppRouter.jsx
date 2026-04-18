@@ -65,12 +65,12 @@ export default function AppRouter() {
       />
 
       {/* 🔐 PLATFORM (ADMIN + SUPER ADMIN) */}
-      <Route element={<ProtectedRoute allowedRoles={["ROLE_VENDOR", "ROLE_VENDOR_ADMIN"]} />}>
+      <Route element={<ProtectedRoute allowedRoles={["VENDOR", "VENDOR_ADMIN"]} />}>
         <Route path="/platform/*" element={<PlatformRoutes />} />
       </Route>
 
       {/* 🔐 ORG */}
-      <Route element={<ProtectedRoute allowedRoles={["ROLE_CLIENT"]} />}>
+      <Route element={<ProtectedRoute allowedRoles={["CLIENT","CLIENT_ADMIN"]} />}>
         <Route path="/org/*" element={<OrgRoutes />} />
       </Route>
 

@@ -51,11 +51,11 @@ export default function OrgSidebar() {
         {/* 🔥 SLIDE PANEL */}
         {showSettings && (
           <div className="settings-panel">
-            <button onClick={() => navigate("/platform/myAccount")}>
+            <button onClick={() => navigate("/org/manageAccounts")}>
               Manage Accounts
             </button>
 
-            <button onClick={() => navigate("/platform/help&support")}>
+            <button onClick={() => navigate("/org/help&support")}>
               Help
             </button>
 
