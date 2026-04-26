@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ToFact.Verification.ClientManagement.Entity.OrgAccount;
-import com.ToFact.Verification.ClientManagement.Service.OrgAuthService;
+import com.ToFact.Verification.Entity.OrgAccount;
+import com.ToFact.Verification.Service.OrgAuthService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -2,6 +2,9 @@ package com.ToFact.Verification.Controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,96 +12,76 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ToFact.Verification.ClientManagement.DTO.CandidateDTO;
-import com.ToFact.Verification.ClientManagement.Entity.Candidate;
-import com.ToFact.Verification.ClientManagement.Entity.OrgVerificationStatus;
-import com.ToFact.Verification.ClientManagement.Service.CandidateService;
-import com.ToFact.Verification.Config.JwtUtil;
+import com.ToFact.Verification.Dto.ClientDTO;
+import com.ToFact.Verification.Entity.Candidate;
+import com.ToFact.Verification.Entity.Client;
+import com.ToFact.Verification.Service.ClientService;
 
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/org/candidates")
+@RequestMapping("/clients")
 @RequiredArgsConstructor
 public class ClientController {
 
-	private final CandidateService service;
-	private final JwtUtil jwtUtil;
+	private final ClientService clientService;
 
-	// 🔹 Extract orgId (COMMON METHOD)
-	private String extractOrgId(String authHeader) {
-		String token = authHeader.substring(7);
-		Claims claims = jwtUtil.extractClaims(token);
-
-		String orgId = claims.get("orgId", String.class);
-
-		if (orgId == null) {
-			throw new RuntimeException("Invalid token: orgId missing");
-		}
-
-		return orgId;
+	// 🔹 Create
+	@PreAuthorize("hasole('VENDOR_ADMIN')")
+	@PostMapping("/create")
+	public ResponseEntity<Client> create(@RequestBody ClientDTO dto) {
+		Client created = clientService.createClient(dto);
+		return ResponseEntity.ok(created);
 	}
 
-	// 🔹 CREATE
-	@PostMapping("/createCandidate")
-	public Candidate create(@RequestBody CandidateDTO dto, @RequestHeader("Authorization") String authHeader) {
-
-		String orgId = extractOrgId(authHeader);
-		if (orgId == null) {
-			throw new RuntimeException("Invalid token: orgId missing");
-		}
-		System.out.println("created");
-		return service.create(dto, orgId); // 🔥 PASS orgId
+	// 🔹 Get All
+	@PreAuthorize("hasAnyRole('VENDOR','VENDOR_ADMIN')")
+	@GetMapping("/getAll")
+	public ResponseEntity<List<Client>> getAll() {
+		List<Client> clients = clientService.getAllClients();
+		return ResponseEntity.ok(clients);
 	}
 
-	// 🔹 GET ALL (FILTERED BY orgId 🔥)
-	@GetMapping("/getAllCandidates")
-	public List<Candidate> getAll(@RequestHeader("Authorization") String authHeader) {
-
-		String orgId = extractOrgId(authHeader);
-
-		return service.getByOrgId(orgId);
+	// 🔹 Get By ID
+	@PreAuthorize("hasAnyRole('VENDOR','VENDOR_ADMIN')")
+	@GetMapping("/{id}")
+	public ResponseEntity<Client> getById(@PathVariable Long id) {
+		Client client = clientService.getClientById(id);
+		return ResponseEntity.ok(client);
 	}
 
-	// 🔹 GET BY ID (SECURED)
-	@GetMapping("/getCandidateDetailsById/{id}")
-	public Candidate getById(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
-
-		String orgId = extractOrgId(authHeader);
-		return service.getById(id, orgId);
+	// 🔹 Update
+	@PutMapping("/update/{id}")
+	@PreAuthorize("hasRole('VENDOR_ADMIN')")
+	public ResponseEntity<Client> update(@PathVariable Long id, @RequestBody ClientDTO dto) {
+		Client updated = clientService.updateClient(id, dto);
+		return ResponseEntity.ok(updated);
 	}
 
-	// 🔹 UPDATE (SECURED)
-	@PutMapping("/editCandidateDetails/{id}")
-	public Candidate update(@PathVariable Long id, @RequestBody CandidateDTO dto,
-			@RequestHeader("Authorization") String authHeader) {
-
-		String orgId = extractOrgId(authHeader);
-		return service.update(id, dto, orgId);
-	}
-
-	// 🔹 DELETE (SECURED)
-	@DeleteMapping("/deleteCandidate/{id}")
-	public String delete(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
-
-		String orgId = extractOrgId(authHeader);
-		service.delete(id, orgId);
+	// 🔹 Delete
+	@PreAuthorize("hasRole('VENDOR_ADMIN')")
+	@DeleteMapping("/delete/{id}")
+	public String delete(@PathVariable Long id) {
+		clientService.deleteClient(id);
 		return "Deleted";
 	}
 
-	// 🔹 STATUS UPDATE
-	@PutMapping("/{id}/status")
-	public Candidate updateStatus(@PathVariable Long id, @RequestParam OrgVerificationStatus status,
-			@RequestHeader("Authorization") String authHeader) {
-
-		String orgId = extractOrgId(authHeader);
-		return service.updateStatus(id, status, orgId);
+	@GetMapping("/search")
+	public List<Client> searchClients(@RequestParam(required = false) String q,
+			@RequestParam(required = false) String location, @RequestParam(required = false) Integer size) {
+		return clientService.searchClients(q, location, size);
 	}
+
+//	This is for search & group the candidates by client in vendor client's candidates section
+//	http://localhost:8081/clients/1/candidates/search
+	@GetMapping("/{clientId}/candidates/search")
+	public List<Candidate> searchCandidates(@PathVariable Long clientId, @RequestParam(required = false) String q) {
+		return clientService.getCandidatesByClientId(clientId, q);
+	}
+
 }

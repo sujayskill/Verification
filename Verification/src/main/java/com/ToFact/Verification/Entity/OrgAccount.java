@@ -1,10 +1,13 @@
-package com.ToFact.Verification.ClientManagement.Entity;
+package com.ToFact.Verification.Entity;
 
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,14 +15,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address {
-	
-	@Id
+@Builder
+public class OrgAccount {
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	private String street;
-	private String city;
-	private String state;
-	private String zipCode;
+    private Long id;
+
+    private String companyName;
+
+    @Column(unique = true)
+    private String username;
+
+    private String password;
 }

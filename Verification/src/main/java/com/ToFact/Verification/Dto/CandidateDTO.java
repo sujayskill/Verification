@@ -1,10 +1,11 @@
-package com.ToFact.Verification.ClientManagement.DTO;
+package com.ToFact.Verification.Dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import com.ToFact.Verification.ClientManagement.Entity.Address;
-import com.ToFact.Verification.ClientManagement.Entity.Education;
-import com.ToFact.Verification.ClientManagement.Entity.Experience;
+import com.ToFact.Verification.Entity.Address;
+import com.ToFact.Verification.Entity.Education;
+import com.ToFact.Verification.Entity.Experience;
 
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class CandidateDTO {
 	private String lastName;
 	private String email;
 	private String phone;
+	private LocalDate dob;
 
 	private Address currentAddress;
 	private Address permanentAddress;

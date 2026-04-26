@@ -11,7 +11,7 @@ import com.ToFact.Verification.Entity.Client;
 public class ClientMapper {
 
 	public Client toEntity(ClientDTO dto, String orgId) {
-		return Client.builder().orgId(orgId).companyName(dto.getCompanyName()).companyType(dto.getCompanyType())
+		return Client.builder().orgId(orgId).companyName(dto.getCompanyName()).companySlug(dto.getCompanyName()) // later.companyType(dto.getCompanyType())
 				.contactEmail(dto.getContactEmail()).contactNumber(dto.getContactNumber()).location(dto.getLocation())
 				.employeeCount(dto.getEmployeeCount()).createdAt(LocalDateTime.now()).build();
 	}
@@ -19,6 +19,7 @@ public class ClientMapper {
 	public ClientDTO toDto(Client client) {
 		ClientDTO dto = new ClientDTO();
 		dto.setCompanyName(client.getCompanyName());
+		dto.setCompanySlug(client.getCompanySlug());
 		dto.setCompanyType(client.getCompanyType());
 		dto.setContactEmail(client.getContactEmail());
 		dto.setContactNumber(client.getContactNumber());

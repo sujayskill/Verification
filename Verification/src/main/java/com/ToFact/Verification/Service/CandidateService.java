@@ -1,14 +1,17 @@
-package com.ToFact.Verification.ClientManagement.Service;
+package com.ToFact.Verification.Service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ToFact.Verification.ClientManagement.DTO.CandidateDTO;
-import com.ToFact.Verification.ClientManagement.Entity.Candidate;
-import com.ToFact.Verification.ClientManagement.Entity.OrgVerificationStatus;
-import com.ToFact.Verification.ClientManagement.Repository.CandidateRepository;
+import com.ToFact.Verification.Dto.CandidateDTO;
+import com.ToFact.Verification.Entity.Candidate;
 import com.ToFact.Verification.Entity.Client;
+import com.ToFact.Verification.Entity.OrgVerificationStatus;
+import com.ToFact.Verification.Repository.CandidateRepository;
 import com.ToFact.Verification.Repository.ClientRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,8 @@ public class CandidateService {
 
 	private final CandidateRepository repo;
 	private final ClientRepository clientRepo;
+
+	private static final Logger log = LoggerFactory.getLogger(CandidateService.class);
 
 	// 🔹 CREATE
 	public Candidate create(CandidateDTO dto, String orgId) {
@@ -33,7 +38,7 @@ public class CandidateService {
 		c.setEmail(dto.getEmail());
 		c.setPhone(dto.getPhone());
 
-		c.setStatus(OrgVerificationStatus.INITIATED);
+		c.setStatus(OrgVerificationStatus.CREATED);
 
 		// 🔹 ADDRESS
 		c.setCurrentAddress(dto.getCurrentAddress());
@@ -61,10 +66,10 @@ public class CandidateService {
 	public List<Candidate> getByOrgId(String orgId) {
 		System.out.println("FETCHING FOR ORG: " + orgId); // 🔥
 
-	    List<Candidate> list = repo.findByClient_OrgId(orgId);
+		List<Candidate> list = repo.findByClient_OrgId(orgId);
 
-	    System.out.println("CANDIDATES FOUND: " + list.size());
-	    return list;
+		System.out.println("CANDIDATES FOUND: " + list.size());
+		return list;
 	}
 
 	// 🔹 GET BY ID
@@ -83,44 +88,48 @@ public class CandidateService {
 	// 🔹 UPDATE
 	public Candidate update(Long id, CandidateDTO dto, String orgId) {
 
-		Candidate c = getById(id, orgId);
+		Candidate existing = repo.findById(id).orElseThrow(() -> new RuntimeException("Candidate not found"));
 
-		// 🔹 BASIC
-		c.setFirstName(dto.getFirstName());
-		c.setLastName(dto.getLastName());
-		c.setEmail(dto.getEmail());
-		c.setPhone(dto.getPhone());
+		// 🔐 SECURITY CHECK (IMPORTANT)
+		if (!existing.getClient().getOrgId().equals(orgId)) {
+			throw new RuntimeException("Unauthorized");
+		}
+
+		// 🔹 BASIC DETAILS
+		existing.setFirstName(dto.getFirstName());
+		existing.setLastName(dto.getLastName());
+		existing.setEmail(dto.getEmail());
+		existing.setPhone(dto.getPhone());
+		existing.setDob(dto.getDob());
 
 		// 🔹 ADDRESS
-		c.setCurrentAddress(dto.getCurrentAddress());
-		c.setPermanentAddress(dto.getPermanentAddress());
+		existing.setCurrentAddress(dto.getCurrentAddress());
+		existing.setPermanentAddress(dto.getPermanentAddress());
 
-		// 🔥 EDUCATION UPDATE (REPLACE OLD)
+		// 🔥 EDUCATION
+		existing.getEducations().clear();
 		if (dto.getEducations() != null) {
-			c.getEducations().clear(); // 🔥 remove old
-
-			dto.getEducations().forEach(e -> {
-				e.setCandidate(c); // 🔥 re-map
-				c.getEducations().add(e);
-			});
+			dto.getEducations().forEach(e -> e.setCandidate(existing));
+			existing.getEducations().addAll(dto.getEducations());
 		}
 
-		// 🔥 EXPERIENCE UPDATE (REPLACE OLD)
+		// 🔥 EXPERIENCE
+		existing.getExperiences().clear();
 		if (dto.getExperiences() != null) {
-			c.getExperiences().clear();
-
-			dto.getExperiences().forEach(exp -> {
-				exp.setCandidate(c);
-				c.getExperiences().add(exp);
-			});
+			dto.getExperiences().forEach(e -> e.setCandidate(existing));
+			existing.getExperiences().addAll(dto.getExperiences());
 		}
 
-		return repo.save(c);
+		return repo.save(existing);
 	}
 
 	// 🔹 DELETE
 	public void delete(Long id, String orgId) {
 		Candidate c = getById(id, orgId);
+
+		if (c.isLocked()) {
+			throw new RuntimeException("Candidate is under verification and cannot be modified");
+		}
 		repo.delete(c);
 	}
 
@@ -129,7 +138,17 @@ public class CandidateService {
 
 		Candidate c = getById(id, orgId);
 		c.setStatus(status);
-
 		return repo.save(c);
+	}
+
+	public List<Candidate> searchCandidates(String orgId, String query, String sortBy, String direction) {
+
+		Sort sort = direction.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+		if (query == null || query.isBlank()) {
+			return repo.findByClient_OrgId(orgId, sort);
+		}
+
+		return repo.searchCandidates(orgId, query, sort);
 	}
 }

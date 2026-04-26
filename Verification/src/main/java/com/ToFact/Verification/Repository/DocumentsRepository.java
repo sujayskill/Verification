@@ -1,8 +1,9 @@
-package com.ToFact.Verification.ClientManagement.Repository;
+package com.ToFact.Verification.Repository;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.ToFact.Verification.ClientManagement.Entity.Documents;
+
+import com.ToFact.Verification.Entity.Documents;
 
 public interface DocumentsRepository extends JpaRepository<Documents, Long> {
 

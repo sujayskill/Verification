@@ -13,27 +13,55 @@ import com.ToFact.Verification.Config.JwtUtil;
 import com.ToFact.Verification.Entity.Notification;
 import com.ToFact.Verification.Service.NotificationService;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/org/notifications")
+@RequestMapping("/notifications")
 @RequiredArgsConstructor
 public class NotificationController {
 
 	private final NotificationService service;
 	private final JwtUtil jwtUtil;
 
-	@GetMapping
-	public List<Notification> get(@RequestHeader("Authorization") String authHeader) {
-
+	private String extractOrgId(String authHeader) {
 		String token = authHeader.substring(7);
-		String orgId = jwtUtil.extractClaims(token).get("orgId", String.class);
+		Claims claims = jwtUtil.extractClaims(token);
+		return claims.get("orgId", String.class);
+	}
 
+	// 🔹 CLIENT - ALL
+	@GetMapping("/client")
+	public List<Notification> getClientNotifications(@RequestHeader("Authorization") String authHeader) {
+
+		String orgId = extractOrgId(authHeader);
 		return service.getByOrg(orgId);
 	}
 
-	@PutMapping("/{id}/read")
-	public void markRead(@PathVariable Long id) {
+	// 🔹 CLIENT - TOP 6 (🔔 bell)
+	@GetMapping("/client/top")
+	public List<Notification> getTopClientNotifications(@RequestHeader("Authorization") String authHeader) {
+
+		String orgId = extractOrgId(authHeader);
+		return service.getTop6ByOrg(orgId);
+	}
+
+	// 🔹 VENDOR - ALL
+	@GetMapping("/vendor")
+	public List<Notification> getVendorNotifications() {
+		return service.getAllVendorNotifications();
+	}
+
+	// 🔹 VENDOR - TOP 6
+	@GetMapping("/vendor/top")
+	public List<Notification> getTopVendorNotifications() {
+		return service.getTop6VendorNotifications();
+	}
+
+	// 🔹 MARK AS READ
+	@PutMapping("/read/{id}")
+	public String markAsRead(@PathVariable Long id) {
 		service.markAsRead(id);
+		return "Marked as read";
 	}
 }

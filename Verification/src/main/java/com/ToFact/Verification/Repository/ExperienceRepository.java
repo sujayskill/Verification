@@ -1,7 +1,8 @@
-package com.ToFact.Verification.ClientManagement.Repository;
+package com.ToFact.Verification.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.ToFact.Verification.ClientManagement.Entity.Experience;
+
+import com.ToFact.Verification.Entity.Experience;
 
 public interface ExperienceRepository extends JpaRepository<Experience, Long>{
 

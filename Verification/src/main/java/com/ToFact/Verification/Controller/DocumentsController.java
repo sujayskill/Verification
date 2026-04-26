@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ToFact.Verification.ClientManagement.Entity.Documents;
-import com.ToFact.Verification.ClientManagement.Repository.DocumentsRepository;
-import com.ToFact.Verification.ClientManagement.Service.DocumentsService;
 import com.ToFact.Verification.Config.JwtUtil;
+import com.ToFact.Verification.Entity.Documents;
+import com.ToFact.Verification.Repository.DocumentsRepository;
+import com.ToFact.Verification.Service.DocumentsService;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;

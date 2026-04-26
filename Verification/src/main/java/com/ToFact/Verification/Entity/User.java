@@ -24,7 +24,10 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	private String firstName;
+	private String lastName;
 	private String username;
+	private String email;  	
 	private String password;
 
 	@Enumerated(EnumType.STRING)
@@ -33,10 +36,9 @@ public class User {
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private Client client;
-	
-	private String orgId;
-	
-    private boolean isActive = true;
 
+	private String orgId;
+
+	private boolean isActive = true;
 
 }

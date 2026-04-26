@@ -1,4 +1,4 @@
-package com.ToFact.Verification.ClientManagement.Entity;
+package com.ToFact.Verification.Entity;
 
 public enum DocumentType {
 	PAN, AADHAR,

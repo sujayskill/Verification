@@ -1,9 +1,9 @@
-package com.ToFact.Verification.ClientManagement.Service;
+package com.ToFact.Verification.Service;
 
 import org.springframework.stereotype.Service;
 
-import com.ToFact.Verification.ClientManagement.Entity.OrgAccount;
-import com.ToFact.Verification.ClientManagement.Repository.OrgAccountRepository;
+import com.ToFact.Verification.Entity.OrgAccount;
+import com.ToFact.Verification.Repository.OrgAccountRepository;
 
 import lombok.RequiredArgsConstructor;
 

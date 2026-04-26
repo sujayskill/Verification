@@ -2,6 +2,9 @@ package com.ToFact.Verification.Entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,31 +23,43 @@ import lombok.NoArgsConstructor;
 @Data
 public class Verification {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private Long candidateId;
+	private Long candidateId;
 
-    private String orgId; // 🔥 CHANGED
-    private String organizationName;
+	private String orgId; // 🔥 CHANGED
+	private String organizationName;
 
-    private String candidateName;
+	private String candidateName;
 
-    @Enumerated(EnumType.STRING)
-    private VerificationStatus status;
-    
-    private String comment;
+	private String candidateEmail;
 
-    private String documentUrl;
+	private String comment;
 
-    private Boolean viewedByVendor = false;
+	private String documentUrl;
 
-    private LocalDateTime createdAt;
-    
-    private LocalDateTime slaDeadline;
-    
-    private Boolean slaBreached = false;
-    
-    private String reportUrl;
+	private Boolean viewedByVendor = false;
+
+	@Column(name = "created_at", nullable = false)
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	private LocalDateTime createdAt;
+
+	private LocalDateTime slaDeadline;
+
+	private Boolean slaBreached = false;
+
+	private String reportUrl;
+
+	@Column(columnDefinition = "TEXT")
+	private String reportData; // JSON string
+
+	private String finalRemarks;
+	private String riskLevel;
+
+	@Enumerated(EnumType.STRING)
+	private VerificationStatus status;
+
+	private boolean rollbackRequested = false;
 }

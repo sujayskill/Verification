@@ -1,12 +1,14 @@
-package com.ToFact.Verification.ClientManagement.Entity;
+package com.ToFact.Verification.Entity;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import com.ToFact.Verification.Entity.Client;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,14 +40,15 @@ public class Candidate {
 	private String email;
 	private String phone;
 	private String countryCode;
-	private Date dob;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dob;
 	
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "current_address_id")
 	private Address currentAddress;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "permanent_address_id")
 	private Address permanentAddress;
 
@@ -58,7 +61,6 @@ public class Candidate {
 	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
 	private List<Documents> documents; // only for PAN/Aadhar
 
-
 	@Enumerated(EnumType.STRING)
 	private OrgVerificationStatus status;
 
@@ -67,5 +69,10 @@ public class Candidate {
 	@JoinColumn(name = "client_id")
 	@JsonIgnore
 	private Client client;
+	
+	@Column(name = "created_at")
+	private LocalDateTime createdAt = LocalDateTime.now();
+	
+	private boolean locked = false;
 
 }

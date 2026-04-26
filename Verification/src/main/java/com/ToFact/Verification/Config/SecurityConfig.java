@@ -51,7 +51,7 @@ public class SecurityConfig {
 						.requestMatchers("/users/create").hasAnyRole("VENDOR_ADMIN", "CLIENT_ADMIN")
 
 						.requestMatchers("/clients/update").hasRole("VENDOR_ADMIN")
-						.requestMatchers("/org/candidates/**").hasRole("CLIENT")
+						.requestMatchers("/org/candidates/**").hasAnyRole("CLIENT","CLIENT_ADMIN")
 
 						.anyRequest().authenticated())
 

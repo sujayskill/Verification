@@ -1,4 +1,4 @@
-package com.ToFact.Verification.ClientManagement.Service;
+package com.ToFact.Verification.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -8,15 +8,15 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ToFact.Verification.ClientManagement.Entity.Candidate;
-import com.ToFact.Verification.ClientManagement.Entity.DocumentType;
-import com.ToFact.Verification.ClientManagement.Entity.Documents;
-import com.ToFact.Verification.ClientManagement.Entity.Education;
-import com.ToFact.Verification.ClientManagement.Entity.Experience;
-import com.ToFact.Verification.ClientManagement.Repository.CandidateRepository;
-import com.ToFact.Verification.ClientManagement.Repository.DocumentsRepository;
-import com.ToFact.Verification.ClientManagement.Repository.EducationRepository;
-import com.ToFact.Verification.ClientManagement.Repository.ExperienceRepository;
+import com.ToFact.Verification.Entity.Candidate;
+import com.ToFact.Verification.Entity.DocumentType;
+import com.ToFact.Verification.Entity.Documents;
+import com.ToFact.Verification.Entity.Education;
+import com.ToFact.Verification.Entity.Experience;
+import com.ToFact.Verification.Repository.CandidateRepository;
+import com.ToFact.Verification.Repository.DocumentsRepository;
+import com.ToFact.Verification.Repository.EducationRepository;
+import com.ToFact.Verification.Repository.ExperienceRepository;
 
 import lombok.RequiredArgsConstructor;
 

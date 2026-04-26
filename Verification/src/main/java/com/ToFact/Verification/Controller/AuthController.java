@@ -37,21 +37,28 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody Map<String, String> req) {
 
-		User user = userRepo.findByUsername(req.get("username"))
-				.orElseThrow(() -> new RuntimeException("User not found"));
+	    String username = req.get("username");
+	    String password = req.get("password");
 
-		// 🔐 Password check
-		if (!passwordEncoder.matches(req.get("password"), user.getPassword())) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid password"));
-		}
+	    if (username == null || password == null) {
+	        return ResponseEntity.badRequest().body(Map.of("error", "Username and password required"));
+	    }
 
-		// 🚫 BLOCKED USER CHECK (IMPORTANT)
-		if (!user.isActive()) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "ACCESS_DENIED"));
-		}
+	    User user = userRepo.findByUsername(username)
+	            .orElseThrow(() -> new RuntimeException("User not found"));
 
-		String token = jwtUtil.generateToken(user);
+	    if (!passwordEncoder.matches(password, user.getPassword())) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                .body(Map.of("error", "Invalid password"));
+	    }
 
-		return ResponseEntity.ok(Map.of("token", token));
+	    if (!user.isActive()) {
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+	                .body(Map.of("error", "ACCESS_DENIED"));
+	    }
+
+	    String token = jwtUtil.generateToken(user);
+
+	    return ResponseEntity.ok(Map.of("token", token));
 	}
 }

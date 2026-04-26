@@ -1,7 +1,8 @@
-package com.ToFact.Verification.ClientManagement.Entity;
+package com.ToFact.Verification.Entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -41,6 +42,8 @@ public class Documents {
 
 	private String contentType; // image/png, application/pdf
 
+	@Column(name = "uploadedAt")
+	@JsonFormat(pattern = "dd-MM-yyyy HH:mm")
 	private LocalDateTime uploadedAt;
 
 	// 🔗 RELATIONS

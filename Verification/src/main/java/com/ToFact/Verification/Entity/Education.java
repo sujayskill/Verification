@@ -1,6 +1,5 @@
-package com.ToFact.Verification.ClientManagement.Entity;
+package com.ToFact.Verification.Entity;
 
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -22,22 +21,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Experience {
+public class Education {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String companyName;
-    private String role;
-    private Date startDate;
-    private Date endDate;
+	private String degree;
+	private String institution;
+	private String graduationYear;
 
-    @ManyToOne
-    @JoinColumn(name = "candidate_id")
-    @JsonIgnore
-    private Candidate candidate;
+	@ManyToOne
+	@JoinColumn(name = "candidate_id")
+	@JsonIgnore
+	private Candidate candidate;
 
-    @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL)
-    private List<Documents> documents;
+	@OneToMany(mappedBy = "education", cascade = CascadeType.ALL)
+	private List<Documents> documents;
 }
