@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
 import "../../styles/ManageAccounts.css";
 
 export default function ClientManageAccounts() {

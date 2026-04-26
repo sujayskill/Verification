@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
+import { getBasePath } from "../../../../utils/PathHelper";
 import "../../styles/AddCandidate.css";
 
 export default function AddCandidate() {
   const navigate = useNavigate();
+  const base = getBasePath();
 
   const [form, setForm] = useState({
     firstName: "",
@@ -177,7 +179,7 @@ export default function AddCandidate() {
       }
 
       alert("✅ Candidate + Documents uploaded");
-      navigate("/org/candidates");
+      navigate(`/${base}candidates`);
     } catch (err) {
       console.error("SAVE ERROR:", err);
       alert("❌ Failed");
@@ -188,8 +190,13 @@ export default function AddCandidate() {
 
   return (
     <div className="add-page">
-      <h2>Add Candidate</h2>
+      {/* 🔙 BACK */}
+      <button onClick={() => navigate(`/${base}/candidates`)}>
+        ← Back to Candidates
+      </button>
 
+      <h2>Add Candidate</h2>
+      
       {/* 🔹 BASIC */}
       <div className="form-card">
         <h3>Basic Information</h3>

@@ -1,4 +1,25 @@
-.report {
-  padding: 20px;
-  border-radius: 15px;
+.search-bar {
+  margin-bottom: 15px;
+}
+
+.search-bar input {
+  width: 260px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+mark {
+  background-color: #ffe58a;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.report-row {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.report-row:hover {
+  background: #f7f9fc;
 }

@@ -49,34 +49,42 @@ import Login from "../modules/auth/pages/Login";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import ScrollToTop from "../services/hooks/ScrollToTop";
+import {useAutoLogout} from "../services/hooks/UseAutoLogout";
 
 export default function AppRouter() {
+  useAutoLogout();
   return (
-    <Routes>
+    <>
+      <ScrollToTop /> {/* ✅ WORKS PERFECTLY HERE */}
+      <Routes>
+        {/* 🔓 PUBLIC ROUTE */}
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
 
-      {/* 🔓 PUBLIC ROUTE */}
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
+        {/* 🔐 PLATFORM */}
+        <Route
+          element={<ProtectedRoute allowedRoles={["VENDOR", "VENDOR_ADMIN"]} />}
+        >
+          <Route path="/platform/*" element={<PlatformRoutes />} />
+        </Route>
 
-      {/* 🔐 PLATFORM (ADMIN + SUPER ADMIN) */}
-      <Route element={<ProtectedRoute allowedRoles={["VENDOR", "VENDOR_ADMIN"]} />}>
-        <Route path="/platform/*" element={<PlatformRoutes />} />
-      </Route>
+        {/* 🔐 ORG */}
+        <Route
+          element={<ProtectedRoute allowedRoles={["CLIENT", "CLIENT_ADMIN"]} />}
+        >
+          <Route path="/:slug/*" element={<OrgRoutes />} />{" "}
+        </Route>
 
-      {/* 🔐 ORG */}
-      <Route element={<ProtectedRoute allowedRoles={["CLIENT","CLIENT_ADMIN"]} />}>
-        <Route path="/org/*" element={<OrgRoutes />} />
-      </Route>
-
-      {/* DEFAULT REDIRECT */}
-      <Route path="*" element={<Navigate to="/login" />} />
-
-    </Routes>
+        {/* DEFAULT */}
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </>
   );
 }

@@ -1,24 +1,38 @@
-.timeline {
-  display: flex;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.step {
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: #eee;
-  font-size: 12px;
-}
-
-.step.active {
-  background: #7c6cf6;
-  color: white;
-}
-
-.card {
-  padding: 15px;
-  border-radius: 15px;
-  background: white;
+.search-bar {
   margin-bottom: 15px;
+}
+
+.search-bar input {
+  width: 280px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+mark {
+  background-color: #ffe58a;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* PAGINATION */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: none;
+  background: #2d6cdf;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
 }

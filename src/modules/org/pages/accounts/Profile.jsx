@@ -1,29 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { api } from "../../../../services/api/Api";
 import "../../styles/Profile.css";
 
 export default function OrgProfile() {
-  const username = localStorage.getItem("username") || "Client User";
-  const orgName = localStorage.getItem("orgName") || "Company Name";
-  const role = localStorage.getItem("role");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const data = await api.get("/users/me");
+      setUser(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (!user) return <p>Loading...</p>;
+
+  // 🔥 GET FROM TOKEN (ONLY ROLE + ORGID)
+  const token = localStorage.getItem("token");
+  const payload = JSON.parse(atob(token.split(".")[1]));
+
+  const role = payload.role.replace("ROLE_", "");
+  const orgId = payload.orgId;
+
+  const isAdmin = role === "CLIENT_ADMIN";
 
   return (
     <div className="profile-page">
-
       <div className="profile-card">
 
-        <div className="avatar">C</div>
+        {/* HEADER */}
+        <div className="profile-header">
+          <div className="avatar">
+            {user.firstName?.[0]}
+          </div>
 
-        <h2>{orgName}</h2>
-        <p className="role">{role}</p>
+          <div>
+            <h2>{user.firstName} {user.lastName}</h2>
+            <p className="role">{role}</p>
+          </div>
+        </div>
 
-        <div className="info-box">
-          <p><b>User:</b> {username}</p>
-          <p><b>Company:</b> {orgName}</p>
-          <p><b>Access:</b> Client Panel</p>
+        {/* DETAILS */}
+        <div className="info-grid">
+          <div><span>ID</span><p>{user.id}</p></div>
+          <div><span>Email</span><p>{user.email}</p></div>
+          <div><span>Username</span><p>{user.username}</p></div>
+          <div><span>Role</span><p>{role}</p></div>
+          <div><span>Org ID</span><p>{orgId}</p></div>
+          <div>
+            <span>Company</span>
+            <p>{user.client?.companyName || "-"}</p>
+          </div>
+
+          <div>
+            <span>Reporting To</span>
+            <p>{isAdmin ? "None" : "Client Admin"}</p>
+          </div>
         </div>
 
       </div>
-
     </div>
   );
 }

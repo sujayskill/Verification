@@ -170,3 +170,26 @@ select {
     border-left: 4px solid #2563eb;
   }
 }
+
+.danger-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.danger-btn:hover {
+  background: #dc2626;
+}
+
+.status.locked {
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

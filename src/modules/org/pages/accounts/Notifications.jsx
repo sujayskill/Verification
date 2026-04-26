@@ -1,20 +1,33 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
+import "../../styles/Notifications.css";
 
-export default function Notifications() {
-  const [list, setList] = useState([]);
+export default function OrgNotifications() {
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    api.get("/org/notifications").then(setList);
+    api.get("/notifications/client").then(setData);
   }, []);
 
-  return (
-    <div className="card">
-      <h3>🔔 Notifications</h3>
+  const markRead = async (id) => {
+    await api.put(`/notifications/read/${id}`);
+    setData((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+    );
+  };
 
-      {list.map((n) => (
-        <div key={n.id}>
+  return (
+    <div className="notif-page">
+      <h2>Notifications</h2>
+
+      {data.map((n) => (
+        <div
+          key={n.id}
+          className={`notif-card ${!n.read ? "unread" : ""}`}
+          onClick={() => markRead(n.id)}
+        >
           <p>{n.message}</p>
+          <span>{new Date(n.createdAt).toLocaleString()}</span>
         </div>
       ))}
     </div>

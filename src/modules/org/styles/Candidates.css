@@ -22,3 +22,14 @@
 }
 
 .danger { color: red; }
+
+.blur {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

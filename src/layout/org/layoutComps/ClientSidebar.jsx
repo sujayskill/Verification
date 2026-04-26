@@ -1,19 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "../styles/OrgSidebar.css";
+import { getBasePath } from "../../../utils/PathHelper";
+import "../styles/ClientSidebar.css";
 
 export default function OrgSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [showSettings, setShowSettings] = useState(false);
+  const settingsRef = useRef();
+  const base = getBasePath();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (settingsRef.current && !settingsRef.current.contains(e.target)) {
+        setShowSettings(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    setShowSettings(false);
+  }, [location.pathname]);
 
   const menu = [
-    { name: "Home", path: "/org/home" },
-    { name: "Candidates", path: "/org/candidates" },
-    { name: "Verifications", path: "/org/verifications" },
-    { name: "Pull Hires", path: "/org/pull-hires" },
-    { name: "Reports", path: "/org/reports" },
-    { name: "Documents", path: "/org/documents" },
+    { name: "Home", path: `/${base}/home` },
+    { name: "Candidates", path: `/${base}/candidates` },
+    { name: "Verifications", path: `/${base}/verifications` },
+    { name: "Pull Hires", path: `/${base}/pull-hires` },
+    { name: "Reports", path: `/${base}/reports` },
+    { name: "Documents", path: `/${base}/documents` },
   ];
 
   return (
@@ -40,22 +59,24 @@ export default function OrgSidebar() {
       </div>
 
       {/* 🔥 SETTINGS SECTION */}
-      <div className="sidebar-footer">
+      <div className="sidebar-footer" ref={settingsRef}>
         <button
           className="settings-btn"
-          onClick={() => setShowSettings(!showSettings)}
+          onClick={(e) => {
+            e.stopPropagation(); // ✅ VERY IMPORTANT
+            setShowSettings(!showSettings);
+          }}
         >
           ⚙ Settings
         </button>
-
         {/* 🔥 SLIDE PANEL */}
         {showSettings && (
           <div className="settings-panel">
-            <button onClick={() => navigate("/org/manageAccounts")}>
+            <button onClick={() => navigate(`/${base}/manageAccounts`)}>
               Manage Accounts
             </button>
 
-            <button onClick={() => navigate("/org/help&support")}>
+            <button onClick={() => navigate(`/${base}/help&support`)}>
               Help
             </button>
 

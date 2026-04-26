@@ -1,0 +1,60 @@
+.cc-page {
+  padding: 20px;
+}
+
+.cc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.cc-header input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.cc-list {
+  display: grid;
+  gap: 12px;
+}
+
+.cc-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #fff;
+  border-radius: 10px;
+  transition: 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cc-card:hover {
+  transform: translateY(-2px);
+}
+
+.cc-info h4 {
+  margin: 0;
+}
+
+.cc-info p {
+  color: gray;
+}
+
+.cc-actions button {
+  margin-left: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.cc-actions .edit {
+  background: #facc15;
+}
+
+.cc-actions .delete {
+  background: #ef4444;
+  color: white;
+}

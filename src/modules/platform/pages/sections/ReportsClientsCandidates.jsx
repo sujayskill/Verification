@@ -1,6 +1,6 @@
 // CandidateReport.jsx
 import { useEffect, useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../styles/Reports.css";
 
@@ -32,9 +32,7 @@ export default function CandidateReport() {
         {steps.map((step) => (
           <div
             key={step}
-            className={`pipeline-step ${
-              v.status === step ? "active" : ""
-            }`}
+            className={`pipeline-step ${v.status === step ? "active" : ""}`}
           >
             {step}
           </div>
@@ -54,6 +52,11 @@ export default function CandidateReport() {
             📄 Download Report
           </a>
         )}
+        <button
+          onClick={() => navigate(`/platform/reports/reportDetails/${v.id}`)}
+        >
+          View Report
+        </button>
       </div>
     </div>
   );

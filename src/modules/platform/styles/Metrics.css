@@ -1,16 +1,20 @@
+.metrics-page {
+  padding: 20px;
+}
+
 .metrics-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
-.metric-card {
-  flex: 1;
+.card {
   background: white;
   padding: 20px;
-  border-radius: 18px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.success { border-left: 5px solid #10b981; }
-.danger { border-left: 5px solid #ef4444; }
+.card.full {
+  grid-column: span 2;
+}

@@ -1,13 +1,13 @@
 import React from "react";
 import "../../styles/Dashboard.css";
+import { getBasePath } from "../../../../utils/PathHelper";
 
 export default function Dashboard() {
+  const base = getBasePath();
   return (
     <div className="dashboard">
-
       {/* TOP CARDS */}
       <div className="cards">
-
         <div className="card purple">
           <h3>120</h3>
           <p>Candidates</p>
@@ -22,12 +22,10 @@ export default function Dashboard() {
           <h3>30</h3>
           <p>Completed</p>
         </div>
-
       </div>
 
       {/* BOTTOM */}
       <div className="bottom-section">
-
         <div className="chart-card">
           <h4>Hiring Overview</h4>
 
@@ -43,9 +41,7 @@ export default function Dashboard() {
           <p>Upgrade your verification plan</p>
           <button>Upgrade</button>
         </div>
-
       </div>
-
     </div>
   );
 }

@@ -1,45 +1,69 @@
-// Reports.jsx
 import { useEffect, useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
-import "../../styles/Reports.css";
+import { getBasePath } from "../../../../utils/PathHelper";
 
 export default function Reports() {
-  const [data, setData] = useState([]);
+  const [grouped, setGrouped] = useState({});
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get("/platform/verifications").then((res) => {
-      setData(res);
+    api.get("/platform/verifications/reports/clients").then((data) => {
+      if (!Array.isArray(data)) return;
+
+      const groupedData = {};
+
+      data.forEach((v) => {
+        if (!groupedData[v.orgId]) {
+          groupedData[v.orgId] = {
+            name: v.organizationName,
+            list: [],
+          };
+        }
+
+        groupedData[v.orgId].list.push(v);
+      });
+
+      setGrouped(groupedData);
     });
   }, []);
 
-  // 🔥 GROUP BY CLIENT
-  const grouped = data.reduce((acc, curr) => {
-    const org = curr.organizationName;
-    if (!acc[org]) acc[org] = [];
-    acc[org].push(curr);
-    return acc;
-  }, {});
+  const filtered = Object.entries(grouped).filter(([orgId, value]) =>
+    value.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const highlight = (text) => {
+    if (!search) return text;
+    return text.replace(new RegExp(`(${search})`, "gi"), "<mark>$1</mark>");
+  };
 
   return (
     <div className="reports-container">
-      <h2>Reports (Client Wise)</h2>
+      <h2>Clients Reports</h2>
 
-      {Object.keys(grouped).map((org) => (
-        <div
-          key={org}
-          className="client-card"
-          onClick={() =>
-            navigate("/platform/reports/clients", {
-              state: { candidates: grouped[org], org },
-            })
-          }
-        >
-          <h3>{org}</h3>
-          <p>{grouped[org].length} Candidates</p>
-        </div>
-      ))}
+      <input
+        placeholder="Search client..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      <div className="reports-list">
+        {filtered.map(([orgId, value]) => (
+          <div
+            key={orgId}
+            className="report-row"
+            onClick={() => navigate(`/platform/reports/${orgId}`)}
+          >
+            <h4
+              dangerouslySetInnerHTML={{
+                __html: highlight(value.name),
+              }}
+            />
+            <p>{value.list.length} Candidates</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

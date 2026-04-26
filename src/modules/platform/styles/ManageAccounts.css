@@ -63,3 +63,44 @@
 .client-group {
   margin-top: 20px;
 }
+
+.card {
+  overflow: visible;
+}
+
+button {
+  pointer-events: auto;
+}
+
+table tr {
+  position: relative;
+  z-index: 1;
+}
+
+table button {
+  position: relative;
+  z-index: 5;
+}
+
+.toggle-btn {
+  padding: 6px 12px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 10;
+  position: relative;
+}
+
+.toggle-btn:hover {
+  background: #4338ca;
+}
+
+.toggle-btn {
+  background: #4f46e5;
+}
+
+.toggle-btn.disable {
+  background: #dc2626;
+}

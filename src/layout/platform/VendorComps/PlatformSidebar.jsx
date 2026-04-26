@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/PlatformSidebar.css";
 
@@ -7,13 +7,30 @@ export default function PlatformSidebar() {
   const location = useLocation();
 
   const [showSettings, setShowSettings] = useState(false);
+  const settingsRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (settingsRef.current && !settingsRef.current.contains(e.target)) {
+        setShowSettings(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    setShowSettings(false);
+  }, [location.pathname]);
 
   const menu = [
     { name: "Home", path: "/platform/home" },
     { name: "Dashboard", path: "/platform/dashboard" },
-    { name: "Vendor", path: "/platform/organizations" },
-    { name: "Verification", path: "/platform/verificationRequests" },
-    { name: "Status", path: "/platform/verificationStatus" },
+    { name: "Clients", path: "/platform/clients" },
+    { name: "Verification", path: "/platform/verifications" },
+    { name: "Status", path: "/platform/status" },
     { name: "Reports", path: "/platform/reports" },
     { name: "Metrics", path: "/platform/metrics" },
     { name: "Sales", path: "/platform/sales" },
@@ -21,7 +38,6 @@ export default function PlatformSidebar() {
 
   return (
     <div className="sidebar-container">
-
       {/* 🔥 COMPANY BRAND */}
       <div className="company-box">
         <h2>ToFact</h2>
@@ -44,14 +60,16 @@ export default function PlatformSidebar() {
       </div>
 
       {/* 🔥 SETTINGS SECTION */}
-      <div className="sidebar-footer">
+      <div className="sidebar-footer" ref={settingsRef}>
         <button
           className="settings-btn"
-          onClick={() => setShowSettings(!showSettings)}
+          onClick={(e) => {
+            e.stopPropagation(); // ✅ VERY IMPORTANT
+            setShowSettings(!showSettings);
+          }}
         >
           ⚙ Settings
         </button>
-
         {/* 🔥 SLIDE PANEL */}
         {showSettings && (
           <div className="settings-panel">

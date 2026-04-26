@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { api } from "../../../services/Api";
+import { api } from "../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
@@ -9,24 +9,32 @@ export default function Login() {
 
   const [error, setError] = useState("");
 
+
   const login = async () => {
     try {
+      console.log("LOGIN PAYLOAD:", form);
       const res = await api.post("/auth/login", form);
 
       const token = res.token;
 
       localStorage.setItem("token", token);
-
       const payload = JSON.parse(atob(token.split(".")[1]));
       const role = payload.role.replace("ROLE_", "");
 
+      if (payload.slug) {
+        localStorage.setItem("slug", payload.slug);
+      } else {
+        localStorage.removeItem("slug"); // vendor case
+      }
       localStorage.setItem("role", role);
       localStorage.setItem("orgId", payload.orgId);
+      localStorage.setItem("username", payload.sub);
+      const slug = payload.slug;
 
       if (role === "VENDOR" || role === "VENDOR_ADMIN") {
         navigate("/platform");
       } else {
-        navigate("/org");
+        navigate(`/${payload.slug}/home`);
       }
     } catch (err) {
       setError("Invalid username or password");
@@ -44,6 +52,7 @@ export default function Login() {
 
       alert("Something went wrong");
     }
+
   };
 
   return (

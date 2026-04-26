@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import OrgLayout from "../layout/org/layoutComps/OrgLayout";
+import OrgLayout from "../layout/org/layoutComps/ClientLayout";
 
 // Pages
 import Candidates from "../modules/org/pages/sections/Candidates";
@@ -17,14 +17,14 @@ import Verifications from "../modules/org/pages/sections/Verifications";
 import Reports from "../modules/org/pages/sections/Reports";
 import Notifications from "../modules/org/pages/accounts/Notifications";
 import Profile from "../modules/org/pages/accounts/Profile";
-import ManageAccounts from "../modules/org/pages/accounts/ManageAccounts"
+import ManageAccounts from "../modules/org/pages/accounts/ManageAccounts";
+import ReportDetails from "../modules/org/pages/sections/ReportDetails";
 
 export default function OrgRoutes() {
   return (
     <Routes>
       <Route element={<OrgLayout />}>
         <Route index element={<Navigate to="home" />} />
-
         <Route path="home" element={<Home />} />
 
         <Route path="candidates" element={<Candidates />} />
@@ -44,6 +44,7 @@ export default function OrgRoutes() {
         <Route path="notifications" element={<Notifications />} />
         <Route path="profile" element={<Profile />} />
         <Route path="manageAccounts" element={<ManageAccounts />} />
+        <Route path="reports/reportDetails/:id" element={<ReportDetails />} />
       </Route>
     </Routes>
   );

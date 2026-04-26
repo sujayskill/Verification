@@ -1,79 +1,63 @@
-.vr-page {
-  padding: 10px;
+/* 🔹 HEADER ALIGNMENT */
+.vr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-/* GRID */
+/* 🔹 SEARCH BOX */
+.vr-search input {
+  padding: 10px 14px;
+  width: 260px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* 🔥 FOCUS EFFECT */
+.vr-search input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+/* 🔹 GRID IMPROVEMENT */
 .vr-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  gap: 16px;
 }
 
-/* ORG CARD */
+/* 🔹 CARD CLEANUP */
 .vr-card {
-  background: white;
-  padding: 20px;
-  border-radius: 18px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #eee;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-  transition: 0.2s;
+  transition: all 0.2s ease;
 }
 
 .vr-card:hover {
   transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-/* BACK */
-.back-btn {
-  margin-bottom: 15px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
+/* 🔹 TITLE */
+.vr-card h3 {
+  margin: 0;
+  font-size: 16px;
 }
 
-/* LIST */
-.vr-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* 🔹 COUNT */
+.vr-card p {
+  margin-top: 6px;
+  color: #666;
+  font-size: 13px;
 }
 
-/* CANDIDATE CARD */
-.candidate-card {
-  display: flex;
-  justify-content: space-between;
-  background: white;
-  padding: 16px;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.candidate-card:hover {
-  transform: translateY(-2px);
-}
-
-/* STATUS BADGE */
-.status {
-  padding: 6px 12px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.status.initiated {
-  background: #fef3c7;
-}
-
-.status.in_progress {
-  background: #dbeafe;
-}
-
-.status.completed {
-  background: #d1fae5;
-}
-
-.status.failed {
-  background: #fee2e2;
+/* 🔹 EMPTY STATE */
+.vr-page p {
+  text-align: center;
 }

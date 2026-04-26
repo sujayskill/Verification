@@ -1,0 +1,52 @@
+/* 🔥 MAIN APP LAYOUT */
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden; /* prevents double scroll */
+  background: #f8fafc;
+}
+
+/* 🔥 SIDEBAR */
+.sidebar-container {
+  width: 240px;
+  height: 100vh;
+  background: #111827;
+  color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+}
+
+/* 🔥 RIGHT SIDE (HEADER + CONTENT) */
+.main-section {
+  margin-left: 240px; /* same as sidebar width */
+  width: calc(100% - 240px);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* 🔥 HEADER */
+.header-container {
+  height: 60px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 20px;
+}
+
+/* 🔥 PAGE CONTENT */
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}

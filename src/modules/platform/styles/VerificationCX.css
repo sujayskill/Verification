@@ -1,0 +1,188 @@
+/* 🔹 HEADER */
+.vr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* 🔹 LEFT SIDE (BACK + TITLE) */
+.vr-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 🔹 BACK BUTTON */
+.back-btn {
+  border: none;
+  background: #f5f5f5;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+/* CARD BORDER INDICATORS */
+.candidate-card.sla-normal {
+  border-left: 5px solid #22c55e; /* green */
+}
+
+.candidate-card.sla-warning {
+  border-left: 5px solid #f59e0b; /* yellow */
+}
+
+.candidate-card.sla-breached {
+  border-left: 5px solid #ef4444; /* red */
+  background: #fff5f5;
+}
+
+/* SLA BADGE */
+.sla-badge {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+/* COLORS */
+.sla-badge.sla-normal {
+  background: #e6f9f0;
+  color: #15803d;
+}
+
+.sla-badge.sla-warning {
+  background: #fff7e6;
+  color: #b45309;
+}
+
+.sla-badge.sla-breached {
+  background: #ffe5e5;
+  color: #b91c1c;
+}
+
+.back-btn:hover {
+  background: #e0e0e0;
+}
+
+/* 🔹 SEARCH */
+.vr-search input {
+  padding: 10px 14px;
+  width: 260px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.vr-search input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+/* 🔹 LIST */
+.vr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 🔹 CARD */
+.candidate-card {
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.candidate-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* 🔹 EMAIL */
+.email {
+  font-size: 13px;
+  color: #666;
+}
+
+/* 🔹 STATUS */
+.status {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f0f0f0;
+}
+
+/* 🔹 SLA STATES */
+.sla-breached {
+  border-left: 4px solid #e53935;
+}
+
+.sla-warning {
+  border-left: 4px solid #fbc02d;
+}
+
+.sla-normal {
+  border-left: 4px solid #43a047;
+}
+
+
+/* SLA SECTION */
+.sla-section {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* TIMER */
+.sla-timer {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* CARD COLORS */
+.candidate-card.sla-normal {
+  border-left: 5px solid #22c55e;
+}
+
+.candidate-card.sla-warning {
+  border-left: 5px solid #f59e0b;
+}
+
+.candidate-card.sla-breached {
+  border-left: 5px solid #ef4444;
+  background: #fff5f5;
+}
+
+/* BADGES */
+.sla-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sla-badge.sla-normal {
+  background: #e6f9f0;
+  color: #15803d;
+}
+
+.sla-badge.sla-warning {
+  background: #fff7e6;
+  color: #b45309;
+}
+
+.sla-badge.sla-breached {
+  background: #ffe5e5;
+  color: #b91c1c;
+}

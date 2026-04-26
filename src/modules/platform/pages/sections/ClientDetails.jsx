@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
-import "../../styles/Organization.css";
+import "../../styles/Clients.css";
 
 export default function OrganizationDetails() {
   const { id } = useParams();
@@ -26,6 +26,9 @@ export default function OrganizationDetails() {
           <b>Org ID:</b> {data.orgId}
         </p>
         <p>
+          <b>Company Slug:</b> {data.companySlug}
+        </p>
+        <p>
           <b>Type:</b> {data.companyType}
         </p>
         <p>
@@ -43,7 +46,7 @@ export default function OrganizationDetails() {
 
         <button
           className="btn"
-          onClick={() => navigate(`/org/candidates?clientId=${id}`)}
+          onClick={() => navigate(`/platform/clients/candidates/${data.id}`)}
         >
           View Candidates →
         </button>

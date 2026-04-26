@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
-import "../../styles/VerificationDetails.css";
+import "../../styles/VerificationCXDetails.css";
 
 export default function VerificationDetails() {
   const { id } = useParams();
@@ -14,6 +14,33 @@ export default function VerificationDetails() {
   const [comment, setComment] = useState("");
   const [file, setFile] = useState(null);
 
+  const [report, setReport] = useState({
+    basicCheckStatus: "",
+    addressStatus: "",
+    educationChecks: [],
+    experienceChecks: [],
+    finalRemarks: "",
+    riskLevel: "LOW",
+  });
+
+  const saveVerification = async () => {
+    await api.put(`/platform/verifications/${id}/verify`, report);
+    alert("Saved");
+  };
+
+  // Rollback request approval to client
+  const approveRollback = async () => {
+    if (!window.confirm("Approve rollback?")) return;
+
+    try {
+      await api.put(`/platform/verifications/${id}/approve-rollback`);
+      alert("Rollback approved");
+      fetchData();
+    } catch (err) {
+      alert("Failed");
+    }
+  };
+
   const fetchData = async () => {
     try {
       const res = await api.get(`/platform/verifications/${id}`);
@@ -22,6 +49,7 @@ export default function VerificationDetails() {
       setCandidate(res.candidate);
 
       setDocs(Array.isArray(res.documents) ? res.documents : []);
+      console.log("data fetched");
     } catch (err) {
       console.error(err);
     }
@@ -61,7 +89,7 @@ export default function VerificationDetails() {
       <button onClick={() => navigate(-1)}>← Back</button>
 
       {/* STATUS */}
-      <div style={{ float: "right" }}>
+      <div style={{ float: "right", display: "flex", gap: "10px" }}>
         <select
           value={verification.status}
           onChange={(e) => updateStatus(e.target.value)}
@@ -71,6 +99,13 @@ export default function VerificationDetails() {
           <option>COMPLETED</option>
           <option>FAILED</option>
         </select>
+
+        {/* 🔁 ROLLBACK APPROVAL BUTTON */}
+        {verification.status === "ROLLBACK_REQUESTED" && (
+          <button className="danger-btn" onClick={approveRollback}>
+            ✅ Approve Rollback
+          </button>
+        )}
       </div>
 
       {/* BASIC */}
@@ -88,6 +123,15 @@ export default function VerificationDetails() {
         </p>
         <p>{candidate.email}</p>
         <p>{candidate.phone}</p>
+        <select
+          onChange={(e) =>
+            setReport({ ...report, basicCheckStatus: e.target.value })
+          }
+        >
+          <option value="">Select</option>
+          <option>VERIFIED</option>
+          <option>DISCREPANCY</option>
+        </select>
       </div>
 
       {/* 🏠 ADDRESS */}
@@ -103,6 +147,14 @@ export default function VerificationDetails() {
         <p>{candidate.permanentAddress?.city || "-"}</p>
         <p>{candidate.permanentAddress?.state || "-"}</p>
         <p>{candidate.permanentAddress?.zipCode || "-"}</p>
+        <select
+          onChange={(e) =>
+            setReport({ ...report, addressStatus: e.target.value })
+          }
+        >
+          <option>VERIFIED</option>
+          <option>FAILED</option>
+        </select>
       </div>
 
       {/* 🎓 EDUCATION */}
@@ -126,6 +178,38 @@ export default function VerificationDetails() {
         ) : (
           <p>No education details</p>
         )}
+        {candidate.educations?.map((edu, i) => (
+          <div key={i} className="sub-card">
+            <p>{edu.degree}</p>
+
+            <select
+              onChange={(e) => {
+                const updated = [...report.educationChecks];
+                updated[i] = {
+                  name: edu.degree,
+                  status: e.target.value,
+                  remarks: "",
+                };
+                setReport({ ...report, educationChecks: updated });
+              }}
+            >
+              <option>VERIFIED</option>
+              <option>DISCREPANCY</option>
+            </select>
+
+            <input
+              placeholder="Remarks"
+              onChange={(e) => {
+                const updated = [...report.educationChecks];
+                updated[i] = {
+                  ...updated[i],
+                  remarks: e.target.value,
+                };
+                setReport({ ...report, educationChecks: updated });
+              }}
+            />
+          </div>
+        ))}
       </div>
 
       {/* 💼 EXPERIENCE */}
@@ -149,6 +233,41 @@ export default function VerificationDetails() {
         ) : (
           <p>No experience details</p>
         )}
+
+        {candidate.experiences?.map((exp, i) => (
+          <div key={i} className="sub-card">
+            <p>
+              {exp.companyName} - {exp.role}
+            </p>
+
+            <select
+              onChange={(e) => {
+                const updated = [...report.experienceChecks];
+                updated[i] = {
+                  name: `${exp.companyName} (${exp.role})`,
+                  status: e.target.value,
+                  remarks: "",
+                };
+                setReport({ ...report, experienceChecks: updated });
+              }}
+            >
+              <option>VERIFIED</option>
+              <option>DISCREPANCY</option>
+            </select>
+
+            <input
+              placeholder="Remarks"
+              onChange={(e) => {
+                const updated = [...report.experienceChecks];
+                updated[i] = {
+                  ...updated[i],
+                  remarks: e.target.value,
+                };
+                setReport({ ...report, experienceChecks: updated });
+              }}
+            />
+          </div>
+        ))}
       </div>
 
       {/* 📄 DOCUMENTS */}
@@ -232,22 +351,25 @@ export default function VerificationDetails() {
 
       {/* COMMENT */}
       <div className="card">
-        <h3>Vendor Comments</h3>
-        <p>{verification.comment || "No comments yet"}</p>
+        <h3>Final Review</h3>
 
-        <input value={comment} onChange={(e) => setComment(e.target.value)} />
-        <button onClick={submitComment}>Submit</button>
+        <select
+          onChange={(e) => setReport({ ...report, riskLevel: e.target.value })}
+        >
+          <option>LOW</option>
+          <option>MEDIUM</option>
+          <option>HIGH</option>
+        </select>
+
+        <textarea
+          placeholder="Final remarks"
+          onChange={(e) =>
+            setReport({ ...report, finalRemarks: e.target.value })
+          }
+        />
       </div>
 
-      {/* FILE UPLOAD */}
-      <div className="card">
-        <h3>Upload Vendor File</h3>
-
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <button onClick={uploadFile}>Upload</button>
-
-        {verification.documentUrl && <p>📄 {verification.documentUrl}</p>}
-      </div>
+      <button onClick={saveVerification}>Rollout Verification</button>
 
       {/* SLA */}
       <div className="card">

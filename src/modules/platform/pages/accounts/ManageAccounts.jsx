@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
 import "../../styles/ManageAccounts.css";
 
 export default function ManageAccounts() {
   const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
     username: "",
     password: "",
     userType: "",
@@ -14,28 +17,28 @@ export default function ManageAccounts() {
   const [clients, setClients] = useState([]);
   const [users, setUsers] = useState([]);
 
-  // 🔹 Load clients
-  const fetchClients = async () => {
-    const data = await api.get("/clients/getAll");
-    setClients(data);
-  };
-
-  // 🔹 Load users
-  const fetchUsers = async () => {
-    const data = await api.get("/users/getAll");
-    console.log("Users API Response:", data);
-    setUsers(Array.isArray(data) ? data : []);
-  };
-
   useEffect(() => {
     fetchClients();
     fetchUsers();
   }, []);
 
-  // 🔹 Create user
+  const fetchClients = async () => {
+    const data = await api.get("/clients/getAll");
+    setClients(data || []);
+  };
+
+  const fetchUsers = async () => {
+    const data = await api.get("/users/getAll");
+    setUsers(Array.isArray(data) ? data : []);
+  };
+
+  // 🔥 CREATE USER
   const createUser = async () => {
     try {
       const payload = {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
         username: form.username,
         password: form.password,
         role: form.role,
@@ -44,14 +47,19 @@ export default function ManageAccounts() {
 
       await api.post("/users/create", payload);
 
+      alert("User created successfully ✅");
+
       setForm({
+        firstName: "",
+        lastName: "",
+        email: "",
         username: "",
         password: "",
         userType: "",
         role: "",
         orgId: "",
       });
-      
+
       fetchUsers();
     } catch (err) {
       console.error(err);
@@ -59,20 +67,45 @@ export default function ManageAccounts() {
     }
   };
 
-  // 🔹 Role options
+  // 🔥 TOGGLE ACTIVE
+  const toggleActive = async (id) => {
+    try {
+      // 🔥 Optimistic UI update
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, isActive: !u.isActive } : u)),
+      );
+      // 🔥 Call backend
+      await api.put(`/users/toggle/${id}`);
+    } catch (err) {
+      console.error(err);
+      // ❌ revert if API fails
+      fetchUsers();
+    }
+  };
+
+  // const updateStatus = async (id, currentStatus) => {
+  //   try {
+  //     await api.put(`/users/status/${id}?active=${!currentStatus}`);
+  //     fetchUsers();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  // 🔹 ROLE OPTIONS
   const vendorRoles = ["VENDOR_ADMIN", "VENDOR"];
   const clientRoles = ["CLIENT_ADMIN", "CLIENT"];
 
-  // 🔹 Filter users
-  const vendorUsers = Array.isArray(users)
-    ? users.filter((u) => u.role === "VENDOR_ADMIN" || u.role === "VENDOR")
-    : [];
+  // 🔹 FILTER USERS
+  const vendorUsers = users.filter(
+    (u) => u.role === "VENDOR_ADMIN" || u.role === "VENDOR",
+  );
 
   const clientUsers = users.filter(
     (u) => u.role === "CLIENT_ADMIN" || u.role === "CLIENT",
   );
 
-  // 🔹 Group client users
+  // 🔹 GROUP CLIENT USERS
   const groupedClients = {};
   clientUsers.forEach((u) => {
     const key = u.client?.companyName || "Unknown";
@@ -84,10 +117,28 @@ export default function ManageAccounts() {
     <div className="manage-container">
       <h2>Manage Accounts</h2>
 
-      {/* 🔥 FORM */}
+      {/* 🔥 CREATE FORM */}
       <div className="card form-card">
-        {/* BASIC */}
         <div className="form-row">
+          <input
+            placeholder="First Name"
+            value={form.firstName}
+            onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+          />
+
+          <input
+            placeholder="Last Name"
+            value={form.lastName}
+            onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+          />
+
           <input
             placeholder="Username"
             value={form.username}
@@ -102,9 +153,9 @@ export default function ManageAccounts() {
           />
         </div>
 
-        {/* 🔹 USER TYPE */}
+        {/* USER TYPE */}
         <div className="form-section">
-          <label>Select Account Type</label>
+          <label>Account Type</label>
 
           <div className="toggle-group">
             <button
@@ -127,9 +178,9 @@ export default function ManageAccounts() {
           </div>
         </div>
 
-        {/* 🔹 ROLE SELECTION */}
+        {/* ROLE */}
         {form.userType && (
-          <div className="form-section role-section">
+          <div className="form-section">
             <label>Select Role</label>
 
             <div className="role-grid">
@@ -148,7 +199,7 @@ export default function ManageAccounts() {
           </div>
         )}
 
-        {/* 🔹 CLIENT SELECT */}
+        {/* CLIENT SELECT */}
         {form.userType === "CLIENT" && form.role && (
           <div className="form-section">
             <label>Select Client</label>
@@ -160,7 +211,7 @@ export default function ManageAccounts() {
               <option value="">Select Client</option>
               {clients.map((c) => (
                 <option key={c.id} value={c.orgId}>
-                  {c.companyName} ({c.orgId})
+                  {c.companyName}
                 </option>
               ))}
             </select>
@@ -179,16 +230,34 @@ export default function ManageAccounts() {
         <table>
           <thead>
             <tr>
-              <th>Username</th>
+              <th>Name</th>
+              <th>Email</th>
               <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
             {vendorUsers.map((u) => (
               <tr key={u.id}>
-                <td>{u.username}</td>
+                <td>
+                  {u.firstName} {u.lastName}
+                </td>
+                <td>{u.email}</td>
                 <td>{u.role}</td>
+                <td>{u.isActive ? "Disabled" : "Active"}</td>
+                <td>
+                  <button
+                    className="toggle-btn"
+                    onClick={(e) => {
+                      e.stopPropagation(); // 🔥 prevents row interference
+                      toggleActive(u.id);
+                    }}
+                  >
+                    {u.isActive ? "Enable" : "Disable"}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -206,16 +275,34 @@ export default function ManageAccounts() {
             <table>
               <thead>
                 <tr>
-                  <th>Username</th>
+                  <th>Name</th>
+                  <th>Email</th>
                   <th>Role</th>
+                  <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
 
               <tbody>
                 {groupedClients[clientName].map((u) => (
                   <tr key={u.id}>
-                    <td>{u.username}</td>
+                    <td>
+                      {u.firstName} {u.lastName}
+                    </td>
+                    <td>{u.email}</td>
                     <td>{u.role}</td>
+                    <td>{u.isActive ? "Disabled" : "Active"}</td>
+                    <td>
+                      <button
+                        className="toggle-btn"
+                        onClick={(e) => {
+                          e.stopPropagation(); // 🔥 prevents row interference
+                          toggleActive(u.id);
+                        }}
+                      >
+                        {u.isActive ? "Enable" : "Disable"}
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

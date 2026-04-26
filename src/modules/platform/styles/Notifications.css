@@ -1,0 +1,31 @@
+.notif-page {
+  padding: 20px;
+}
+
+.notif-card {
+  background: white;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border-left: 4px solid transparent;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.notif-card:hover {
+  background: #f9fafb;
+}
+
+.notif-card.unread {
+  background: #eef4ff;
+  border-left: 4px solid #2563eb;
+}
+
+.notif-card p {
+  margin: 0;
+}
+
+.notif-card span {
+  font-size: 12px;
+  color: gray;
+}

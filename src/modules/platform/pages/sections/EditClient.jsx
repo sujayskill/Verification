@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
 import { useNavigate, useParams } from "react-router-dom";
-import "../../styles/Organization.css";
+import "../../styles/Clients.css";
 
 export default function EditOrganization() {
   const { id } = useParams();
   const navigate = useNavigate();
+  
 
   const [form, setForm] = useState({});
 
@@ -20,12 +21,18 @@ export default function EditOrganization() {
 
   return (
     <div className="container">
+      <button onClick={() => navigate(-1)}>← Back</button>
+
       <h2>Edit Client</h2>
 
       <div className="card grid">
         <input
           value={form.companyName || ""}
           onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+        />
+        <input
+          value={form.companySlug || ""}
+          onChange={(e) => setForm({ ...form, companySlug: e.target.value })}
         />
         <input
           value={form.companyType || ""}

@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { api } from "../../../../services/Api";
+import { api } from "../../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
+import { getBasePath } from "../../../../utils/PathHelper";
 import "../../styles/PageStyle.css";
 
 export default function CandidateDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const base = getBasePath();
 
   const [data, setData] = useState(null);
-  const [initiated, setInitiated] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [verification, setVerification] = useState(null);
 
+  const isInitiated =
+    verification &&
+    ["INITIATED", "IN_PROGRESS", "ROLLBACK_REQUESTED", "COMPLETED"].includes(
+      verification.status,
+    );
   // 🔥 FETCH DATA
   const fetchData = async () => {
     try {
@@ -18,9 +25,17 @@ export default function CandidateDetails() {
         `/org/candidates/getCandidateDetailsById/${id}`,
       );
       setData(candidate);
-      const exists = await api.get(`/org/verifications/exists/${id}`);
-      setInitiated(exists);
-      console.log(data);
+
+      try {
+        const verificationData = await api.get(
+          `/org/verifications/by-candidate/${id}`,
+        );
+
+        setVerification(verificationData);
+      } catch (err) {
+        // 🔥 IMPORTANT: no verification exists
+        setVerification(null);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -38,7 +53,7 @@ export default function CandidateDetails() {
       await api.post(`/org/verifications/${id}`);
       alert("Verification request sent ✅");
 
-      setInitiated(true);
+      fetchData(); // 🔥 IMPORTANT
     } catch (err) {
       console.error(err);
       alert(err.message || "Failed");
@@ -47,28 +62,55 @@ export default function CandidateDetails() {
     }
   };
 
+  // Rollback request to vendor
+  const requestRollback = async () => {
+    if (!window.confirm("Request rollback for this verification?")) return;
+
+    try {
+      await api.put(`/org/verifications/${verification.id}/request-rollback`);
+      alert("Rollback request sent");
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to request rollback");
+    }
+  };
+
   if (!data) return <p>Loading...</p>;
 
   return (
     <div className="container">
       {/* 🔙 BACK */}
-      <button onClick={() => navigate("/org/candidates")}>
+      <button onClick={() => navigate(`/${base}/candidates`)}>
         ← Back to Candidates
       </button>
 
       {/* 🚀 ACTION */}
       <div className="action-bar">
         <button
-          className={`primary-btn ${initiated ? "disabled" : ""}`}
+          className={`primary-btn ${isInitiated ? "disabled" : ""}`}
           onClick={initiateVerification}
-          disabled={initiated || loading}
+          disabled={isInitiated || loading}
         >
           {loading
             ? "Processing..."
-            : initiated
+            : isInitiated
               ? "Verification Initiated"
               : "🚀 Initiate Verification"}
         </button>
+        {verification?.status === "ROLLBACK_REQUESTED" && (
+          <p className="info-text">
+            ⏳ Rollback requested. Waiting for vendor approval
+          </p>
+        )}
+
+        {verification &&
+          verification.status !== "COMPLETED" &&
+          verification.status !== "ROLLBACK_REQUESTED" && (
+            <button className="warning-btn" onClick={requestRollback}>
+              🔁 Request Rollback
+            </button>
+          )}
       </div>
 
       {/* 🔹 BASIC INFO */}

@@ -1,8 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import OrgSidebar from "./OrgSidebar";
-import OrgHeader from "./OrgHeader";
-import "../styles/OrgLayout.css";
+import OrgSidebar from "./ClientSidebar";
+import OrgHeader from "./ClientHeader";
+import "../styles/ClientLayout.css";
 
 export default function OrgLayout() {
   return (
