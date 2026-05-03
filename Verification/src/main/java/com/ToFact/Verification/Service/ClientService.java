@@ -47,7 +47,8 @@ public class ClientService {
 
 	// 🔹 Update
 	public Client updateClient(Long id, ClientDTO dto) {
-		Client existing = getClientById(id);
+		Client existing = clientRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Client not found"));
 
 		existing.setCompanyName(dto.getCompanyName());
 		existing.setCompanySlug(generateSlug(dto.getCompanyName()));
@@ -90,7 +91,6 @@ public class ClientService {
 	    if (q == null || q.isBlank()) {
 	        return candidateRepo.findByClient_Id(clientId);
 	    }
-
 	    return candidateRepo.searchByClientId(clientId, q);
 	}
 }

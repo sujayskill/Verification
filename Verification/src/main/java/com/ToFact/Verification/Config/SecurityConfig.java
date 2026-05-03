@@ -45,14 +45,13 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().requestMatchers("/auth/**").permitAll()
-
+						.requestMatchers("/ws/**").permitAll()
 						// ✅ ADD THIS
 						.requestMatchers("/users/**").hasAnyRole("VENDOR_ADMIN", "VENDOR", "CLIENT_ADMIN")
 						.requestMatchers("/users/create").hasAnyRole("VENDOR_ADMIN", "CLIENT_ADMIN")
 
 						.requestMatchers("/clients/update").hasRole("VENDOR_ADMIN")
 						.requestMatchers("/org/candidates/**").hasAnyRole("CLIENT","CLIENT_ADMIN")
-
 						.anyRequest().authenticated())
 
 				// ✅ JWT Filter

@@ -37,6 +37,8 @@ public class Client {
 	private String contactNumber;	
 	private String location;
 	private String employeeCount;
+	
+    private Boolean isActive = true;
 
 	@Column(name = "created_at", nullable = false)
 	@JsonFormat(pattern = "dd-MM-yyyy HH:mm")

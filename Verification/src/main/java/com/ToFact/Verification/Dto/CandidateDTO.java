@@ -29,5 +29,7 @@ public class CandidateDTO {
 
 	private String panNumber;
 	private String adharNumber;
+	
+	private Long departmentId; // 🔥 ADD THIS
 
 }

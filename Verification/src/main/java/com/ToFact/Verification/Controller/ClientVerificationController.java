@@ -9,9 +9,6 @@ import java.util.Map;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ToFact.Verification.Config.JwtUtil;
-import com.ToFact.Verification.Dto.ClientReportDTO;
 import com.ToFact.Verification.Dto.VerificationDTO;
 import com.ToFact.Verification.Entity.Candidate;
 import com.ToFact.Verification.Entity.Documents;
@@ -32,7 +28,8 @@ import com.ToFact.Verification.Entity.Verification;
 import com.ToFact.Verification.Entity.VerificationStatus;
 import com.ToFact.Verification.Repository.CandidateRepository;
 import com.ToFact.Verification.Repository.DocumentsRepository;
-import com.ToFact.Verification.Service.VerificationsReportsService;
+import com.ToFact.Verification.Service.ClientActivityService;
+import com.ToFact.Verification.Service.VendorActivityService;
 import com.ToFact.Verification.Service.VerificationService;
 
 import io.jsonwebtoken.Claims;
@@ -43,8 +40,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClientVerificationController {
 
-	private final VerificationService service;
-	private final VerificationsReportsService reportService;
+	private final VerificationService verificationService;
+	private final ClientActivityService clientActivityService;
+	private final VendorActivityService verificationsReportsService;
 	private final JwtUtil jwtUtil;
 	private final CandidateRepository candidateRepo;
 	private final DocumentsRepository documentsRepository;
@@ -67,16 +65,18 @@ public class ClientVerificationController {
 	public Verification create(@PathVariable Long candidateId, @RequestHeader("Authorization") String authHeader) {
 
 		String orgId = extractOrgId(authHeader);
-		return service.create(candidateId, orgId);
+		return verificationService.create(candidateId, orgId);
 	}
 
-	@GetMapping("/candidateReports")
-	public List<VerificationDTO> getMyReports(@RequestHeader("Authorization") String authHeader,
-			@RequestParam(required = false) String q) {
-
-		String orgId = extractOrgId(authHeader);
-
-		return reportService.getCompletedReports(orgId, q);
+//	This method is for getting the candidate reports in reports section client module
+	@GetMapping("/candidateReports/by-department")
+	public List<VerificationDTO> getReportsByDept(
+	        @RequestHeader("Authorization") String authHeader,
+	        @RequestParam Long deptId,
+	        @RequestParam(required = false) String q
+	) {
+	    String orgId = extractOrgId(authHeader);
+	    return verificationsReportsService.getCompletedReportsByDept(orgId, deptId, q);
 	}
 
 	// 🔹 PLATFORM VIEW
@@ -85,14 +85,14 @@ public class ClientVerificationController {
 
 		String orgId = extractOrgId(authHeader);
 
-		return service.getByOrgDTO(orgId);
+		return verificationService.getByOrgDTO(orgId);
 	}
 
 //	It fetch the report by candidate
 	@GetMapping("/{id}")
 	public Map<String, Object> getDetails(@PathVariable Long id) {
 
-		Verification v = service.getById(id);
+		Verification v = verificationService.getById(id);
 
 		Candidate c = candidateRepo.findById(v.getCandidateId())
 				.orElseThrow(() -> new RuntimeException("Candidate not found"));
@@ -111,12 +111,12 @@ public class ClientVerificationController {
 
 	@GetMapping("/exists/{candidateId}")
 	public boolean exists(@PathVariable Long candidateId) {
-		return service.exists(candidateId);
+		return verificationService.exists(candidateId);
 	}
 
 	@PutMapping("/{id}/status")
 	public Verification updateStatus(@PathVariable Long id, @RequestParam VerificationStatus status) {
-		return service.updateStatus(id, status);
+		return verificationService.updateStatus(id, status);
 	}
 
 	@GetMapping("/org")
@@ -127,13 +127,13 @@ public class ClientVerificationController {
 
 		String orgId = claims.get("orgId", String.class);
 
-		return service.getByOrg(orgId);
+		return verificationService.getByOrg(orgId);
 	}
 
 	@GetMapping("/download/{id}")
 	public ResponseEntity<Resource> download(@PathVariable Long id) throws IOException {
 
-		Verification v = service.getById(id);
+		Verification v = verificationService.getById(id);
 
 		Path path = Paths.get(v.getReportUrl());
 
@@ -149,7 +149,7 @@ public class ClientVerificationController {
 
 		String orgId = extractOrgId(authHeader);
 
-		return service.requestRollback(id, orgId);
+		return clientActivityService.requestRollback(id, orgId);
 	}
 
 //	It gives candidate wise details
@@ -159,20 +159,23 @@ public class ClientVerificationController {
 
 		String orgId = extractOrgId(authHeader);
 
-		return service.getByCandidate(candidateId, orgId);
+		return verificationService.getByCandidate(candidateId, orgId);
 	}
 
 //	This method is for implementing search functionality in verification page in client module 
 	@GetMapping("/search")
-	public Page<Verification> search(@RequestParam(required = false) String q,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "6") int size,
+	public List<Verification> search(@RequestParam(required = false) String q,
 			@RequestHeader("Authorization") String authHeader) {
-
 		String orgId = extractOrgId(authHeader);
+		return verificationService.searchVerifications(orgId, q);
+	}
 
-		Pageable pageable = PageRequest.of(page, size);
-
-		return service.searchVerifications(orgId, q, pageable);
+//	This method is for implementing getAll/search functionality in Verifications page in client module 
+	@GetMapping("/by-department/{deptId}")
+	public List<Verification> getByDept(@PathVariable Long deptId, @RequestParam(required = false) String q,
+			@RequestHeader("Authorization") String authHeader) {
+		String orgId = extractOrgId(authHeader);
+		return verificationsReportsService.searchByDepartment(orgId, deptId, q);
 	}
 
 //	// CLIENT LIST

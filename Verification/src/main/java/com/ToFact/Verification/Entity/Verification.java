@@ -11,6 +11,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,29 +30,27 @@ public class Verification {
 	private Long id;
 
 	private Long candidateId;
-
 	private String orgId; // 🔥 CHANGED
 	private String organizationName;
-
 	private String candidateName;
-
 	private String candidateEmail;
-
 	private String comment;
-
 	private String documentUrl;
-
 	private Boolean viewedByVendor = false;
-
+	
+	@ManyToOne
+	@JoinColumn(name = "department_id")
+	private Department department;
+	
+	
+	
 	@Column(name = "created_at", nullable = false)
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private LocalDateTime createdAt;
 
 	private LocalDateTime slaDeadline;
-
 	private Boolean slaBreached = false;
-
-	private String reportUrl;
+	
 
 	@Column(columnDefinition = "TEXT")
 	private String reportData; // JSON string
@@ -62,4 +62,9 @@ public class Verification {
 	private VerificationStatus status;
 
 	private boolean rollbackRequested = false;
+	private String reportUrl;
+	
+	public Long getDepartmentId() {
+	    return department != null ? department.getId() : null;
+	}
 }

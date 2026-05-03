@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.ToFact.Verification.Dto.CandidateDTO;
 import com.ToFact.Verification.Entity.Candidate;
 import com.ToFact.Verification.Entity.Client;
-import com.ToFact.Verification.Entity.OrgVerificationStatus;
+import com.ToFact.Verification.Entity.ClientVerificationStatus;
+import com.ToFact.Verification.Entity.Department;
 import com.ToFact.Verification.Repository.CandidateRepository;
 import com.ToFact.Verification.Repository.ClientRepository;
+import com.ToFact.Verification.Repository.DepartmentRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,8 +22,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CandidateService {
 
-	private final CandidateRepository repo;
+	private final CandidateRepository candidateRepo;
 	private final ClientRepository clientRepo;
+	private final DepartmentRepository departmentRepo;
 
 	private static final Logger log = LoggerFactory.getLogger(CandidateService.class);
 
@@ -29,7 +32,6 @@ public class CandidateService {
 	public Candidate create(CandidateDTO dto, String orgId) {
 
 		Client client = clientRepo.findByOrgId(orgId).orElseThrow(() -> new RuntimeException("Client not found"));
-
 		Candidate c = new Candidate();
 
 		// 🔹 BASIC
@@ -37,36 +39,40 @@ public class CandidateService {
 		c.setLastName(dto.getLastName());
 		c.setEmail(dto.getEmail());
 		c.setPhone(dto.getPhone());
-
-		c.setStatus(OrgVerificationStatus.CREATED);
-
+		c.setStatus(ClientVerificationStatus.CREATED);
 		// 🔹 ADDRESS
 		c.setCurrentAddress(dto.getCurrentAddress());
 		c.setPermanentAddress(dto.getPermanentAddress());
-
-		// 🔥 EDUCATIONS (MULTIPLE)
+		// 🔥 EDUCATIONS
 		if (dto.getEducations() != null) {
-			dto.getEducations().forEach(e -> e.setCandidate(c)); // 🔥 IMPORTANT
+			dto.getEducations().forEach(e -> e.setCandidate(c));
 			c.setEducations(dto.getEducations());
 		}
-
-		// 🔥 EXPERIENCES (MULTIPLE)
+		// 🔥 EXPERIENCES
 		if (dto.getExperiences() != null) {
-			dto.getExperiences().forEach(exp -> exp.setCandidate(c)); // 🔥 IMPORTANT
+			dto.getExperiences().forEach(exp -> exp.setCandidate(c));
 			c.setExperiences(dto.getExperiences());
 		}
-
 		// 🔥 CLIENT LINK
 		c.setClient(client);
-
-		return repo.save(c);
+		// 🔥🔥🔥 IMPORTANT PART (NEW)
+		if (dto.getDepartmentId() != null) {
+			Department dept = departmentRepo.findById(dto.getDepartmentId())
+					.orElseThrow(() -> new RuntimeException("Department not found"));
+			// 🔐 SECURITY CHECK
+			if (!dept.getOrgId().equals(orgId)) {
+				throw new RuntimeException("Unauthorized department access");
+			}
+			c.setDepartment(dept);
+		}
+		return candidateRepo.save(c);
 	}
 
 	// 🔹 GET ALL
 	public List<Candidate> getByOrgId(String orgId) {
 		System.out.println("FETCHING FOR ORG: " + orgId); // 🔥
 
-		List<Candidate> list = repo.findByClient_OrgId(orgId);
+		List<Candidate> list = candidateRepo.findByClient_OrgId(orgId);
 
 		System.out.println("CANDIDATES FOUND: " + list.size());
 		return list;
@@ -75,7 +81,7 @@ public class CandidateService {
 	// 🔹 GET BY ID
 	public Candidate getById(Long id, String orgId) {
 
-		Candidate c = repo.findById(id).orElseThrow(() -> new RuntimeException("Candidate not found"));
+		Candidate c = candidateRepo.findById(id).orElseThrow(() -> new RuntimeException("Candidate not found"));
 
 		if (!c.getClient().getOrgId().equals(orgId)) {
 			throw new RuntimeException("Unauthorized access");
@@ -88,7 +94,7 @@ public class CandidateService {
 	// 🔹 UPDATE
 	public Candidate update(Long id, CandidateDTO dto, String orgId) {
 
-		Candidate existing = repo.findById(id).orElseThrow(() -> new RuntimeException("Candidate not found"));
+		Candidate existing = candidateRepo.findById(id).orElseThrow(() -> new RuntimeException("Candidate not found"));
 
 		// 🔐 SECURITY CHECK (IMPORTANT)
 		if (!existing.getClient().getOrgId().equals(orgId)) {
@@ -120,7 +126,7 @@ public class CandidateService {
 			existing.getExperiences().addAll(dto.getExperiences());
 		}
 
-		return repo.save(existing);
+		return candidateRepo.save(existing);
 	}
 
 	// 🔹 DELETE
@@ -130,15 +136,15 @@ public class CandidateService {
 		if (c.isLocked()) {
 			throw new RuntimeException("Candidate is under verification and cannot be modified");
 		}
-		repo.delete(c);
+		candidateRepo.delete(c);
 	}
 
 	// 🔹 STATUS UPDATE
-	public Candidate updateStatus(Long id, OrgVerificationStatus status, String orgId) {
+	public Candidate updateStatus(Long id, ClientVerificationStatus status, String orgId) {
 
 		Candidate c = getById(id, orgId);
 		c.setStatus(status);
-		return repo.save(c);
+		return candidateRepo.save(c);
 	}
 
 	public List<Candidate> searchCandidates(String orgId, String query, String sortBy, String direction) {
@@ -146,9 +152,17 @@ public class CandidateService {
 		Sort sort = direction.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
 		if (query == null || query.isBlank()) {
-			return repo.findByClient_OrgId(orgId, sort);
+			return candidateRepo.findByClient_OrgId(orgId, sort);
 		}
 
-		return repo.searchCandidates(orgId, query, sort);
+		return candidateRepo.searchCandidates(orgId, query, sort);
+	}
+
+	public List<Candidate> getByDepartment(String orgId, Long deptId) {
+		return candidateRepo.findByClient_OrgIdAndDepartment_Id(orgId, deptId);
+	}
+
+	public List<Candidate> getCandidatesByDept(String orgId, Long deptId, String q) {
+		return candidateRepo.findByOrgAndDepartment(orgId, deptId, q);
 	}
 }

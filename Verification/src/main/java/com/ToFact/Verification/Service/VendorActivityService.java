@@ -20,14 +20,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class VerificationsReportsService {
+public class VendorActivityService {
 
-	private final VerificationRepository repo;
+	private final VerificationRepository verificationsRepo;
 
 //	This method is for generating the reports for verification completed candidates from vendor
 	public List<VerificationDTO> getCompletedReports(String orgId, String q) {
 
-		List<Verification> list = repo.findByOrgIdAndStatus(orgId, VerificationStatus.COMPLETED);
+		List<Verification> list = verificationsRepo.findByOrgIdAndStatus(orgId, VerificationStatus.COMPLETED);
 
 		// 🔍 SEARCH FILTER
 		if (q != null && !q.trim().isEmpty()) {
@@ -47,12 +47,12 @@ public class VerificationsReportsService {
 
 	// 🔹 GET ALL CLIENT VERIFICATIONS (for grouping)
 	public List<Verification> getAll() {
-		return repo.findAll();
+		return verificationsRepo.findAll();
 	}
 
 	// 🔹 GET ONLY COMPLETED REPORTS
 	public List<Verification> getCompletedByOrg(String orgId) {
-		return repo.findByOrgIdAndStatus(orgId, VerificationStatus.COMPLETED);
+		return verificationsRepo.findByOrgIdAndStatus(orgId, VerificationStatus.COMPLETED);
 	}
 
 	public Page<Map<String, Object>> getClientsGrouped(String q, Pageable pageable) {
@@ -60,9 +60,9 @@ public class VerificationsReportsService {
 		Page<Verification> pageData;
 
 		if (q == null || q.isBlank()) {
-			pageData = repo.findAll(pageable);
+			pageData = verificationsRepo.findAll(pageable);
 		} else {
-			pageData = repo.findByOrganizationNameContainingIgnoreCase(q, pageable);
+			pageData = verificationsRepo.findByOrganizationNameContainingIgnoreCase(q, pageable);
 		}
 
 		Map<String, List<Verification>> grouped = pageData.getContent().stream()
@@ -85,12 +85,58 @@ public class VerificationsReportsService {
 	public List<Verification> searchCandidates(String orgId, String query) {
 
 		if (query == null || query.isBlank()) {
-			return repo.findByOrgId(orgId);
+			return verificationsRepo.findByOrgId(orgId);
 		}
 
-		return repo.findByOrgIdAndCandidateNameContainingIgnoreCaseOrOrgIdAndCandidateEmailContainingIgnoreCase(orgId,
+		return verificationsRepo.findByOrgIdAndCandidateNameContainingIgnoreCaseOrOrgIdAndCandidateEmailContainingIgnoreCase(orgId,
 				query, orgId, query);
 	}
+	
+	
+//	This method is for implementing search functionality in VerificationsDepartments page in client module 
+	public List<Verification> searchByDepartment(String orgId, Long deptId, String q) {
+
+	    if (q == null || q.isBlank()) {
+	        return verificationsRepo.findByOrgIdAndDepartment(orgId, deptId);
+	    }
+
+	    return verificationsRepo.searchByDept(orgId, deptId, q);
+	}
+	
+	
+	
+//	This method is for getting the candidate reports in reports section client module
+	public List<VerificationDTO> getCompletedReportsByDept(String orgId, Long deptId, String q) {
+
+	    List<Verification> list = verificationsRepo.findCompletedByDept(orgId, deptId);
+
+	    if (q != null && !q.trim().isEmpty()) {
+	        list = list.stream()
+	                .filter(v -> v.getCandidateName().toLowerCase().contains(q.toLowerCase()))
+	                .toList();
+	    }
+
+	    return list.stream().map(v -> {
+	        VerificationDTO dto = new VerificationDTO();
+	        dto.setId(v.getId());
+	        dto.setCandidateName(v.getCandidateName());
+	        dto.setStatus(v.getStatus());
+	        dto.setReportAvailable(v.getReportData() != null);
+	        dto.setCreatedAt(v.getCreatedAt());
+	        return dto;
+	    }).toList();
+	}
+	
+//	This method is used to filter the candidates by department in verification sections for vendor module  
+	public List<Verification> getByOrgAndDept(String orgId, Long deptId, String q) {
+	    return verificationsRepo.findByOrgAndDept(orgId, deptId, q);
+	}
+	
+//	This method is to list the candidates by department in reports section at vendor module
+	public List<Verification> getReportsByDept(String orgId, Long deptId) {
+	    return verificationsRepo.findReportsByDept(orgId, deptId);
+	}
+	
 
 ////	Search clients in vendor reports 
 //	public Page<ClientReportDTO> getReportSummary(String q, Pageable pageable) {

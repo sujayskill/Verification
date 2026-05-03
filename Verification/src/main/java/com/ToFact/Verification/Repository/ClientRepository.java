@@ -44,4 +44,8 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 			""")
 	Page<Client> searchClients(@Param("q") String q, @Param("location") String location, @Param("size") Integer size,
 			Pageable pageable);
+	
+	long countByIsActiveTrue();
+	
+	long countByIsActiveFalse();
 }

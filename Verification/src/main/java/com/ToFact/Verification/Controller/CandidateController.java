@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ToFact.Verification.Config.JwtUtil;
 import com.ToFact.Verification.Dto.CandidateDTO;
 import com.ToFact.Verification.Entity.Candidate;
-import com.ToFact.Verification.Entity.OrgVerificationStatus;
+import com.ToFact.Verification.Entity.ClientVerificationStatus;
 import com.ToFact.Verification.Service.CandidateService;
 
 import io.jsonwebtoken.Claims;
@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CandidateController {
 
-	private final CandidateService service;
+	private final CandidateService candidateService;
 	private final JwtUtil jwtUtil;
 
 	// 🔹 Extract orgId (COMMON METHOD)
@@ -55,7 +55,7 @@ public class CandidateController {
 			throw new RuntimeException("Invalid token: orgId missing");
 		}
 		System.out.println("created");
-		return service.create(dto, orgId); // 🔥 PASS orgId
+		return candidateService.create(dto, orgId); // 🔥 PASS orgId
 	}
 
 	// 🔹 GET ALL (FILTERED BY orgId 🔥)
@@ -64,7 +64,7 @@ public class CandidateController {
 
 		String orgId = extractOrgId(authHeader);
 
-		return service.getByOrgId(orgId);
+		return candidateService.getByOrgId(orgId);
 	}
 
 	// 🔹 GET BY ID (SECURED)
@@ -72,7 +72,7 @@ public class CandidateController {
 	public Candidate getById(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
 
 		String orgId = extractOrgId(authHeader);
-		return service.getById(id, orgId);
+		return candidateService.getById(id, orgId);
 	}
 
 	// 🔹 UPDATE (SECURED)
@@ -81,7 +81,7 @@ public class CandidateController {
 			@RequestHeader("Authorization") String authHeader) {
 
 		String orgId = extractOrgId(authHeader);
-		return service.update(id, dto, orgId);
+		return candidateService.update(id, dto, orgId);
 	}
 
 	// 🔹 DELETE (SECURED)
@@ -89,17 +89,17 @@ public class CandidateController {
 	public String delete(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
 
 		String orgId = extractOrgId(authHeader);
-		service.delete(id, orgId);
+		candidateService.delete(id, orgId);
 		return "Deleted";
 	}
 
 	// 🔹 STATUS UPDATE
 	@PutMapping("/{id}/status")
-	public Candidate updateStatus(@PathVariable Long id, @RequestParam OrgVerificationStatus status,
+	public Candidate updateStatus(@PathVariable Long id, @RequestParam ClientVerificationStatus status,
 			@RequestHeader("Authorization") String authHeader) {
 
 		String orgId = extractOrgId(authHeader);
-		return service.updateStatus(id, status, orgId);
+		return candidateService.updateStatus(id, status, orgId);
 	}
 
 	@GetMapping("/search")
@@ -108,7 +108,22 @@ public class CandidateController {
 			@RequestParam(defaultValue = "desc") String direction, @RequestHeader("Authorization") String authHeader) {
 		String orgId = extractOrgId(authHeader);
 
-		return service.searchCandidates(orgId, q, sortBy, direction);
+		return candidateService.searchCandidates(orgId, q, sortBy, direction);
 	}
 
+	@GetMapping("/by-department/{deptId}")
+	public List<Candidate> getByDepartment(@PathVariable Long deptId, @RequestHeader("Authorization") String auth) {
+		String orgId = extractOrgId(auth);
+		return candidateService.getByDepartment(orgId, deptId);
+	}
+	
+
 }
+//	@GetMapping("/by-department")
+//	public List<Candidate> getCandidates(
+//	        @RequestParam String orgId,
+//	        @RequestParam Long deptId,
+//	        @RequestParam(required = false) String q
+//	) {
+//	    return candidateService.getCandidatesByDept(orgId, deptId, q);
+//	}

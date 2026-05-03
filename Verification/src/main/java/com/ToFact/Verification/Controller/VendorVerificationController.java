@@ -22,7 +22,7 @@ import com.ToFact.Verification.Entity.Documents;
 import com.ToFact.Verification.Entity.Verification;
 import com.ToFact.Verification.Repository.CandidateRepository;
 import com.ToFact.Verification.Repository.DocumentsRepository;
-import com.ToFact.Verification.Service.VerificationsReportsService;
+import com.ToFact.Verification.Service.VendorActivityService;
 import com.ToFact.Verification.Service.VerificationService;
 
 import io.jsonwebtoken.Claims;
@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class VendorVerificationController {
 
 	private final VerificationService service;
-	private final VerificationsReportsService reportService;
+	private final VendorActivityService reportService;
 	private final CandidateRepository candidateRepo;
 	private final DocumentsRepository documentsRepository;
 	private final JwtUtil jwtUtil;
@@ -101,7 +101,7 @@ public class VendorVerificationController {
 //	Functionality for verification rollback approval 
 	@PutMapping("/{id}/approve-rollback")
 	public Verification approveRollback(@PathVariable Long id) {
-		return service.rollback(id);
+		return service.approveClientRollbackRequest(id);
 	}
 
 

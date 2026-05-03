@@ -1,8 +1,9 @@
 package com.ToFact.Verification.Entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -29,7 +30,12 @@ public class Education {
 
 	private String degree;
 	private String institution;
-	private String graduationYear;
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate courseStartDate;
+	
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate courseEndDate;
 
 	@ManyToOne
 	@JoinColumn(name = "candidate_id")

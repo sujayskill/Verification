@@ -1,6 +1,8 @@
 package com.ToFact.Verification.Controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ToFact.Verification.Config.JwtUtil;
 import com.ToFact.Verification.Entity.Notification;
+import com.ToFact.Verification.Entity.VendorNotification;
 import com.ToFact.Verification.Service.NotificationService;
 
 import io.jsonwebtoken.Claims;
@@ -64,4 +67,6 @@ public class NotificationController {
 		service.markAsRead(id);
 		return "Marked as read";
 	}
+	
+
 }

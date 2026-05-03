@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ToFact.Verification.Entity.Candidate;
+import com.ToFact.Verification.Entity.ClientVerificationStatus;
 
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 //    List<OrgCandidate> findByOrgAccountId(Long orgAccountId);
@@ -47,4 +48,28 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 			    )
 			""")
 	List<Candidate> searchByClientId(Long clientId, String q);
+
+//	Find candidate by Client and Department
+	List<Candidate> findByClient_OrgIdAndDepartment_Id(String orgId, Long deptId);
+
+	@Query("""
+			    SELECT c FROM Candidate c
+			    WHERE c.client.orgId = :orgId
+			    AND c.department.id = :deptId
+			    AND (
+			        :q IS NULL OR
+			        LOWER(c.firstName) LIKE LOWER(CONCAT('%', :q, '%')) OR
+			        LOWER(c.email) LIKE LOWER(CONCAT('%', :q, '%'))
+			    )
+			    ORDER BY c.createdAt DESC
+			""")
+	List<Candidate> findByOrgAndDepartment(@Param("orgId") String orgId, @Param("deptId") Long deptId,
+			@Param("q") String q);
+	
+	long countByClient_OrgId(String orgId);
+	
+	long countByClientOrgIdAndStatusIn(String orgId, List<ClientVerificationStatus> statuses);
+	
+	long countByClient_OrgIdAndStatus(String orgId, ClientVerificationStatus status);
+
 }

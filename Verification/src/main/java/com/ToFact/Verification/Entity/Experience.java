@@ -1,9 +1,9 @@
 package com.ToFact.Verification.Entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -30,8 +30,12 @@ public class Experience {
 
     private String companyName;
     private String role;
-    private Date startDate;
-    private Date endDate;
+    
+	@JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
+    
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate endDate;
 
     @ManyToOne
     @JoinColumn(name = "candidate_id")

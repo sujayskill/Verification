@@ -25,9 +25,69 @@ public interface VerificationRepository extends JpaRepository<Verification, Long
 
 	Page<Verification> findByOrgId(String orgId, Pageable pageable);
 
-	Page<Verification> findByOrgIdAndCandidateNameContainingIgnoreCaseOrOrgIdAndCandidateEmailContainingIgnoreCase(
-			String orgId, String name, String orgId2, String email, Pageable pageable);
+	
+	
+//	This method is for implementing search functionality in verification page in client module 
+	@Query("""
+			    SELECT v FROM Verification v
+			    WHERE v.orgId = :orgId
+			    ORDER BY v.createdAt DESC
+			""")
+	List<Verification> findByOrgIdOrderByCreatedAtDesc(@Param("orgId") String orgId);
 
+//	This method is for implementing search functionality in verification page in client module 
+	@Query("""
+			    SELECT v FROM Verification v
+			    WHERE v.orgId = :orgId
+			    AND (
+			        LOWER(v.candidateName) LIKE LOWER(CONCAT('%', :query, '%'))
+			        OR LOWER(v.candidateEmail) LIKE LOWER(CONCAT('%', :query, '%'))
+			    )
+			    ORDER BY v.createdAt DESC
+			""")
+	List<Verification> searchByOrgAndNameOrEmail(@Param("orgId") String orgId, @Param("query") String query);
+
+	
+	
+//	This method is for searching departments in verifications in client module
+	@Query("""
+			    SELECT v FROM Verification v
+			    JOIN Candidate c ON v.candidateId = c.id
+			    WHERE c.client.orgId = :orgId
+			    AND c.department.id = :deptId
+			    ORDER BY v.createdAt DESC
+			""")
+	List<Verification> findByOrgIdAndDepartment(@Param("orgId") String orgId, @Param("deptId") Long deptId);
+
+//	This method is for searching departments in verifications in client module
+	@Query("""
+			    SELECT v FROM Verification v
+			    JOIN Candidate c ON v.candidateId = c.id
+			    WHERE c.client.orgId = :orgId
+			    AND c.department.id = :deptId
+			    AND (
+			        LOWER(c.firstName) LIKE LOWER(CONCAT('%', :q, '%'))
+			        OR LOWER(c.email) LIKE LOWER(CONCAT('%', :q, '%'))
+			    )
+			    ORDER BY v.createdAt DESC
+			""")
+	List<Verification> searchByDept(@Param("orgId") String orgId, @Param("deptId") Long deptId, @Param("q") String q);
+
+	
+	
+//	This method is for getting the candidate reports in reports section client module
+	@Query("""
+			    SELECT v FROM Verification v
+			    JOIN Candidate c ON v.candidateId = c.id
+			    WHERE v.orgId = :orgId
+			    AND v.status = 'COMPLETED'
+			    AND c.department.id = :deptId
+			""")
+	List<Verification> findCompletedByDept(String orgId, Long deptId);
+
+	
+	
+	
 	// 🔹 CANDIDATE LEVEL
 	@Query("""
 			    SELECT v FROM Verification v
@@ -40,8 +100,39 @@ public interface VerificationRepository extends JpaRepository<Verification, Long
 			""")
 	Page<Verification> searchCandidates(@Param("org") String org, @Param("q") String q, Pageable pageable);
 
+	
+//	This method is used to filter the candidates by department in verification sections for vendor module  
+	@Query("""
+		    SELECT v FROM Verification v
+		    WHERE v.orgId = :orgId
+		    AND v.department.id = :deptId
+		    AND (
+		        :q IS NULL OR
+		        LOWER(v.candidateName) LIKE LOWER(CONCAT('%', :q, '%')) OR
+		        LOWER(v.candidateEmail) LIKE LOWER(CONCAT('%', :q, '%'))
+		    )
+		    ORDER BY v.createdAt DESC
+		""")
+	List<Verification> findByOrgAndDept(@Param("orgId") String orgId, @Param("deptId") Long deptId, @Param("q") String q);
+	
+	
+	
+//	This method is to list the candidates by department in reports section at vendor module
+	@Query("""
+		    SELECT v FROM Verification v
+		    JOIN Candidate c ON c.id = v.candidateId
+		    WHERE c.client.orgId = :orgId
+		    AND c.department.id = :deptId
+		    AND v.status = 'COMPLETED'
+		""")
+	List<Verification> findReportsByDept(@Param("orgId") String orgId, @Param("deptId") Long deptId);
+	
+	
+	
 	List<Verification> findByOrgIdAndStatus(String orgId, VerificationStatus status);
 
+	
+	
 	Page<Verification> findByStatus(VerificationStatus status, Pageable pageable);
 
 	Page<Verification> findByStatusAndOrganizationNameContainingIgnoreCase(VerificationStatus status, String org,
@@ -59,11 +150,9 @@ public interface VerificationRepository extends JpaRepository<Verification, Long
 	Page<Verification> findByOrganizationNameContainingIgnoreCase(String name, Pageable pageable);
 
 	List<Verification> findByOrgId(String orgId);
-	
+
 	List<Verification> findByOrgIdAndCandidateNameContainingIgnoreCaseOrOrgIdAndCandidateEmailContainingIgnoreCase(
-		    String orgId1, String name,
-		    String orgId2, String email
-		);
+			String orgId1, String name, String orgId2, String email);
 
 	// 🔹 CLIENT LEVEL (grouping)
 //		@Query("""

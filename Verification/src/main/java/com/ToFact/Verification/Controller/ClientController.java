@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ToFact.Verification.Dto.ClientDTO;
 import com.ToFact.Verification.Entity.Candidate;
 import com.ToFact.Verification.Entity.Client;
+import com.ToFact.Verification.Repository.ClientRepository;
 import com.ToFact.Verification.Service.ClientService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class ClientController {
 
 	private final ClientService clientService;
+	private final ClientRepository clientRepo;
 
 	// 🔹 Create
 	@PreAuthorize("hasole('VENDOR_ADMIN')")
@@ -56,8 +58,8 @@ public class ClientController {
 	}
 
 	// 🔹 Update
-	@PutMapping("/update/{id}")
 	@PreAuthorize("hasRole('VENDOR_ADMIN')")
+	@PutMapping("/update/{id}")
 	public ResponseEntity<Client> update(@PathVariable Long id, @RequestBody ClientDTO dto) {
 		Client updated = clientService.updateClient(id, dto);
 		return ResponseEntity.ok(updated);
@@ -71,6 +73,7 @@ public class ClientController {
 		return "Deleted";
 	}
 
+	@PreAuthorize("hasAnyRole('VENDOR','VENDOR_ADMIN')")
 	@GetMapping("/search")
 	public List<Client> searchClients(@RequestParam(required = false) String q,
 			@RequestParam(required = false) String location, @RequestParam(required = false) Integer size) {
@@ -79,9 +82,18 @@ public class ClientController {
 
 //	This is for search & group the candidates by client in vendor client's candidates section
 //	http://localhost:8081/clients/1/candidates/search
+	@PreAuthorize("hasAnyRole('VENDOR','VENDOR_ADMIN')")
 	@GetMapping("/{clientId}/candidates/search")
 	public List<Candidate> searchCandidates(@PathVariable Long clientId, @RequestParam(required = false) String q) {
 		return clientService.getCandidatesByClientId(clientId, q);
+	}
+	
+	@PreAuthorize("hasAnyRole('VENDOR','VENDOR_ADMIN')")
+	@GetMapping("/by-org/{orgId}")
+	public ResponseEntity<Client> getByOrgId(@PathVariable String orgId) {
+	    Client client = clientRepo.findByOrgId(orgId)
+	            .orElseThrow(() -> new RuntimeException("Client not found"));
+	    return ResponseEntity.ok(client);
 	}
 
 }

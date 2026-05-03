@@ -8,21 +8,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import com.ToFact.Verification.Dto.ClientReportDTO;
 import com.ToFact.Verification.Dto.VerificationDTO;
 import com.ToFact.Verification.Dto.VerificationUpdateDTO;
 import com.ToFact.Verification.Entity.Candidate;
 import com.ToFact.Verification.Entity.Client;
+import com.ToFact.Verification.Entity.ClientVerificationStatus;
+import com.ToFact.Verification.Entity.VendorNotification;
 import com.ToFact.Verification.Entity.Verification;
 import com.ToFact.Verification.Entity.VerificationStatus;
 import com.ToFact.Verification.Repository.CandidateRepository;
 import com.ToFact.Verification.Repository.ClientRepository;
+import com.ToFact.Verification.Repository.VendorNotificationsRepository;
 import com.ToFact.Verification.Repository.VerificationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,40 +36,54 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VerificationService {
 
+	@Autowired
 	private final VerificationRepository repo;
 	private final CandidateRepository candidateRepo;
 	private final ClientRepository clientRepo;
 	private final NotificationService notificationService;
+	private final VendorNotificationsService vendorNotificationsService;
 
 	public Verification create(Long candidateId, String orgId) {
 
-		Optional<Verification> existingOpt = repo.findTopByCandidateIdOrderByCreatedAtDesc(candidateId);
-
+		// 🔍 Fetch candidate
 		Candidate c = candidateRepo.findById(candidateId)
 				.orElseThrow(() -> new RuntimeException("Candidate not found"));
 
-		// 🔐 SECURITY
+		// 🔐 SECURITY CHECK
 		if (!c.getClient().getOrgId().equals(orgId)) {
 			throw new RuntimeException("Unauthorized access");
 		}
 
+		// 🔍 Fetch org
 		Client org = clientRepo.findByOrgId(orgId).orElseThrow(() -> new RuntimeException("Org not found"));
 
-		// 🔥 CASE 1: EXISTING RECORD
+		// 🔍 Check existing verification
+		Optional<Verification> existingOpt = repo.findTopByCandidateIdOrderByCreatedAtDesc(candidateId);
+
+		// =========================================================
+		// 🔁 CASE 1: RE-INITIATE (ROLLED BACK)
+		// =========================================================
 		if (existingOpt.isPresent()) {
+
 			Verification v = existingOpt.get();
 
-			// ❌ Already active
 			if (v.getStatus() != VerificationStatus.ROLLED_BACK) {
 				throw new RuntimeException("Verification already in progress");
 			}
 
-			// ♻️ RE-INITIATE SAME RECORD
+			// 🔄 RESET EXISTING RECORD
+			v.setCandidateId(candidateId);
 			v.setStatus(VerificationStatus.INITIATED);
 			v.setCreatedAt(LocalDateTime.now());
-			v.setSlaDeadline(LocalDateTime.now().plusDays(3));
+			c.setStatus(ClientVerificationStatus.INITIATED);
+			v.setSlaDeadline(LocalDateTime.now().plusDays(7));
 
-			// 🔄 CLEAR OLD DATA (IMPORTANT)
+			// ✅ NEW → Attach Department
+			if (c.getDepartment() != null) {
+				v.setDepartment(c.getDepartment());
+			}
+
+			// 🔄 CLEAR OLD DATA
 			v.setReportData(null);
 			v.setFinalRemarks(null);
 			v.setRiskLevel(null);
@@ -73,32 +91,53 @@ public class VerificationService {
 			v.setDocumentUrl(null);
 			v.setRollbackRequested(false);
 
-			// 🔒 LOCK candidate again
+			// 🔒 Lock candidate
 			c.setLocked(true);
 			candidateRepo.save(c);
 
-			return repo.save(v);
+			Verification saved = repo.save(v);
+
+			// 🚀 PUSH LIVE UPDATE
+			vendorNotificationsService.pushToVendor(saved);
+
+			return saved;
 		}
 
-		// 🔥 CASE 2: FIRST TIME (CREATE NEW)
+		// =========================================================
+		// 🆕 CASE 2: NEW VERIFICATION
+		// =========================================================
+
 		if (c.isLocked()) {
 			throw new RuntimeException("Candidate already under verification");
 		}
 
+		// 🔒 Lock candidate
 		c.setLocked(true);
 		candidateRepo.save(c);
 
 		Verification v = new Verification();
+
 		v.setCandidateId(candidateId);
 		v.setOrgId(orgId);
 		v.setOrganizationName(org.getCompanyName());
 		v.setCandidateName(c.getFirstName() + " " + c.getLastName());
 		v.setCandidateEmail(c.getEmail());
+		c.setStatus(ClientVerificationStatus.INITIATED);
 		v.setStatus(VerificationStatus.INITIATED);
 		v.setCreatedAt(LocalDateTime.now());
 		v.setSlaDeadline(LocalDateTime.now().plusDays(7));
 
-		return repo.save(v);
+		// ✅ NEW → Attach Department
+		if (c.getDepartment() != null) {
+			v.setDepartment(c.getDepartment());
+		}
+
+		Verification saved = repo.save(v);
+
+		// 🚀 PUSH LIVE UPDATE
+		vendorNotificationsService.pushToVendor(saved);
+
+		return saved;
 	}
 
 	public List<Verification> getAll() {
@@ -120,7 +159,7 @@ public class VerificationService {
 //	It gives details by candidates
 	public Verification getByCandidate(Long candidateId, String orgId) {
 
-		Verification v = repo.findByCandidateId(candidateId)
+		Verification v = repo.findTopByCandidateIdOrderByCreatedAtDesc(candidateId)
 				.orElseThrow(() -> new RuntimeException("Verification not found"));
 
 		if (!v.getOrgId().equals(orgId)) {
@@ -136,27 +175,58 @@ public class VerificationService {
 
 		v.setStatus(status);
 
+		// 🔥 FETCH CANDIDATE
+		Candidate c = candidateRepo.findById(v.getCandidateId())
+				.orElseThrow(() -> new RuntimeException("Candidate not found"));
+
+		// 🔥 SYNC STATUS
+		switch (status) {
+		case INITIATED:
+			c.setStatus(ClientVerificationStatus.INITIATED);
+			break;
+
+		case IN_PROGRESS:
+			c.setStatus(ClientVerificationStatus.IN_PROGRESS);
+			break;
+
+		case COMPLETED:
+			c.setStatus(ClientVerificationStatus.COMPLETED);
+			c.setLocked(false); // 🔥 unlock candidate after completion
+			break;
+
+		case FAILED:
+			c.setStatus(ClientVerificationStatus.FAILED);
+			c.setLocked(false);
+			break;
+
+		default:
+			break;
+		}
+
+		candidateRepo.save(c); // 🔥 IMPORTANT
+
 		// 🔥 SEND NOTIFICATION
 		notificationService.sendToClient(v.getOrgId(),
 				"Verification for " + v.getCandidateName() + " is now " + status);
+
 		// 🔥 GENERATE REPORT WHEN COMPLETED
 		if (status == VerificationStatus.COMPLETED) {
-
 			String reportJson = """
-					{
-					    "basicCheck": "VERIFIED",
-					    "addressCheck": "MATCHED",
-					    "educationChecks": [
-					        {
-					            "name": "B.Tech",
-					            "status": "VERIFIED",
-					            "remarks": "Valid degree"
-					        }
-					    ]
-					}
+					    {
+					        "basicCheck": "VERIFIED",
+					        "addressCheck": "MATCHED",
+					        "educationChecks": [
+					            {
+					                "name": "B.Tech",
+					                "status": "VERIFIED",
+					                "remarks": "Valid degree"
+					            }
+					        ]
+					    }
 					""";
 
-			v.setReportData(reportJson); // 🔥 THIS IS REQUIRED
+			v.setReportData(reportJson);
+
 			notificationService.sendToClient(v.getOrgId(), "Report generated for " + v.getCandidateName());
 		}
 
@@ -238,7 +308,8 @@ public class VerificationService {
 	public Verification saveVerificationData(Long id, VerificationUpdateDTO dto) {
 
 		Verification v = repo.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
-
+		Candidate c = new Candidate();
+		c.setStatus(ClientVerificationStatus.COMPLETED);
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 
@@ -274,55 +345,13 @@ public class VerificationService {
 				.toList();
 	}
 
-	public List<VerificationDTO> getCompletedReports(String orgId, String q) {
-
-		List<Verification> list = repo.findByOrgIdAndStatus(orgId, VerificationStatus.COMPLETED);
-
-		// 🔍 SEARCH FILTER
-		if (q != null && !q.trim().isEmpty()) {
-			list = list.stream().filter(v -> v.getCandidateName().toLowerCase().contains(q.toLowerCase())).toList();
-		}
-
-		return list.stream().map(v -> {
-			VerificationDTO dto = new VerificationDTO();
-			dto.setId(v.getId());
-			dto.setCandidateName(v.getCandidateName());
-			dto.setStatus(v.getStatus());
-			dto.setReportAvailable(v.getReportData() != null);
-			dto.setCreatedAt(v.getCreatedAt());
-			return dto;
-		}).toList();
-	}
-
-//	This is for rolling back the verification request from vendor
-	public Verification requestRollback(Long id, String orgId) {
-
-		Verification v = repo.findById(id).orElseThrow(() -> new RuntimeException("Verification not found"));
-
-		// 🔐 SECURITY
-		if (!v.getOrgId().equals(orgId)) {
-			throw new RuntimeException("Unauthorized");
-		}
-
-		if (v.getStatus() == VerificationStatus.COMPLETED) {
-			throw new RuntimeException("Cannot rollback completed verification");
-		}
-
-		// 🔁 MARK REQUEST
-		v.setStatus(VerificationStatus.ROLLBACK_REQUESTED);
-
-		notificationService.sendToVendor("Rollback requested for " + v.getCandidateName());
-
-		return repo.save(v);
-	}
-
 //	this is for verification rollback request approval to client 
-	public Verification rollback(Long id) {
+	public Verification approveClientRollbackRequest(Long id) {
 
 		Verification v = repo.findById(id).orElseThrow(() -> new RuntimeException("Verification not found"));
 
 		if (v.getStatus() != VerificationStatus.ROLLBACK_REQUESTED) {
-			throw new RuntimeException("Rollback not requested");
+			throw new RuntimeException("Rollback not requested from client");
 		}
 
 		Candidate c = candidateRepo.findById(v.getCandidateId())
@@ -333,6 +362,7 @@ public class VerificationService {
 		candidateRepo.save(c);
 
 		v.setStatus(VerificationStatus.ROLLED_BACK);
+		c.setStatus(ClientVerificationStatus.ROLLED_BACK);
 
 		notificationService.sendToClient(v.getOrgId(), "Rollback approved for " + v.getCandidateName());
 		return repo.save(v);
@@ -344,14 +374,13 @@ public class VerificationService {
 	}
 
 //	This method is for search functionality in client verifications page
-	public Page<Verification> searchVerifications(String orgId, String query, Pageable pageable) {
+	public List<Verification> searchVerifications(String orgId, String query) {
 
 		if (query == null || query.isBlank()) {
-			return repo.findByOrgId(orgId, pageable);
+			return repo.findByOrgIdOrderByCreatedAtDesc(orgId);
 		}
 
-		return repo.findByOrgIdAndCandidateNameContainingIgnoreCaseOrOrgIdAndCandidateEmailContainingIgnoreCase(orgId,
-				query, orgId, query, pageable);
+		return repo.searchByOrgAndNameOrEmail(orgId, query);
 	}
 
 //	Search functionality for Verification Requests candidate wise

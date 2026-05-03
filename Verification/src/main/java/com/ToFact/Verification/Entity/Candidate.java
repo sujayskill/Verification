@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -62,13 +62,17 @@ public class Candidate {
 	private List<Documents> documents; // only for PAN/Aadhar
 
 	@Enumerated(EnumType.STRING)
-	private OrgVerificationStatus status;
+	private ClientVerificationStatus status;
 
 	// 🔥 RELATION (MANY → ONE CLIENT)
 	@ManyToOne
 	@JoinColumn(name = "client_id")
-	@JsonIgnore
+	@JsonIgnoreProperties({"candidates"})
 	private Client client;
+	
+	@ManyToOne
+	@JoinColumn(name = "department_id")
+	private Department department;
 	
 	@Column(name = "created_at")
 	private LocalDateTime createdAt = LocalDateTime.now();
