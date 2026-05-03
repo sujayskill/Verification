@@ -62,29 +62,21 @@
   text-align: center;
 }
 
-.notif-badge {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  background: #ef4444;
-  color: white;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 50px;
-  font-weight: bold;
-}
 .vr-card {
-  position: relative;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.vr-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
 }
 
 .vr-card.highlight {
-  border: 2px solid #6366f1;
-  background: #eef2ff;
-  animation: pulse 1.5s infinite;
+  animation: fadeOut 0.3s ease forwards;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
+@keyframes fadeOut {
+  from { background: #fff3f3; }
+  to { background: transparent; }
 }

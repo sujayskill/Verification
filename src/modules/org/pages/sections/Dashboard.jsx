@@ -1,45 +1,89 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { api } from "../../../../services/api/Api";
 import "../../styles/Dashboard.css";
-import { getBasePath } from "../../../../utils/PathHelper";
 
 export default function Dashboard() {
-  const base = getBasePath();
+  const [stats, setStats] = useState({
+    totalCandidates: 0,
+    inProgress: 0,
+    completed: 0,
+    hiringTrend: [],
+  });
+
+  useEffect(() => {
+    fetchDashboard();
+  }, []);
+
+  const fetchDashboard = async () => {
+    try {
+      const res = await api.get("/client/dashboard");
+      setStats(res);
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const max = Math.max(...stats.hiringTrend.map((d) => d.count), 1);
+
   return (
-    <div className="dashboard">
-      {/* TOP CARDS */}
-      <div className="cards">
-        <div className="card purple">
-          <h3>120</h3>
-          <p>Candidates</p>
+    <div className="dashboard modern-dashboard">
+      {/* HEADER */}
+      <div className="dashboard-header">
+        <h2>Client Dashboard</h2>
+        <span className="badge-live">● Live Data</span>
+      </div>
+
+      {/* KPI CARDS */}
+      <div className="cards modern-cards">
+        <div className="card glass purple">
+          <p>Total Candidates</p>
+          <h3>{stats.totalCandidates}</h3>
         </div>
 
-        <div className="card blue">
-          <h3>45</h3>
+        <div className="card glass blue">
           <p>In Progress</p>
+          <h3>{stats.inProgress}</h3>
         </div>
 
-        <div className="card light">
-          <h3>30</h3>
+        <div className="card glass green">
           <p>Completed</p>
+          <h3>{stats.completed}</h3>
         </div>
       </div>
 
-      {/* BOTTOM */}
-      <div className="bottom-section">
-        <div className="chart-card">
+      {/* MAIN GRID */}
+      <div className="bottom-section modern-grid">
+        {/* CHART */}
+        <div className="chart-card glass">
           <h4>Hiring Overview</h4>
 
-          <div className="bars">
-            {[4, 6, 8, 5, 7, 9].map((h, i) => (
-              <div key={i} style={{ height: h * 10 }}></div>
+          <div className="bars modern-bars">
+            {stats.hiringTrend.map((item, i) => (
+              <div key={i} className="bar-wrapper">
+                <div
+                  className="bar"
+                  style={{
+                    height: `${(item.count / max) * 100}%`,
+                  }}
+                />
+                <span className="bar-label">{item.month}</span>
+              </div>
             ))}
           </div>
         </div>
 
-        <div className="promo-card">
-          <h3>Need Faster BGV?</h3>
-          <p>Upgrade your verification plan</p>
-          <button>Upgrade</button>
+        {/* INSIGHT CARD */}
+        <div className="promo-card modern-promo">
+          <h3>⚡ Faster Verifications</h3>
+          <p>Upgrade to priority processing</p>
+
+          <div className="promo-stats">
+            <span>{stats.completed} Verified</span>
+            <span>{stats.inProgress} Ongoing</span>
+          </div>
+
+          <button className="upgrade-btn">Upgrade Plan</button>
         </div>
       </div>
     </div>

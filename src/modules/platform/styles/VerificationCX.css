@@ -186,3 +186,30 @@
   background: #ffe5e5;
   color: #b91c1c;
 }
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.new-badge {
+  background: #22c55e;
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  animation: pulse 1.2s infinite;
+}
+
+/* 🔥 animation makes it noticeable */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.candidate-card.new {
+  border-left: 4px solid #22c55e;
+}

@@ -1,12 +1,12 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import PlatformLayout from "../layout/platform/VendorComps/PlatformLayout";
+import PlatformLayout from "../layout/platform/layoutComps/PlatformLayout";
 
 // Pages
 import Clients from "../modules/platform/pages/sections/Clients";
 import ClientDetails from "../modules/platform/pages/sections/ClientDetails";
 import AddClient from "../modules/platform/pages/sections/AddClient";
-import EditClient from "../modules/platform/pages/sections/EditClient";
+import EditClient from "../modules/platform/pages/sections/EditClientDetails";
 import Dashboard from "../modules/platform/pages/sections/Dashboard";
 import Home from "../modules/platform/pages/sections/Home";
 import MyAccount from "../modules/platform/pages/accounts/Profile";
@@ -21,13 +21,20 @@ import Reports from "../modules/platform/pages/sections/Reports";
 import Profile from "../modules/platform/pages/accounts/Profile";
 import ReportsClients from "../modules/platform/pages/sections/ReportsClients";
 import ReportsClientsCandidates from "../modules/platform/pages/sections/ReportsClientsCandidates";
-import ManageAccounts from "../modules/platform/pages/accounts/ManageAccounts";
+import ManageAccountsVendorAdmin from "../modules/platform/pages/accounts/ManageAccountsVendorAdmin";
+import ManageAccountsVendor from "../modules/platform/pages/accounts/ManageAccountsVendor";
 import Sales from "../modules/platform/pages/sections/Sales";
 import ReportDetails from "../modules/platform/pages/sections/ReportDetails";
 import Notifications from "../modules/platform/pages/accounts/Notifications";
-import StatusClient from "../modules/platform/pages/sections/StatusClient";
-import StatusCandidate from "../modules/platform/pages/sections/StatusCandidate";
-import ClientCandidates from "../modules/platform/pages/sections/ClientCandidates";
+import StatusClient from "../modules/platform/pages/sections/StatusCandidates";
+import StatusCandidate from "../modules/platform/pages/sections/StatusCandidateDetails";
+import ClientCandidates from "../modules/platform/pages/sections/ClientDepartmentCandidates";
+import ClientDepartments from "../modules/platform/pages/sections/ClientDepartments";
+import VerificationDepartments from "../modules/platform/pages/sections/VerificationDepartments";
+import StatusDepartments from "../modules/platform/pages/sections/StatusDepartment";
+import ReportsDepartments from "../modules/platform/pages/sections/ReportsDepartments";
+import ClientCandidateDetails from "../modules/platform/pages/sections/ClientCandidateDetails";
+import EditClientCandidates from "../modules/platform/pages/sections/EditClientCandidates";
 
 export default function PlatformRoutes() {
   return (
@@ -39,34 +46,66 @@ export default function PlatformRoutes() {
         <Route path="dashboard" element={<Dashboard />} />
 
         <Route path="clients" element={<Clients />} />
-                <Route path="clients/new" element={<AddClient />} />
-                <Route path="clients/:id" element={<ClientDetails />} />
-                        <Route path="clients/candidates/:id" element={<ClientCandidates/>} />
-                <Route path="clients/edit/:id" element={<EditClient />} />
-
+        <Route
+          path="clients/:orgId/departments"
+          element={<ClientDepartments />}
+        />
+        <Route path="clientsDetails/:orgId" element={<ClientDetails />} />
+        <Route path="clients/edit/:id/:orgId" element={<EditClient />} />
+        <Route
+          path="clients/editCandidateDetails/:id"
+          element={<EditClientCandidates />}
+        />
+        <Route
+          path="clients/:orgId/departments/:deptId"
+          element={<ClientCandidates />}
+        />
+        <Route path="clients/new" element={<AddClient />} />
+        <Route
+          path="clients/candidateDetails/:id"
+          element={<ClientCandidateDetails />}
+        />
 
         <Route path="verifications" element={<VerificationRequests />} />
-                <Route path="verifications/:orgId" element={<VerificationCX />} />
-                        <Route path="verifications/verificationCX/:id" element={<VerificationCXDetails />} />
-        
-        
-        <Route path="status" element={<Status />} />
-                <Route path="status/client/:orgId" element={<StatusClient />} />
-                        <Route path="status/candidate/:id" element={<StatusCandidate />} />
+        <Route
+          path="verifications/:orgId/departments"
+          element={<VerificationDepartments />}
+        />
+        <Route
+          path="verifications/:orgId/:deptId"
+          element={<VerificationCX />}
+        />
+        <Route
+          path="verifications/verificationCX/:id"
+          element={<VerificationCXDetails />}
+        />
 
+        <Route path="status" element={<Status />} />
+        <Route
+          path="status/:orgId/departments"
+          element={<StatusDepartments />}
+        />
+        <Route path="status/:orgId/:deptId" element={<StatusClient />} />
+        <Route path="status/candidate/:id" element={<StatusCandidate />} />
+
+        <Route path="reports" element={<Reports />} />
+        <Route
+          path="reports/:orgId/departments"
+          element={<ReportsDepartments />}
+        />
+        <Route path="reports/:orgId/:deptId" element={<ReportsClients />} />
+        <Route
+          path="reports/client/:id"
+          element={<ReportsClientsCandidates />}
+        />
+        <Route path="reports/reportDetails/:id" element={<ReportDetails />} />
 
         <Route path="metrics" element={<Metrics />} />
 
-
-        <Route path="reports" element={<Reports />} />
-                <Route path="reports/:orgId" element={<ReportsClients />} />
-                        <Route path="reports/client/:id" element={<ReportsClientsCandidates />}/>
-                                <Route path="reports/reportDetails/:id" element={<ReportDetails />} />
-        
-        
         <Route path="settings" element={<Settings />} />
         <Route path="help&support" element={<HelpSupport />} />
-        <Route path="manageAccounts" element={<ManageAccounts />} />
+        <Route path="manage-account/admin" element={<ManageAccountsVendorAdmin />} />
+        <Route path="manage-account/vendor" element={<ManageAccountsVendor />} />
         <Route path="profile" element={<Profile />} />
         <Route path="sales" element={<Sales />} />
         <Route path="notifications" element={<Notifications />} />

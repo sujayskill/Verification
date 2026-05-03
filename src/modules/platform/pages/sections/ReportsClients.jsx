@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
 
 export default function ReportsCandidates() {
-  const { orgId } = useParams();
+  const { orgId, deptId } = useParams();
   const navigate = useNavigate();
   const base = getBasePath();
 
@@ -12,11 +12,15 @@ export default function ReportsCandidates() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    api.get(`/platform/verifications/reports/${orgId}`).then((res) => {
-      console.log("orgId",orgId);
-      setData(Array.isArray(res) ? res : []);
-      console.log(res);
-    });
+    api
+      .get(
+        `/vendor/platform/verifications/reports/by-department?orgId=${orgId}&deptId=${deptId}`,
+      )
+      .then((res) => {
+        console.log("orgId", orgId);
+        setData(Array.isArray(res) ? res : []);
+        console.log(res);
+      });
   }, [orgId]);
 
   const filtered = data.filter((v) =>
@@ -30,9 +34,13 @@ export default function ReportsCandidates() {
 
   return (
     <div className="reports-container">
-      <button onClick={() => navigate(`/platform/reports`)}>← Back</button>
+      <button
+        onClick={() => navigate(`/platform/reports/${orgId}/departments`)}
+      >
+        ← Back
+      </button>
 
-      <h2>{data[0]?.organizationName || "Reports"}</h2>
+      <h2>{data[0]?.organizationName || "Reports"} - Department</h2>
 
       <input
         placeholder="Search candidate..."

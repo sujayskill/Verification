@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Bell, User } from "react-feather";
 import { useNavigate } from "react-router-dom";
-import "../styles/PlatformHeader.css";
 import { connectSocket } from "../../../services/notifications/SocketService";
 import { api } from "../../../services/api/Api";
+import "../styles/PlatformHeader.css";
 
 export default function VendorHeader() {
   const [showNotif, setShowNotif] = useState(false);

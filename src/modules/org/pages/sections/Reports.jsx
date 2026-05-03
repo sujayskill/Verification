@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
-import "../../styles/Reports.css";
 
 export default function Reports() {
+  const { deptId } = useParams();
+
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -14,8 +15,9 @@ export default function Reports() {
   const fetchData = async () => {
     try {
       const res = await api.get(
-        `/org/verifications/candidateReports?q=${search}`,
+        `/org/verifications/candidateReports/by-department?deptId=${deptId}&q=${search}`
       );
+
       setData(Array.isArray(res) ? res : []);
     } catch (err) {
       console.error(err);
@@ -23,53 +25,52 @@ export default function Reports() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [search]);
+    if (deptId) fetchData();
+  }, [search, deptId]);
 
-  // 🔥 HIGHLIGHT FUNCTION
   const highlight = (text) => {
     if (!search) return text;
-
-    const regex = new RegExp(`(${search})`, "gi");
-    return text.replace(regex, "<mark>$1</mark>");
+    return text.replace(new RegExp(`(${search})`, "gi"), "<mark>$1</mark>");
   };
 
   return (
     <div className="reports-container">
-      <h2>Candidate Reports</h2>
+      <button onClick={() => navigate(`${base}/reports`)}>
+        ← Back to Departments
+      </button>
 
-      {/* 🔍 SEARCH */}
-      <div className="search-bar">
-        <input
-          placeholder="Search candidate..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+      <h2>Department Reports</h2>
+
+      <input
+        placeholder="Search candidate..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
       <div className="reports-list">
-        {data.length === 0 && <p>No completed reports found</p>}
+        {data.length === 0 && <p>No reports found</p>}
 
         {data.map((v) => (
           <div
             key={v.id}
             className="report-row"
-            onClick={() => navigate(`${base}/reports/reportDetails/${v.id}`)}
+            onClick={() =>
+              navigate(`${base}/reports/reportDetails/${v.id}`)
+            }
           >
-            <div>
-              <h4
-                dangerouslySetInnerHTML={{
-                  __html: highlight(v.candidateName),
-                }}
-              />
-              <p>Created: {v.createdAt}</p>
-            </div>
+            <h4
+              dangerouslySetInnerHTML={{
+                __html: highlight(v.candidateName),
+              }}
+            />
 
             <span className={`status ${v.status.toLowerCase()}`}>
               {v.status}
             </span>
 
-            {v.reportAvailable && <span className="ready">✔ Report Ready</span>}
+            {v.reportAvailable && (
+              <span className="ready">✔ Report Ready</span>
+            )}
           </div>
         ))}
       </div>

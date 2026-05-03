@@ -1,26 +1,31 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
+import "../../styles/StatusDepartments.css";
 
-export default function StatusClient() {
+export default function StatusDepartments() {
   const { orgId } = useParams();
   const navigate = useNavigate();
 
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
 
+  const fetchData = async () => {
+    const res = await api.get(`/departments/platform/by-org?orgId=${orgId}`);
+    setData(Array.isArray(res) ? res : []);
+  };
+
   useEffect(() => {
-    api
-      .get(`/platform/verifications/search/candidates?orgId=${orgId}&q=${search}`)
-      .then((res) => setData(Array.isArray(res) ? res : []));
-  }, [orgId, search]);
+    fetchData();
+  }, [orgId]);
+
+  const filtered = data.filter((d) =>
+    d.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   const highlight = (text) => {
-    if (!search || !text) return text;
-    return text.replace(
-      new RegExp(`(${search})`, "gi"),
-      "<mark>$1</mark>"
-    );
+    if (!search) return text;
+    return text.replace(new RegExp(`(${search})`, "gi"), "<mark>$1</mark>");
   };
 
   return (
@@ -29,38 +34,28 @@ export default function StatusClient() {
         ← Back
       </button>
 
-      <h2>{data[0]?.organizationName || "Candidates"}</h2>
+      <h2>Departments</h2>
 
       <input
-        placeholder="Search name / email..."
+        placeholder="Search department..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
       <div className="status-list">
-        {data.map((v) => (
+        {filtered.map((d) => (
           <div
-            key={v.id}
+            key={d.id}
             className="status-card"
             onClick={() =>
-              navigate(`/platform/status/candidate/${v.id}`)
+              navigate(`/platform/status/${orgId}/${d.id}`)
             }
           >
             <h4
               dangerouslySetInnerHTML={{
-                __html: highlight(v.candidateName),
+                __html: highlight(d.name),
               }}
             />
-
-            <p
-              dangerouslySetInnerHTML={{
-                __html: highlight(v.candidateEmail),
-              }}
-            />
-
-            <span className={`status ${v.status.toLowerCase()}`}>
-              {v.status}
-            </span>
           </div>
         ))}
       </div>

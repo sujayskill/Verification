@@ -19,6 +19,9 @@ export default function AddOrganizations() {
 
   return (
     <div className="form-page">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        ← Back
+      </button>
       <div className="form-card">
         <h2>Add Organization</h2>
 

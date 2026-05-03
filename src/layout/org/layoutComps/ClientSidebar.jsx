@@ -28,7 +28,7 @@ export default function OrgSidebar() {
 
   const menu = [
     { name: "Home", path: `/${base}/home` },
-    { name: "Candidates", path: `/${base}/candidates` },
+    { name: "Candidates", path: `/${base}/departments` },
     { name: "Verifications", path: `/${base}/verifications` },
     { name: "Pull Hires", path: `/${base}/pull-hires` },
     { name: "Reports", path: `/${base}/reports` },

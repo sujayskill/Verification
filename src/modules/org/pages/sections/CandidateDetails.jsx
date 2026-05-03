@@ -5,7 +5,7 @@ import { getBasePath } from "../../../../utils/PathHelper";
 import "../../styles/PageStyle.css";
 
 export default function CandidateDetails() {
-  const { id } = useParams();
+  const { id, deptId } = useParams();
   const navigate = useNavigate();
   const base = getBasePath();
 
@@ -13,11 +13,6 @@ export default function CandidateDetails() {
   const [loading, setLoading] = useState(false);
   const [verification, setVerification] = useState(null);
 
-  const isInitiated =
-    verification &&
-    ["INITIATED", "IN_PROGRESS", "ROLLBACK_REQUESTED", "COMPLETED"].includes(
-      verification.status,
-    );
   // 🔥 FETCH DATA
   const fetchData = async () => {
     try {
@@ -25,7 +20,7 @@ export default function CandidateDetails() {
         `/org/candidates/getCandidateDetailsById/${id}`,
       );
       setData(candidate);
-
+      console.log(candidate);
       try {
         const verificationData = await api.get(
           `/org/verifications/by-candidate/${id}`,
@@ -64,6 +59,11 @@ export default function CandidateDetails() {
 
   // Rollback request to vendor
   const requestRollback = async () => {
+    if (!verification?.id) {
+      alert("Verification not available");
+      return;
+    }
+
     if (!window.confirm("Request rollback for this verification?")) return;
 
     try {
@@ -75,28 +75,43 @@ export default function CandidateDetails() {
       alert("Failed to request rollback");
     }
   };
+  
+  const status = verification?.status;
+  const isCompleted = status === "COMPLETED";
+  const isInitiated =
+    verification &&
+    ["INITIATED", "IN_PROGRESS", "ROLLBACK_REQUESTED"].includes(
+      verification.status,
+    );
 
   if (!data) return <p>Loading...</p>;
 
   return (
     <div className="container">
+      {isCompleted && <h2 className="verified-title">✅ VERIFIED</h2>}
       {/* 🔙 BACK */}
-      <button onClick={() => navigate(`/${base}/candidates`)}>
+      <button
+        onClick={() => navigate(`/${base}/candidates/${data.department.id}`)}
+      >
         ← Back to Candidates
       </button>
 
       {/* 🚀 ACTION */}
       <div className="action-bar">
         <button
-          className={`primary-btn ${isInitiated ? "disabled" : ""}`}
+          className={`primary-btn ${
+            isCompleted || isInitiated ? "disabled" : ""
+          }`}
           onClick={initiateVerification}
-          disabled={isInitiated || loading}
+          disabled={isCompleted || isInitiated || loading}
         >
           {loading
             ? "Processing..."
-            : isInitiated
-              ? "Verification Initiated"
-              : "🚀 Initiate Verification"}
+            : isCompleted
+              ? "✅ Verification Completed"
+              : isInitiated
+                ? "Verification Initiated"
+                : "🚀 Initiate Verification"}
         </button>
         {verification?.status === "ROLLBACK_REQUESTED" && (
           <p className="info-text">

@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
+import { useNavigate } from "react-router-dom";
+import { getBasePath } from "../../../../utils/PathHelper";
+import { useParams } from "react-router-dom";
 import "../../styles/Verifications.css";
 
 export default function Verifications() {
+  const navigate = useNavigate();
+  const base = getBasePath();
+  const { deptId } = useParams();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
 
   // 🔥 FETCH API
   const fetchData = async () => {
     try {
       const res = await api.get(
-        `/org/verifications/search?q=${search}&page=${page}&size=6`,
+        `/org/verifications/by-department/${deptId}?q=${search}`,
       );
-
-      setData(res.content || []);
-      setTotalPages(res.totalPages || 0);
+      setData(Array.isArray(res) ? res : []);
     } catch (err) {
       console.error(err);
     }
@@ -24,18 +26,21 @@ export default function Verifications() {
 
   useEffect(() => {
     fetchData();
-  }, [search, page]);
+  }, [search]);
 
   // 🔥 HIGHLIGHT FUNCTION
   const highlight = (text) => {
-    if (!search) return text;
+    if (!search || !text) return text;
 
-    const regex = new RegExp(`(${search})`, "gi");
-    return text.replace(regex, "<mark>$1</mark>");
+    const safe = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return text.replace(new RegExp(`(${safe})`, "gi"), "<mark>$1</mark>");
   };
 
   return (
     <div className="content">
+      <button onClick={() => navigate(`${base}/verifications`)}>
+        ← Back to Departments
+      </button>
       <h2>Verification Status</h2>
 
       {/* 🔍 SEARCH */}
@@ -45,7 +50,6 @@ export default function Verifications() {
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
-            setPage(0); // reset page
           }}
         />
       </div>
@@ -58,8 +62,7 @@ export default function Verifications() {
               __html: highlight(v.candidateName),
             }}
           />
-              <h5>{v.candidateEmail}</h5>   {/* 👈 Added email under name */}
-
+          <h5>{v.candidateEmail}</h5> {/* 👈 Added email under name */}
           {/* 🔥 TIMELINE */}
           <div className="timeline">
             {["INITIATED", "IN_PROGRESS", "COMPLETED"].map((step) => (
@@ -71,13 +74,10 @@ export default function Verifications() {
               </span>
             ))}
           </div>
-
           <p>Status: {v.status}</p>
-
           <p>
             <b>Vendor Note:</b> {v.comment || "No updates yet"}
           </p>
-
           {v.status === "COMPLETED" && v.reportUrl && (
             <a
               href={`http://localhost:8081/org/verifications/download/${v.id}`}
@@ -91,22 +91,6 @@ export default function Verifications() {
       ))}
 
       {/* 🔥 PAGINATION */}
-      <div className="pagination">
-        <button disabled={page === 0} onClick={() => setPage(page - 1)}>
-          Prev
-        </button>
-
-        <span>
-          Page {page + 1} of {totalPages}
-        </span>
-
-        <button
-          disabled={page === totalPages - 1}
-          onClick={() => setPage(page + 1)}
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 }

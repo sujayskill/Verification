@@ -33,6 +33,10 @@ export default function OrgReportDetails() {
 
   return (
     <div className="report-container">
+      {/* <button onClick={() =>  navigate(`${base}/reports/${d.id}`)}>
+        ← Back to Candidates
+      </button> */}
+      
       {/* DOWNLOAD */}
       <div className="report-header">
         <button className="download-btn" onClick={downloadPDF}>

@@ -1,0 +1,29 @@
+/* Default (scroll allowed) */
+.page-content {
+  margin-top: 20px;
+  overflow-y: auto;
+  height: calc(100vh - 80px); /* header adjust if needed */
+}
+
+/* 🔥 Dashboard ONLY → no scroll */
+.app-container.no-scroll .page-content {
+  overflow: hidden;
+  height: calc(100vh - 80px);
+}
+
+/* Optional: prevent body scroll too */
+.app-container.no-scroll {
+  overflow: hidden;
+}
+
+.main-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+}

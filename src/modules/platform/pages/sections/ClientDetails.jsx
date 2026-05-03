@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
+import { getUserRole } from "../../../../utils/UiHideHelper";
 import "../../styles/Clients.css";
 
 export default function OrganizationDetails() {
-  const { id } = useParams();
+  const role = getUserRole();
+  const { id, orgId } = useParams();
   const navigate = useNavigate();
+
+  console.log(orgId);
 
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    api.get(`/clients/${id}`).then(setData);
+    api.get(`/clients/by-org/${orgId}`).then(setData);
   }, [id]);
 
   if (!data) return <p>Loading...</p>;
@@ -44,12 +48,14 @@ export default function OrganizationDetails() {
           <b>Employees:</b> {data.employeeCount}
         </p>
 
-        <button
-          className="btn"
-          onClick={() => navigate(`/platform/clients/candidates/${data.id}`)}
-        >
-          View Candidates →
-        </button>
+        {role !== "ROLE_VENDOR" && (
+          <button
+            className="primary-btn"
+            onClick={() => navigate(`/platform/clients/edit/${data.id}/${orgId}`)}
+          >
+            ✏️ Edit Client
+          </button>
+        )}
       </div>
     </div>
   );

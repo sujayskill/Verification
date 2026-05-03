@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
-import "../../styles/Clients.css";
 import useDebounce from "../../../../services/hooks/DebounceEffect";
+import { getUserRole } from "../../../../utils/UiHideHelper";
+import "../../styles/Clients.css";
 
 export default function Organizations() {
   const [clients, setClients] = useState([]);
@@ -10,6 +11,9 @@ export default function Organizations() {
   const [location, setLocation] = useState("");
   const [size, setSize] = useState("");
   const debouncedSearch = useDebounce(search, 400);
+  const role = getUserRole();
+
+  console.log(role);
 
   const navigate = useNavigate();
 
@@ -77,12 +81,14 @@ export default function Organizations() {
             </select>
           </div>
 
-          <button
-            className="primary-btn"
-            onClick={() => navigate("/platform/clients/new")}
-          >
-            + Add Organization
-          </button>
+          {role !== "ROLE_VENDOR" && (
+            <button
+              className="primary-btn"
+              onClick={() => navigate("/platform/clients/new")}
+            >
+              + Add Organization
+            </button>
+          )}
         </div>
       </div>
 
@@ -98,7 +104,9 @@ export default function Organizations() {
                 dangerouslySetInnerHTML={{
                   __html: highlight(c.companyName || ""),
                 }}
-                onClick={() => navigate(`/platform/clients/${c.id}`)}
+                onClick={() =>
+                  navigate(`/platform/clients/${c.orgId}/departments`)
+                }
               />
               <p
                 dangerouslySetInnerHTML={{

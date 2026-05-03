@@ -1,0 +1,62 @@
+.status-page {
+  padding: 20px;
+}
+
+.status-list {
+  display: grid;
+  gap: 15px;
+}
+
+.status-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.status-card:hover {
+  transform: translateY(-3px);
+}
+
+/* STATUS COLORS */
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.status.initiated { background: #e0f2fe; }
+.status.in_progress { background: #fff7ed; }
+.status.rollback_requested { background: #fef3c7; }
+.status.rolled_back { background: #f3f4f6; }
+.status.completed { background: #dcfce7; }
+
+/* PIPELINE */
+.pipeline {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.step {
+  padding: 10px;
+  border-radius: 20px;
+  background: #eee;
+}
+
+.step.active {
+  background: #4f46e5;
+  color: white;
+}
+
+.status-card {
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+
+.status-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}

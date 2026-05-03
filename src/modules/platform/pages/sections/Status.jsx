@@ -55,7 +55,7 @@ export default function VerificationStatus() {
           <div
             key={orgId}
             className="status-card"
-            onClick={() => navigate(`/platform/status/client/${orgId}`)}
+            onClick={() => navigate(`/platform/status/${orgId}/departments`)}
           >
             <h4
               dangerouslySetInnerHTML={{

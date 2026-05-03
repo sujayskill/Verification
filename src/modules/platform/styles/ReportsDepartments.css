@@ -89,3 +89,13 @@
   color: #999;
   font-size: 14px;
 }
+
+.report-card {
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+
+.report-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}

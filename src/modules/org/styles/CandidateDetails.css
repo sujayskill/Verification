@@ -16,3 +16,13 @@
 .primary-btn.disabled {
   background: #ccc;
 }
+
+.verified-title {
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 10px 14px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 10px;
+  font-weight: 600;
+}

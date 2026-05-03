@@ -13,6 +13,7 @@ export default function ReportDetails() {
   useEffect(() => {
     api.get(`/platform/verifications/${id}`).then((res) => {
       setData(res.verification);
+      console.log(res);
     });
   }, [id]);
 

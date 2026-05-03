@@ -50,6 +50,7 @@
 /* SETTINGS */
 .sidebar-footer {
   position: relative;
+  margin-bottom:30px;
 }
 
 .settings-btn {

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { getUserRole } from "../../../utils/UiHideHelper";
 import "../styles/PlatformSidebar.css";
 
 export default function PlatformSidebar() {
@@ -20,6 +21,16 @@ export default function PlatformSidebar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleManageAccounts = () => {
+    const role = getUserRole();
+
+    if (role === "ROLE_VENDOR") {
+      navigate("/platform/manage-account/vendor");
+    } else {
+      navigate("/platform/manage-account/admin");
+    }
+  };
 
   useEffect(() => {
     setShowSettings(false);
@@ -73,9 +84,7 @@ export default function PlatformSidebar() {
         {/* 🔥 SLIDE PANEL */}
         {showSettings && (
           <div className="settings-panel">
-            <button onClick={() => navigate("/platform/manageAccounts")}>
-              Manage Accounts
-            </button>
+            <button onClick={handleManageAccounts}>Manage Accounts</button>
 
             <button onClick={() => navigate("/platform/help&support")}>
               Help

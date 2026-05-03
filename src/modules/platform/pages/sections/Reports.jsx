@@ -39,28 +39,45 @@ export default function Reports() {
   };
 
   return (
-    <div className="reports-container">
-      <h2>Clients Reports</h2>
+    <div className="reports-page">
+      {/* HEADER */}
+      <div className="reports-header">
+        <div>
+          <h2>Clients Reports</h2>
+          <p>View completed verification reports by client</p>
+        </div>
 
-      <input
-        placeholder="Search client..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        <input
+          className="search-input"
+          placeholder="Search client..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-      <div className="reports-list">
+      {/* LIST */}
+      <div className="reports-grid">
+        {filtered.length === 0 && <p className="empty">No clients found</p>}
+
         {filtered.map(([orgId, value]) => (
           <div
             key={orgId}
-            className="report-row"
-            onClick={() => navigate(`/platform/reports/${orgId}`)}
+            className="report-card"
+            onClick={() => navigate(`/platform/reports/${orgId}/departments`)}
           >
-            <h4
-              dangerouslySetInnerHTML={{
-                __html: highlight(value.name),
-              }}
-            />
-            <p>{value.list.length} Candidates</p>
+            <div className="report-card-top">
+              <h3
+                dangerouslySetInnerHTML={{
+                  __html: highlight(value.name),
+                }}
+              />
+            </div>
+
+            <div className="report-card-bottom">
+              <span className="count">{value.list.length} Candidates</span>
+
+              <span className="view">View →</span>
+            </div>
           </div>
         ))}
       </div>

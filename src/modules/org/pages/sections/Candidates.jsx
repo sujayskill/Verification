@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
+import { useParams } from "react-router-dom";
 import "../../styles/Candidates.css";
 
 export default function Candidates() {
+  const { deptId } = useParams();
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const base = getBasePath();
@@ -13,7 +15,8 @@ export default function Candidates() {
 
   const fetchCandidates = async () => {
     try {
-      let url = `/org/candidates/search?sortBy=createdAt&direction=desc`;
+      let url = `/org/candidates/by-department/${deptId}`;
+
       if (search.trim()) {
         url += `&q=${search}`;
       }
@@ -27,8 +30,8 @@ export default function Candidates() {
   };
 
   useEffect(() => {
-    fetchCandidates();
-  }, [search, status]);
+    if (deptId) fetchCandidates();
+  }, [search, deptId]);
 
   const deleteCandidate = async (id) => {
     if (!window.confirm("Are you sure you want to delete this candidate?"))
@@ -53,6 +56,9 @@ export default function Candidates() {
   return (
     <div className="page">
       <div className="page-header">
+        <button onClick={() => navigate(`${base}/departments`)}>
+          ← Back to Departments
+        </button>
         <h2>Candidates</h2>
         <div className="actions">
           <input
@@ -65,7 +71,7 @@ export default function Candidates() {
         </div>
         <button
           className="primary-btn"
-          onClick={() => navigate(`/${base}/candidates/new`)}
+          onClick={() => navigate(`${base}/candidates/new/${deptId}`)}
         >
           + Add Candidate
         </button>
@@ -88,15 +94,18 @@ export default function Candidates() {
                     __html: highlight(c.email),
                   }}
                 />
-                <span className={`status ${c.locked ? "locked" : ""}`}>
-                  {c.locked ? "🔒 Under Verification" : c.status}
-                </span>{" "}
+                <span className={`status`}>
+                  {c.status === "COMPLETED" && "✅ Verification Completed"}
+                  {c.status === "IN_PROGRESS" && "🟡 In Progress"}
+                  {c.status === "INITIATED" && "🔵 Initiated"}
+                  {c.status === "ROLLBACK_REQUESTED" && "⚠ Rollback Requested"}
+                  {c.status === "CREATED" && "Not Started"}
+                </span>
               </div>
-
               <div className="actions">
                 <button
                   onClick={() =>
-                    navigate(`${base}/candidates/candidateDetails/${c.id}`)
+                    navigate(`${base}/candidates/candidateDetails/${c.id}/`)
                   }
                 >
                   View

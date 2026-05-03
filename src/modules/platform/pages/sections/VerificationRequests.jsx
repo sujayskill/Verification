@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
-import "../../styles/VerificationRequests.css";
+import SockJS from "sockjs-client";
 
 export default function VerificationRequests() {
+  const [notifications, setNotifications] = useState({});
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -20,10 +21,33 @@ export default function VerificationRequests() {
     }
   };
 
+  const fetchNotifications = async () => {
+    try {
+      const res = await api.get("/vendor/notifications/count");
+
+      setNotifications(res || {});
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const openClient = (orgId) => {
+    setNotifications((prev) => ({
+      ...prev,
+      [orgId]: 0,
+    }));
+
+    navigate(`/platform/verifications/${orgId}/departments`);
+  };
+
   useEffect(() => {
     const delay = setTimeout(fetchData, 400);
     return () => clearTimeout(delay);
   }, [search]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
 
   // 🔥 HIGHLIGHT
   const highlight = (text) => {
@@ -57,9 +81,14 @@ export default function VerificationRequests() {
         {data.map((org) => (
           <div
             key={org.orgId}
-            className="vr-card"
-            onClick={() => navigate(`/platform/verifications/${org.orgId}`)}
+            className={`vr-card ${notifications[org.orgId] ? "highlight" : ""}`}
+            onClick={() => openClient(org.orgId)}
           >
+            {notifications[org.orgId] && (
+              <span className="notif-badge">
+                {notifications[org.orgId] > 3 ? "3+" : notifications[org.orgId]}
+              </span>
+            )}
             <h3
               dangerouslySetInnerHTML={{
                 __html: highlight(org.organizationName),

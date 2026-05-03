@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
-import "../../styles/VerificationCX.css";
 import { getSlaMeta, formatTimeLeft } from "../../../../utils/SlaHelper";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import "../../styles/VerificationCX.css";
 
-export default function VerificationCandidates() {
-  const { orgId } = useParams();
+export default function VerificationCX() {
+  const [newItems, setNewItems] = useState({});
+  const { orgId, deptId } = useParams();
   const navigate = useNavigate();
+  const [notifications, setNotifications] = useState({});
 
   const [now, setNow] = useState(Date.now());
   const [data, setData] = useState([]);
@@ -15,16 +19,44 @@ export default function VerificationCandidates() {
   console.log("org", orgId);
   const fetchData = async () => {
     try {
-      console.log("Calling API with:", orgId, search);
+      // console.log("Calling API with:", orgId, search);
       const res = await api.get(
-        `/platform/verifications/search/candidates?orgId=${orgId}&q=${search}`,
+        `/vendor/platform/verifications/by-department?orgId=${orgId}&deptId=${deptId}&q=${search}`,
       );
-      console.log("API RES:", res);
+      // console.log("API RES:", res);
       setData(Array.isArray(res) ? res : []);
     } catch (err) {
       console.error(err);
     }
   };
+
+  const fetchVerificationNotifications = async () => {
+    try {
+      const data = await api.get(
+        `/vendor/notifications/count/verifications?orgId=${orgId}&deptId=${deptId}`,
+      );
+
+      if (!data || Object.keys(data).length === 0) return;
+
+      const normalized = {};
+      Object.keys(data).forEach((key) => {
+        normalized[String(key)] = data[key];
+      });
+
+      setNotifications(normalized);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchVerificationNotifications();
+  }, [orgId, deptId]);
+
+  useEffect(() => {
+    const interval = setInterval(fetchVerificationNotifications, 10000);
+    return () => clearInterval(interval);
+  }, [orgId, deptId]);
 
   // ⏱ LIVE TIMER
   useEffect(() => {
@@ -40,13 +72,10 @@ export default function VerificationCandidates() {
   }, [search, orgId]);
 
   const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
   const highlight = (text) => {
     if (!search || !text) return text;
-
     const safeSearch = escapeRegex(search);
     const regex = new RegExp(`(${safeSearch})`, "gi");
-
     return text.replace(regex, "<mark>$1</mark>");
   };
 
@@ -74,12 +103,13 @@ export default function VerificationCandidates() {
         <div className="vr-left">
           <button
             className="back-btn"
-            onClick={() => navigate("/platform/verifications")}
+            onClick={() =>
+              navigate(`/platform/verifications/${orgId}/departments`)
+            }
           >
             ← Back
           </button>
-
-          <h2>{data[0]?.organizationName || "Candidates"} - Candidates</h2>
+          <h2>{data[0]?.organizationName || "Candidates"} - Department</h2>{" "}
         </div>
 
         <div className="vr-search">
@@ -98,23 +128,36 @@ export default function VerificationCandidates() {
           <div
             key={v.id}
             className={`candidate-card ${sla.class}`}
-            onClick={() =>
-              navigate(`/platform/verifications/verificationCX/${v.id}`)
-            }
+            onClick={async () => {
+              const key = String(v.id);
+              // ✅ remove notification locally
+              setNotifications((prev) => {
+                const copy = { ...prev };
+                copy[key] = 0;
+                return copy;
+              });
+              try {
+                await api.put(
+                  `/vendor/notifications/mark-read/${orgId}/${deptId}/verification/${v.id}`,
+                );
+              } catch (err) {
+                console.error(err);
+              }
+              navigate(`/platform/verifications/verificationCX/${v.id}`);
+            }}
           >
-            <div className="sla-section">
-              <div className={`sla-badge ${sla.class}`}>{sla.label}</div>
-
-              <div className="sla-timer">
-                ⏱ {formatTimeLeft(sla.remainingMs)}
-              </div>
+            {/* 🔥 TOP ROW (BEST PLACE FOR BADGE) */}
+            <div className="card-header">
+              <h4
+                dangerouslySetInnerHTML={{
+                  __html: highlight(v.candidateName),
+                }}
+              />
+              {/* ✅ NEW BADGE HERE */}
+              {notifications[v.id] && <span className="new-badge">NEW</span>}
             </div>
-            <h4
-              dangerouslySetInnerHTML={{
-                __html: highlight(v.candidateName),
-              }}
-            />
 
+            {/* EMAIL */}
             <p
               className="email"
               dangerouslySetInnerHTML={{
@@ -122,11 +165,13 @@ export default function VerificationCandidates() {
               }}
             />
 
-            <p>ID: {v.candidateId}</p>
-
+            {/* STATUS */}
             <span className={`status ${v.status.toLowerCase()}`}>
               {v.status}
             </span>
+
+            {/* SLA */}
+            <div className={`sla-badge ${sla.class}`}>{sla.label}</div>
           </div>
         );
       })}

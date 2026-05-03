@@ -3,8 +3,10 @@ import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
 import "../../styles/AddCandidate.css";
+import { useParams } from "react-router-dom";
 
 export default function AddCandidate() {
+  const { deptId } = useParams();
   const navigate = useNavigate();
   const base = getBasePath();
 
@@ -121,6 +123,7 @@ export default function AddCandidate() {
         ...form,
         educations,
         experiences,
+         departmentId: deptId,
       });
 
       const candidateId = res?.id;
@@ -179,7 +182,7 @@ export default function AddCandidate() {
       }
 
       alert("✅ Candidate + Documents uploaded");
-      navigate(`/${base}candidates`);
+      navigate(`/${base}/candidates/${deptId}`);
     } catch (err) {
       console.error("SAVE ERROR:", err);
       alert("❌ Failed");
@@ -191,12 +194,12 @@ export default function AddCandidate() {
   return (
     <div className="add-page">
       {/* 🔙 BACK */}
-      <button onClick={() => navigate(`/${base}/candidates`)}>
+      <button onClick={() => navigate(`/${base}/candidates/${deptId}`)}>
         ← Back to Candidates
       </button>
 
       <h2>Add Candidate</h2>
-      
+
       {/* 🔹 BASIC */}
       <div className="form-card">
         <h3>Basic Information</h3>
