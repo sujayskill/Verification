@@ -20,19 +20,19 @@ import Metrics from "../modules/platform/pages/sections/Metrics";
 import Reports from "../modules/platform/pages/sections/Reports";
 import Profile from "../modules/platform/pages/accounts/Profile";
 import ReportsClients from "../modules/platform/pages/sections/ReportsClients";
-import ReportsClientsCandidates from "../modules/platform/pages/sections/ReportsClientsCandidates";
+import ReportsCandidates from "../modules/platform/pages/sections/ReportsClientCandidates";
 import ManageAccountsVendorAdmin from "../modules/platform/pages/accounts/ManageAccountsVendorAdmin";
 import ManageAccountsVendor from "../modules/platform/pages/accounts/ManageAccountsVendor";
 import Sales from "../modules/platform/pages/sections/Sales";
 import ReportDetails from "../modules/platform/pages/sections/ReportDetails";
 import Notifications from "../modules/platform/pages/accounts/Notifications";
-import StatusClient from "../modules/platform/pages/sections/StatusCandidates";
+import StatusClients from "../modules/platform/pages/sections/StatusCandidates";
 import StatusCandidate from "../modules/platform/pages/sections/StatusCandidateDetails";
 import ClientCandidates from "../modules/platform/pages/sections/ClientCandidates";
 import ClientDepartments from "../modules/platform/pages/sections/ClientDepartments";
-import VerificationDepartments from "../modules/platform/pages/sections/VerificationDepartments";
-import StatusDepartments from "../modules/platform/pages/sections/StatusDepartment";
-import ReportsDepartments from "../modules/platform/pages/sections/ReportsDepartments";
+import VerificationDepartments from "../modules/platform/unused/VerificationDepartments";
+import StatusDepartments from "../modules/platform/unused/StatusDepartment";
+import ReportsDepartments from "../modules/platform/unused/ReportsDepartments";
 import CandidateDetails from "../modules/platform/pages/sections/CandidateDetails";
 import EditCandidate from "../modules/platform/pages/sections/EditCandidate";
 
@@ -45,69 +45,47 @@ export default function PlatformRoutes() {
         <Route path="home" element={<Home />} />
         <Route path="dashboard" element={<Dashboard />} />
 
+
         <Route path="clients" element={<Clients />} />
-        <Route
-          path="clients/:orgId/departments"
-          element={<ClientDepartments />}
-        />
+        <Route path="clients/:orgId/departments" element={<ClientDepartments />} />
         <Route path="clientsDetails/:orgId" element={<ClientDetails />} />
         <Route path="clients/edit/:id/:orgId" element={<EditClient />} />
-        <Route
-          path="clients/editCandidateDetails/:id"
-          element={<EditCandidate />}
-        />
-        <Route
-          path="clients/:orgId/departments/:deptId"
-          element={<ClientCandidates />}
-        />
+        <Route path="clients/editCandidateDetails/:id" element={<EditCandidate />} />
+        <Route path="clients/:orgId/departments/:deptId" element={<ClientCandidates />} />
         <Route path="clients/new" element={<AddClient />} />
-        <Route
-          path="clients/candidateDetails/:id"
-          element={<CandidateDetails />}
-        />
+        <Route path="clients/candidateDetails/:id" element={<CandidateDetails />} />
+
 
         <Route path="verifications" element={<VerificationRequests />} />
-        <Route
-          path="verifications/:orgId/departments"
-          element={<VerificationDepartments />}
-        />
-        <Route
-          path="verifications/:orgId/:deptId"
-          element={<VerificationCX />}
-        />
-        <Route
-          path="verifications/verificationCX/:id"
-          element={<VerificationCXDetails />}
-        />
+        {/* <Route path="verifications/:orgId/departments" element={<VerificationDepartments />} /> */}
+        <Route path="verifications/:orgId" element={<VerificationCX />} />
+        <Route path="verifications/verificationCX/:id" element={<VerificationCXDetails />} />
+
 
         <Route path="status" element={<Status />} />
-        <Route
-          path="status/:orgId/departments"
-          element={<StatusDepartments />}
-        />
-        <Route path="status/:orgId/:deptId" element={<StatusClient />} />
+        {/* <Route path="status/:orgId/departments" element={<StatusDepartments />} /> */}
+        <Route path="status/:orgId" element={<StatusClients />} />
         <Route path="status/candidate/:id" element={<StatusCandidate />} />
 
+
         <Route path="reports" element={<Reports />} />
-        <Route
-          path="reports/:orgId/departments"
-          element={<ReportsDepartments />}
-        />
-        <Route path="reports/:orgId/:deptId" element={<ReportsClients />} />
-        <Route
-          path="reports/client/:id"
-          element={<ReportsClientsCandidates />}
-        />
+        {/* <Route path="reports/:orgId/departments" element={<ReportsDepartments />} /> */}
+        <Route path="reports/:orgId" element={<ReportsClients />} />
+        <Route path="reports/client/:id" element={<ReportsCandidates />} />
         <Route path="reports/reportDetails/:id" element={<ReportDetails />} />
 
+
         <Route path="metrics" element={<Metrics />} />
+
+
+        <Route path="sales" element={<Sales />} />
+
 
         <Route path="settings" element={<Settings />} />
         <Route path="help&support" element={<HelpSupport />} />
         <Route path="manage-account/admin" element={<ManageAccountsVendorAdmin />} />
         <Route path="manage-account/vendor" element={<ManageAccountsVendor />} />
         <Route path="profile" element={<Profile />} />
-        <Route path="sales" element={<Sales />} />
         <Route path="notifications" element={<Notifications />} />
       </Route>
     </Routes>

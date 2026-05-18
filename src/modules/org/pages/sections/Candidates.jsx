@@ -66,12 +66,12 @@ export default function Candidates() {
   };
 
   return (
-    <div className="page">
-      <div className="page-header">
+    <div className="c-page">
+      <div className="c-page-header">
         {/* LEFT */}
-        <div className="header-left">
+        <div className="c-eader-left">
           <button
-            className="back-btn"
+            className="c-back-btn"
             onClick={() => navigate(`${base}/departments`)}
           >
             ← Back
@@ -80,16 +80,16 @@ export default function Candidates() {
         </div>
 
         {/* RIGHT */}
-        <div className="header-right">
+        <div className="c-header-right">
           <input
-            className="search-input"
+            className="c-search-input"
             placeholder="Search by name or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 
           <button
-            className="primary-btn"
+            className="c-primary-btn"
             onClick={() => navigate(`${base}/candidates/new/${deptId}`)}
           >
             + Add Candidate
@@ -103,44 +103,141 @@ export default function Candidates() {
           filtered.map((c) => (
             <div
               key={c.id}
-              className="row clickable-row"
+              className="candidate-row clickable-row"
               onClick={() =>
-                navigate(`${base}/candidates/candidateDetails/${c.id}/`)
-              }
-            >
-              <div className="info">
+                navigate(
+                  `${base}/candidates/candidateDetails/${c.id}/`)}>
+              {/* LEFT SECTION */}
+              <div className="candidate-col candidate-primary">
+
                 <h4
                   dangerouslySetInnerHTML={{
-                    __html: highlight(`${c.firstName} ${c.lastName}`),
+                    __html: highlight(
+                      `${c.firstName} ${c.lastName}`,
+                    ),
                   }}
                 />
+
                 <p
                   dangerouslySetInnerHTML={{
                     __html: highlight(c.email),
                   }}
                 />
-                <span className={`status`}>
-                  {c.status === "COMPLETED" && "✅ Verification Completed"}
-                  {c.status === "IN_PROGRESS" && "🟡 In Progress"}
-                  {c.status === "INITIATED" && "🔵 Initiated"}
-                  {c.status === "ROLLBACK_REQUESTED" && "⚠ Rollback Requested"}
-                  {c.status === "CREATED" && "Not Started"}
+
+                <span className="candidate-status">
+
+                  {c.status === "COMPLETED" &&
+                    "✅ Verification Completed"}
+
+                  {c.status === "IN_PROGRESS" &&
+                    "🟡 In Progress"}
+
+                  {c.status === "INITIATED" &&
+                    "🔵 Initiated"}
+
+                  {c.status ===
+                    "ROLLBACK_REQUESTED" &&
+                    "⚠ Rollback Requested"}
+
+                  {c.status === "CREATED" &&
+                    "⚪ Not Started"}
+
                 </span>
               </div>
-              <div className="actions">
+
+              {/* MIDDLE SECTION */}
+
+              <div className="candidate-col candidate-middle">
+
+                {/* MOBILE */}
+
+                <div className="candidate-meta-row">
+
+                  <span className="candidate-meta-label">
+                    Mobile: 
+                  </span>
+
+                  <span className="candidate-meta-value">
+                    {c.phone
+                      ? `${c.countryCode || ""} ${c.phone}`
+                      : "N/A"}
+                  </span>
+                </div>
+
+                {/* LOCATION */}
+
+                <div className="candidate-meta-row">
+
+                  <span className="candidate-meta-label">
+                    Location: 
+                  </span>
+
+                  <span className="candidate-meta-value">
+                    {c.location?.trim()
+                      ? c.location
+                      : " N/A"}
+                  </span>
+                </div>
+
+                {/* ROLE */}
+
+                <div className="candidate-meta-row">
+
+                  <span className="candidate-meta-label">
+                    Role:
+                  </span>
+
+                  <span className="candidate-meta-value">
+                    {c.role?.trim()
+                      ? c.role
+                      : " N/A"}
+                  </span>
+                </div>
+              </div>
+
+              {/* REMARKS SECTION */}
+
+              <div className="candidate-col candidate-remarks">
+
+                <div className="remarks-box">
+
+                  <span className="remarks-title">
+                    Remarks
+                  </span>
+
+                  <p>
+                    {c.remark?.trim()
+                      ? c.remark
+                      : "N/A"}
+                  </p>
+                </div>
+              </div>
+              {/* ACTIONS */}
+              <div className="candidate-actions">
                 <button
                   disabled={isActionDisabled(c.status)}
-                  className={isActionDisabled(c.status) ? "disabled blur" : ""}
+                  className={
+                    isActionDisabled(c.status)
+                      ? "disabled blur"
+                      : ""
+                  }
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`${base}/candidates/edit/${c.id}`);
+
+                    navigate(
+                      `${base}/candidates/edit/${c.id}`,
+                    );
                   }}
                 >
                   Edit
                 </button>
                 <button
                   disabled={isActionDisabled(c.status)}
-                  className={isActionDisabled(c.status) ? "disabled blur" : ""}
+                  className={
+                    isActionDisabled(c.status)
+                      ? "disabled blur"
+                      : ""
+                  }
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedCandidate(c);
@@ -183,7 +280,6 @@ export default function Candidates() {
               >
                 Cancel
               </button>
-
               <button className="confirm-delete-btn" onClick={deleteCandidate}>
                 Delete
               </button>

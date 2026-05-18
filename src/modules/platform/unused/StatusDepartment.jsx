@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../../services/api/Api";
+import { api } from "../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
-import "../../styles/StatusDepartments.css";
+import "./StatusDepartments.css";
 
 export default function StatusDepartments() {
   const { orgId } = useParams();

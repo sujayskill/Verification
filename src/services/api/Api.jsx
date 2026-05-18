@@ -16,7 +16,7 @@ const onRefreshed = (newToken) => {
 export const logoutUser = async () => {
   try {
     const token = localStorage.getItem("token");
-    console.log(JSON.parse(atob(token.split(".")[1])));
+    console.log("TOKEN AT LOGOUT: ",JSON.parse(atob(token.split(".")[1])));
     if (token) {
       await fetch(BASE_URL + "/auth/logout", {
         method: "POST",
@@ -81,7 +81,7 @@ const refreshAccessToken = async () => {
       "refreshToken",
       data.refreshToken
     );
-
+    console.log("NEW ACCESS TOKEN GENERATED");
     // notify waiting requests
     onRefreshed(data.accessToken);
     return data.accessToken;
@@ -126,6 +126,8 @@ const request = async (
     options.body = JSON.stringify(body);
   }
 
+  console.log("API REQUEST:", url);
+  console.log("TOKEN AT REQUEST: ", token);
   try {
     let res = await fetch(BASE_URL + url, options);
 
@@ -137,6 +139,7 @@ const request = async (
       retry &&
       !isAuthRoute
     ) {
+      console.log("CALLING REFRESH API");
       const newToken = await refreshAccessToken();
       console.log("TOKEN EXPIRED -> REFRESHING");
 
@@ -148,14 +151,16 @@ const request = async (
       options.headers.Authorization =
         `Bearer ${newToken}`;
       res = await fetch(BASE_URL + url, options);
+      console.log("RETRYING ORIGINAL REQUEST");
     }
 
     /* =========================
        STILL UNAUTHORIZED
     ========================= */
 
-    if (res.status === 401) {
+    if (res.status === 401 && !retry) {
       logoutUser();
+      console.log("REFRESH FAILED -> LOGOUT");
       return null;
     }
 

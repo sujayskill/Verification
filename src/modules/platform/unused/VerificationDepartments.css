@@ -1,4 +1,8 @@
 /* 🔹 HEADER ALIGNMENT */
+.vrd-page {
+  padding: 20px;
+}
+
 .vr-header {
   display: flex;
   justify-content: space-between;
@@ -58,7 +62,7 @@
 }
 
 /* 🔹 EMPTY STATE */
-.vr-page p {
+.vrd-page p {
   text-align: center;
 }
 

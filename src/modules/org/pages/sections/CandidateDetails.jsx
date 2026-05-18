@@ -90,25 +90,32 @@ export default function CandidateDetails() {
     <div className="candidate-details-page">
       {/* TOP BAR */}
       <div className="candidate-topbar">
-        <div className="header-left">
+        {/* LEFT */}
+        <div>
           <button
-            className="back-btn"
+            className="candidate-back-btn"
             onClick={() =>
-              navigate(`/${base}/candidates/${data.department.id}`)
+              navigate(
+                `/${base}/candidates/${data.department.id}`,
+              )
             }
           >
             ← Back
           </button>
           <h1>Candidates</h1>
+          <p>
+            Candidate Verification Details
+          </p>
         </div>
-
-        <div className="top-section">
-          <div className="top-left">
-            {isCompleted && <h2 className="verified-title">✅ VERIFIED</h2>}
-          </div>
+        {/* RIGHT */}
+        <div className="candidate-header-right">
+          {isCompleted && (
+            <div className="verified-title">
+              ✅ VERIFIED
+            </div>
+          )}
         </div>
       </div>
-
       {/* HERO SECTION */}
       <div className="glass-card hero-card">
         <div className="hero-left">
@@ -133,9 +140,8 @@ export default function CandidateDetails() {
         {/* ACTIONS */}
         <div className="hero-actions">
           <button
-            className={`primary-btn ${
-              isCompleted || isInitiated ? "disabled" : ""
-            }`}
+            className={`primary-btn ${isCompleted || isInitiated ? "disabled" : ""
+              }`}
             onClick={initiateVerification}
             disabled={isCompleted || isInitiated || loading}
           >

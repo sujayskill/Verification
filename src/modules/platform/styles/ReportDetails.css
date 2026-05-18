@@ -1,21 +1,497 @@
-input {
-  padding: 8px;
+/* =========================
+   PAGE
+========================= */
+
+.report-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+}
+
+/* =========================
+   STICKY HEADER
+========================= */
+
+.report-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 24px;
+
+  background: rgba(248, 250, 252, 0.92);
+
+  backdrop-filter: blur(14px);
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.report-header-left h2 {
+  margin: 0;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.report-header-left p {
+  margin-top: 4px;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+.report-header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.report-content {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 24px;
+}
+
+/* =========================
+   GLASS CARD
+========================= */
+
+.report-glass-card {
+  border-radius: 28px;
+
+  padding: 28px;
+
+  background: rgba(255,
+      255,
+      255,
+      0.78);
+
+  backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.05),
+    0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+/* =========================
+   TOP
+========================= */
+
+.report-top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 30px;
+}
+
+.report-top-section h1 {
+  margin: 0;
+
+  font-size: 34px;
+  font-weight: 800;
+
+  color: #111827;
+}
+
+.subtitle {
+  margin-top: 10px;
+
+  color: #6b7280;
+
+  font-size: 15px;
+}
+
+/* =========================
+   BADGES
+========================= */
+
+.candidate-chip {
+  padding: 10px 16px;
+
+  border-radius: 999px;
+
+  background: #eef2ff;
+
+  color: #4338ca;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-badge {
+  padding: 10px 14px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-badge.completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-badge.failed {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-badge.in_progress {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-badge.initiated {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.risk-badge {
+  padding: 14px 20px;
+
+  border-radius: 18px;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.risk-badge.low {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.risk-badge.medium {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.risk-badge.high {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.report-section {
+  margin-top: 34px;
+}
+
+.section-header {
+  margin-bottom: 18px;
+}
+
+.section-header h3 {
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+/* =========================
+   SUMMARY GRID
+========================= */
+
+.summary-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit,
+      minmax(220px, 1fr));
+
+  gap: 18px;
+}
+
+.summary-card {
+  padding: 20px;
+
+  border-radius: 20px;
+
+  background: rgba(248,
+      250,
+      252,
+      0.8);
+
+  border: 1px solid #e5e7eb;
+}
+
+.summary-card label {
+  display: block;
+
+  margin-bottom: 10px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #94a3b8;
+}
+
+.summary-card p {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* =========================
+   CHECKS
+========================= */
+
+.checks-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit,
+      minmax(260px, 1fr));
+
+  gap: 18px;
+}
+
+.check-card {
+  padding: 22px;
+
+  border-radius: 22px;
+
+  background: rgba(248,
+      250,
+      252,
+      0.8);
+
+  border: 1px solid #e5e7eb;
+}
+
+.check-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
 }
 
-mark {
-  background: #ffe58a;
+.check-card h4 {
+  margin: 0;
+
+  font-size: 16px;
+  font-weight: 700;
 }
 
-.client-card,
-.candidate-card {
+.check-card p {
+  margin: 0;
+
+  color: #6b7280;
+
+  line-height: 1.6;
+}
+
+/* =========================
+   MINI STATUS
+========================= */
+
+.mini-status {
+  padding: 7px 12px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mini-status.verified {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.mini-status.discrepancy {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* =========================
+   STACK
+========================= */
+
+.stack-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =========================
+   ITEM CARD
+========================= */
+
+.verification-item-card {
+  padding: 22px;
+
+  border-radius: 22px;
+
+  background: rgba(248,
+      250,
+      252,
+      0.8);
+
+  border: 1px solid #e5e7eb;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  margin-bottom: 16px;
+}
+
+.item-header h4 {
+  margin: 0;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.item-header p {
+  margin-top: 6px;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+.remarks-box {
+  padding: 16px;
+
+  border-radius: 16px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  color: #374151;
+
+  line-height: 1.7;
+}
+
+/* =========================
+   FINAL REMARKS
+========================= */
+
+.final-remarks-card {
+  padding: 24px;
+
+  border-radius: 22px;
+
+  background: rgba(248,
+      250,
+      252,
+      0.8);
+
+  border: 1px solid #e5e7eb;
+}
+
+.final-remarks-card p {
+  margin: 0;
+
+  line-height: 1.8;
+
+  color: #374151;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-card {
+  padding: 24px;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  background: rgba(248,
+      250,
+      252,
+      0.8);
+
+  border: 1px dashed #cbd5e1;
+
+  color: #64748b;
+}
+
+/* =========================
+   DOWNLOAD BUTTON
+========================= */
+
+.download-btn {
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 14px;
+
+  background: linear-gradient(135deg,
+      #2563eb,
+      #1d4ed8);
+
+  color: white;
+
+  font-weight: 600;
+
   cursor: pointer;
-  transition: 0.2s;
+
+  transition: 0.22s ease;
 }
 
-.client-card:hover,
-.candidate-card:hover {
-  background: #f5f7fb;
+.download-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 24px rgba(37, 99, 235, 0.22);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .report-sticky-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .report-header-right {
+    flex-wrap: wrap;
+  }
+
+  .report-top-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .item-header {
+    flex-direction: column;
+    gap: 12px;
+  }
 }

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
-import "../../styles/AddCandidate.css";
 import { useParams } from "react-router-dom";
+import "../../styles/AddCandidate.css";
 
 export default function AddCandidate() {
   const { deptId } = useParams();
@@ -15,7 +15,6 @@ export default function AddCandidate() {
     lastName: "",
     email: "",
     phone: "",
-
     currentAddress: {},
     permanentAddress: {},
   });
@@ -123,7 +122,7 @@ export default function AddCandidate() {
         ...form,
         educations,
         experiences,
-         departmentId: deptId,
+        departmentId: deptId,
       });
 
       const candidateId = res?.id;
@@ -192,223 +191,393 @@ export default function AddCandidate() {
   // ================= UI =================
 
   return (
-    <div className="add-page">
-      {/* 🔙 BACK */}
-      <button onClick={() => navigate(`/${base}/candidates/${deptId}`)}>
-        ← Back to Candidates
-      </button>
+    <div className="cac-page">
+      {/* HEADER */}
+      <div className="cac-header">
+        {/* LEFT */}
+        <div className="cac-header-left">
+          <button
+            className="cac-back-btn"
+            onClick={() => navigate( `/${base}/candidates/${deptId}`,)}>
+            ← Back
+          </button>
+          <div className="cac-header-info">
+            <h2>Add Candidate</h2>
+            <p>
+              Create and manage candidate
+              verification profile
+            </p>
+          </div>
+        </div>
 
-      <h2>Add Candidate</h2>
-
-      {/* 🔹 BASIC */}
-      <div className="form-card">
-        <h3>Basic Information</h3>
-
-        <input
-          placeholder="First Name"
-          onChange={(e) => handleChange("firstName", e.target.value)}
-        />
-
-        <input
-          placeholder="Last Name"
-          onChange={(e) => handleChange("lastName", e.target.value)}
-        />
-
-        <input
-          placeholder="Email"
-          onChange={(e) => handleChange("email", e.target.value)}
-        />
-
-        {/* 🔥 DOB */}
-        <input
-          type="date"
-          onChange={(e) => handleChange("dob", e.target.value)}
-        />
-
-        {/* 🔥 PHONE WITH COUNTRY CODE */}
-        <div className="phone-group">
-          <select onChange={(e) => handleChange("countryCode", e.target.value)}>
-            <option value="+91">🇮🇳 +91</option>
-            <option value="+1">🇺🇸 +1</option>
-            <option value="+44">🇬🇧 +44</option>
-            <option value="+61">🇦🇺 +61</option>
-          </select>
-
-          <input
-            placeholder="Phone Number"
-            onChange={(e) => handleChange("phone", e.target.value)}
-          />
+        {/* RIGHT */}
+        <div className="cac-header-right">
+          <button
+            className="cac-submit-btn"
+            onClick={save}
+          >
+            Save Candidate
+          </button>
         </div>
       </div>
 
-      {/* 🔹 ADDRESS */}
-      <div className="form-card">
-        <h3>Current Address</h3>
+      {/* =========================
+       BODY
+    ========================= */}
 
-        <input
-          placeholder="Street"
-          onChange={(e) =>
-            handleNestedChange("currentAddress", "street", e.target.value)
-          }
-        />
-        <input
-          placeholder="City"
-          onChange={(e) =>
-            handleNestedChange("currentAddress", "city", e.target.value)
-          }
-        />
-        <input
-          placeholder="State"
-          onChange={(e) =>
-            handleNestedChange("currentAddress", "state", e.target.value)
-          }
-        />
-        <input
-          placeholder="Zip Code"
-          onChange={(e) =>
-            handleNestedChange("currentAddress", "zipCode", e.target.value)
-          }
-        />
-      </div>
+      <div className="cac-body">
 
-      <div className="form-card">
-        <h3>Permanent Address</h3>
+        {/* BASIC */}
+        <div className="cac-card">
+          <h3>Basic Information</h3>
 
-        <input
-          placeholder="Street"
-          onChange={(e) =>
-            handleNestedChange("permanentAddress", "street", e.target.value)
-          }
-        />
-        <input
-          placeholder="City"
-          onChange={(e) =>
-            handleNestedChange("permanentAddress", "city", e.target.value)
-          }
-        />
-        <input
-          placeholder="State"
-          onChange={(e) =>
-            handleNestedChange("permanentAddress", "state", e.target.value)
-          }
-        />
-        <input
-          placeholder="Zip Code"
-          onChange={(e) =>
-            handleNestedChange("permanentAddress", "zipCode", e.target.value)
-          }
-        />
-      </div>
+          <div className="cac-grid">
 
-      {/* 🔹 KYC */}
-      <div className="form-card">
-        <h3>Scanned copies of Aadhar & PAN</h3>
-
-        <input
-          type="file"
-          onChange={(e) => handleFileChange("PAN", e.target.files[0])}
-        />
-        <input
-          type="file"
-          onChange={(e) => handleFileChange("AADHAR", e.target.files[0])}
-        />
-      </div>
-
-      {/* 🔹 EDUCATION */}
-      <div className="form-card">
-        <h3>Education</h3>
-
-        <button onClick={addEducation}>+ Add Education</button>
-
-        {educations.map((edu, i) => (
-          <div key={i} className="sub-card">
             <input
-              placeholder="Degree"
+              className="cac-input"
+              placeholder="First Name"
               onChange={(e) =>
-                handleEducationChange(i, "degree", e.target.value)
-              }
-            />
-            <input
-              placeholder="Institution"
-              onChange={(e) =>
-                handleEducationChange(i, "institution", e.target.value)
-              }
-            />
-            <input
-              placeholder="Year"
-              onChange={(e) =>
-                handleEducationChange(i, "graduationYear", e.target.value)
+                handleChange(
+                  "firstName",
+                  e.target.value,
+                )
               }
             />
 
             <input
-              type="file"
-              multiple
-              onChange={(e) => handleEducationFiles(i, e.target.files)}
+              className="cac-input"
+              placeholder="Last Name"
+              onChange={(e) =>
+                handleChange(
+                  "lastName",
+                  e.target.value,
+                )
+              }
             />
+
+            <input
+              className="cac-input"
+              placeholder="Email"
+              onChange={(e) =>
+                handleChange(
+                  "email",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cac-input"
+              type="date"
+              onChange={(e) =>
+                handleChange(
+                  "dob",
+                  e.target.value,
+                )
+              }
+            />
+
           </div>
-        ))}
-      </div>
 
-      {/* 🔹 EXPERIENCE */}
-      <div className="form-card">
-        <h3>Experience</h3>
+          {/* PHONE */}
 
-        <button onClick={addExperience}>+ Add Experience</button>
+          <div className="cac-phone-group">
 
-        {experiences.map((exp, i) => (
-          <div key={i} className="sub-card">
-            <input
-              placeholder="Company"
+            <select
+              className="cac-select"
               onChange={(e) =>
-                handleExperienceChange(i, "companyName", e.target.value)
+                handleChange(
+                  "countryCode",
+                  e.target.value,
+                )
               }
-            />
-            <input
-              placeholder="Role"
-              onChange={(e) =>
-                handleExperienceChange(i, "role", e.target.value)
-              }
-            />
-            <input
-              type="date"
-              onChange={(e) => handleChange("Start date", e.target.value)}
-            />
-            <input
-              type="date"
-              onChange={(e) => handleChange("End date", e.target.value)}
-            />
-            <label>Payslips</label>
-            <input
-              type="file"
-              multiple
-              onChange={(e) =>
-                handleExperienceFiles(i, "payslips", e.target.files)
-              }
-            />
+            >
+              <option value="+91">
+                🇮🇳 +91
+              </option>
 
-            <label>Experience Letter</label>
-            <input
-              type="file"
-              onChange={(e) =>
-                handleExperienceFiles(i, "experienceLetter", e.target.files[0])
-              }
-            />
+              <option value="+1">
+                🇺🇸 +1
+              </option>
 
-            <label>Relieving Letter</label>
+              <option value="+44">
+                🇬🇧 +44
+              </option>
+
+              <option value="+61">
+                🇦🇺 +61
+              </option>
+            </select>
+
             <input
-              type="file"
+              className="cac-input"
+              placeholder="Phone Number"
               onChange={(e) =>
-                handleExperienceFiles(i, "relievingLetter", e.target.files[0])
+                handleChange(
+                  "phone",
+                  e.target.value,
+                )
               }
             />
           </div>
-        ))}
-      </div>
+        </div>
 
-      <button className="submit-btn" onClick={save}>
-        Save Candidate
-      </button>
+        {/* CURRENT ADDRESS */}
+
+        <div className="cac-card">
+
+          <h3>Current Address</h3>
+
+          <div className="cac-grid">
+
+            <input
+              className="cac-input"
+              placeholder="Street"
+              onChange={(e) =>
+                handleNestedChange(
+                  "currentAddress",
+                  "street",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cac-input"
+              placeholder="City"
+              onChange={(e) =>
+                handleNestedChange(
+                  "currentAddress",
+                  "city",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cac-input"
+              placeholder="State"
+              onChange={(e) =>
+                handleNestedChange(
+                  "currentAddress",
+                  "state",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cac-input"
+              placeholder="Zip Code"
+              onChange={(e) =>
+                handleNestedChange(
+                  "currentAddress",
+                  "zipCode",
+                  e.target.value,
+                )
+              }
+            />
+          </div>
+        </div>
+
+        {/* PERMANENT ADDRESS */}
+
+        <div className="cac-card">
+
+          <h3>Permanent Address</h3>
+
+          <div className="cac-grid">
+
+            <input
+              className="cac-input"
+              placeholder="Street"
+              onChange={(e) =>
+                handleNestedChange(
+                  "permanentAddress",
+                  "street",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cac-input"
+              placeholder="City"
+              onChange={(e) =>
+                handleNestedChange(
+                  "permanentAddress",
+                  "city",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cac-input"
+              placeholder="State"
+              onChange={(e) =>
+                handleNestedChange(
+                  "permanentAddress",
+                  "state",
+                  e.target.value,
+                )
+              }
+            />
+            <input
+              className="cac-input"
+              placeholder="Zip Code"
+              onChange={(e) =>
+                handleNestedChange(
+                  "permanentAddress",
+                  "zipCode",
+                  e.target.value,
+                )
+              }
+            />
+          </div>
+        </div>
+        {/* KYC */}
+        <div className="cac-card">
+          <h3>
+            KYC Documents
+          </h3>
+          <div className="cac-grid">
+            <input
+              className="cac-file-input"
+              type="file"
+              onChange={(e) =>
+                handleFileChange(
+                  "PAN",
+                  e.target.files[0],
+                )
+              }
+            />
+            <input
+              className="cac-file-input"
+              type="file"
+              onChange={(e) =>
+                handleFileChange(
+                  "AADHAR",
+                  e.target.files[0],
+                )
+              }
+            />
+          </div>
+        </div>
+        {/* EDUCATION */}
+        <div className="cac-card">
+          <div className="cac-section-header">
+            <h3>Education</h3>
+            <button
+              className="cac-add-btn"
+              onClick={addEducation}
+            >
+              + Add Education
+            </button>
+          </div>
+          {educations.map((edu, i) => (
+            <div key={i} className="cac-sub-card">
+              <div className="cac-grid">
+                <input
+                  className="cac-input"
+                  placeholder="Degree"
+                  onChange={(e) =>
+                    handleEducationChange(
+                      i,
+                      "degree",
+                      e.target.value,
+                    )
+                  }
+                />
+                <input
+                  className="cac-input"
+                  placeholder="Institution"
+                  onChange={(e) =>
+                    handleEducationChange(
+                      i,
+                      "institution",
+                      e.target.value,
+                    )
+                  }
+                />
+                <input
+                  className="cac-input"
+                  placeholder="Year"
+                  onChange={(e) =>
+                    handleEducationChange(
+                      i,
+                      "graduationYear",
+                      e.target.value,
+                    )
+                  }
+                />
+                <input
+                  className="cac-file-input"
+                  type="file"
+                  multiple
+                  onChange={(e) =>
+                    handleEducationFiles(
+                      i,
+                      e.target.files,
+                    )
+                  }
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* EXPERIENCE */}
+        <div className="cac-card">
+          <div className="cac-section-header">
+            <h3>Experience</h3>
+            <button
+              className="cac-add-btn"
+              onClick={addExperience}
+            >
+              + Add Experience
+            </button>
+          </div>
+          {experiences.map((exp, i) => (
+            <div
+              key={i}
+              className="cac-sub-card"
+            >
+              <div className="cac-grid">
+                <input
+                  className="cac-input"
+                  placeholder="Company"
+                  onChange={(e) =>
+                    handleExperienceChange(
+                      i,
+                      "companyName",
+                      e.target.value,
+                    )
+                  }
+                />
+                <input
+                  className="cac-input"
+                  placeholder="Role"
+                  onChange={(e) =>
+                    handleExperienceChange(
+                      i,
+                      "role",
+                      e.target.value,
+                    )
+                  }
+                />
+                <input
+                  className="cac-input"
+                  type="date"
+                />
+                <input
+                  className="cac-input"
+                  type="date"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

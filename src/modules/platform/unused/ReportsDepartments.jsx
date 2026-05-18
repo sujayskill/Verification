@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../../services/api/Api";
+import { api } from "../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
-import "../../styles/ReportsDepartments.css";
+import "./ReportsDepartments.css";
 
 export default function ReportsDepartments() {
   const { orgId } = useParams();

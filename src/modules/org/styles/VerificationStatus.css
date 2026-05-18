@@ -16,19 +16,27 @@
 
 .pipeline-header-left {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.pipeline-header h1 {
+.pipeline-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pipeline-header-info h1 {
   margin: 0;
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 700;
   color: #111827;
 }
 
-.pipeline-header p {
-  margin-top: 6px;
+.pipeline-header-info p {
+  margin: 0;
+  font-size: 14px;
   color: #6b7280;
 }
 
@@ -47,6 +55,8 @@
   border-radius: 999px;
   font-weight: 600;
   font-size: 14px;
+  margin-left: 650px;
+  margin-top: 50px;
 }
 
 .pipeline-status.initiated {
@@ -223,6 +233,9 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  margin-right: 30px;
+  margin-top: 50px;
+  height: 42px;
 }
 
 .message-btn:hover {

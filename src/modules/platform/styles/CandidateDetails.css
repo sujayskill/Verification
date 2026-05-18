@@ -5,10 +5,8 @@
 .Candidate-details-page {
   display: flex;
   flex-direction: column;
-
   height: 100%;
   min-height: 0;
-
   background: #f8fafc;
 }
 
@@ -19,37 +17,28 @@
 .candidate-header {
   position: sticky;
   top: 0;
-
   z-index: 200;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: 18px 24px;
-
   background: rgba(248, 250, 252, 0.92);
-
   backdrop-filter: blur(12px);
-
   border-bottom: 1px solid #e5e7eb;
 }
 
 /* LEFT */
 
-.header-left {
+.candidate-header .header-left {
   display: flex;
   align-items: center;
-
   gap: 18px;
 }
 
 .header-left h2 {
   margin: 0;
-
   font-size: 24px;
   font-weight: 700;
-
   color: #111827;
 }
 

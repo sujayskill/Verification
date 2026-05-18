@@ -21,8 +21,8 @@ import ManageAccounts from "../modules/org/pages/accounts/ManageAccounts";
 import ReportDetails from "../modules/org/pages/sections/ReportDetails";
 import Departments from "../modules/org/pages/sections/Departments";
 import AddDepartment from "../modules/org/pages/sections/AddDepartment";
-import VerificationDepartments from "../modules/org/pages/unused/VerificationDepartments";
-import ReportsDepartments from "../modules/org/pages/unused/ReportsDepartments";
+// import VerificationDepartments from "../modules/org/pages/unused/VerificationDepartments";
+// import ReportsDepartments from "../modules/org/pages/unused/ReportsDepartments";
 import VerificationStatus from "../modules/org/pages/sections/VerificationStaus";
 
 export default function OrgRoutes() {

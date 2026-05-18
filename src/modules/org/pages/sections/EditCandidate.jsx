@@ -156,179 +156,423 @@ export default function EditCandidate() {
   };
 
   return (
-    <div className="page">
-      <button onClick={() => navigate(`/${base}/candidates/${form.department.id}`)}>
-        ← Back
-      </button>
-      <h2>Edit Candidate</h2>
+    <div className="cec-page">
 
-      {/* 🔹 BASIC DETAILS */}
-      <div className="card">
-        <h3>Basic Details</h3>
-        <div className="grid-3">
-          <input
-            placeholder="First Name"
-            value={form.firstName || ""}
-            onChange={(e) => handleChange("firstName", e.target.value)}
-          />
-          <input
-            placeholder="Last Name"
-            value={form.lastName || ""}
-            onChange={(e) => handleChange("lastName", e.target.value)}
-          />
-          <input
-            placeholder="Email"
-            value={form.email || ""}
-            onChange={(e) => handleChange("email", e.target.value)}
-          />
-          <input
-            placeholder="Phone"
-            value={form.phone || ""}
-            onChange={(e) => handleChange("phone", e.target.value)}
-          />
-          <input
-            placeholder="Country Code"
-            value={form.countryCode || ""}
-            onChange={(e) => handleChange("countryCode", e.target.value)}
-          />
-          <input
-            type="date"
-            value={form.dob || ""}
-            onChange={(e) => handleChange("dob", e.target.value)}
-          />
+      {/* =========================
+       HEADER
+    ========================= */}
+
+      <div className="cec-header">
+
+        {/* LEFT */}
+
+        <div className="cec-header-left">
+
+          <button
+            className="cec-back-btn"
+            onClick={() =>
+              navigate(
+                `/${base}/candidates/${form.department.id}`,
+              )
+            }
+          >
+            ← Back
+          </button>
+
+          <div className="cec-header-info">
+            <h2>Edit Candidate</h2>
+
+            <p>
+              Update candidate profile and
+              verification details
+            </p>
+          </div>
+        </div>
+
+        {/* RIGHT */}
+
+        <div className="cec-header-right">
+          <button
+            className="cec-update-btn"
+            onClick={update}
+          >
+            Update Candidate
+          </button>
         </div>
       </div>
 
-      {/* 🔹 ADDRESS */}
-      <div className="card">
-        <h3>Address</h3>
+      {/* =========================
+       BODY
+    ========================= */}
 
-        <div className="grid-2">
-          <div>
-            <h4>Current Address</h4>
-            <input
-              placeholder="Street"
-              value={form.currentAddress?.street || ""}
-              onChange={(e) =>
-                handleAddressChange("currentAddress", "street", e.target.value)
-              }
-            />
-            <input
-              placeholder="City"
-              value={form.currentAddress?.city || ""}
-              onChange={(e) =>
-                handleAddressChange("currentAddress", "city", e.target.value)
-              }
-            />
-          </div>
+      <div className="cec-body">
 
-          <div>
-            <h4>Permanent Address</h4>
+        {/* BASIC DETAILS */}
+
+        <div className="cec-card">
+
+          <h3>Basic Details</h3>
+
+          <div className="cec-grid-3">
+
             <input
-              placeholder="Street"
-              value={form.permanentAddress?.street || ""}
+              className="cec-input"
+              placeholder="First Name"
+              value={form.firstName || ""}
               onChange={(e) =>
-                handleAddressChange(
-                  "permanentAddress",
-                  "street",
+                handleChange(
+                  "firstName",
                   e.target.value,
                 )
               }
             />
+
             <input
-              placeholder="City"
-              value={form.permanentAddress?.city || ""}
+              className="cec-input"
+              placeholder="Last Name"
+              value={form.lastName || ""}
               onChange={(e) =>
-                handleAddressChange("permanentAddress", "city", e.target.value)
+                handleChange(
+                  "lastName",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cec-input"
+              placeholder="Email"
+              value={form.email || ""}
+              onChange={(e) =>
+                handleChange(
+                  "email",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cec-input"
+              placeholder="Phone"
+              value={form.phone || ""}
+              onChange={(e) =>
+                handleChange(
+                  "phone",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cec-input"
+              placeholder="Country Code"
+              value={form.countryCode || ""}
+              onChange={(e) =>
+                handleChange(
+                  "countryCode",
+                  e.target.value,
+                )
+              }
+            />
+
+            <input
+              className="cec-input"
+              type="date"
+              value={form.dob || ""}
+              onChange={(e) =>
+                handleChange(
+                  "dob",
+                  e.target.value,
+                )
               }
             />
           </div>
         </div>
-      </div>
 
-      {/* 🔹 EDUCATION */}
-      <div className="card">
-        <h3>Education</h3>
+        {/* ADDRESS */}
 
-        {form.educations.map((edu, i) => (
-          <div key={i} className="sub-card">
-            <input
-              placeholder="Degree"
-              value={edu.degree}
-              onChange={(e) => updateEducation(i, "degree", e.target.value)}
-            />
-            <input
-              placeholder="Institution"
-              value={edu.institution}
-              onChange={(e) =>
-                updateEducation(i, "institution", e.target.value)
-              }
-            />
-            <input
-              type="date"
-              value={edu.courseStartDate || ""}
-              onChange={(e) =>
-                updateEducation(i, "courseStartDate", e.target.value)
-              }
-            />
+        <div className="cec-card">
 
-            <input
-              type="date"
-              value={edu.courseEndDate || ""}
-              onChange={(e) =>
-                updateEducation(i, "courseEndDate", e.target.value)
-              }
-            />
-            <button onClick={() => removeEducation(i)}>❌</button>
+          <h3>Address</h3>
+
+          <div className="cec-grid-2">
+
+            {/* CURRENT */}
+
+            <div className="cec-sub-card">
+
+              <h4>Current Address</h4>
+
+              <div className="cec-form-group">
+
+                <input
+                  className="cec-input"
+                  placeholder="Street"
+                  value={
+                    form.currentAddress
+                      ?.street || ""
+                  }
+                  onChange={(e) =>
+                    handleAddressChange(
+                      "currentAddress",
+                      "street",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <input
+                  className="cec-input"
+                  placeholder="City"
+                  value={
+                    form.currentAddress
+                      ?.city || ""
+                  }
+                  onChange={(e) =>
+                    handleAddressChange(
+                      "currentAddress",
+                      "city",
+                      e.target.value,
+                    )
+                  }
+                />
+              </div>
+            </div>
+
+            {/* PERMANENT */}
+
+            <div className="cec-sub-card">
+
+              <h4>Permanent Address</h4>
+
+              <div className="cec-form-group">
+
+                <input
+                  className="cec-input"
+                  placeholder="Street"
+                  value={
+                    form.permanentAddress
+                      ?.street || ""
+                  }
+                  onChange={(e) =>
+                    handleAddressChange(
+                      "permanentAddress",
+                      "street",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <input
+                  className="cec-input"
+                  placeholder="City"
+                  value={
+                    form.permanentAddress
+                      ?.city || ""
+                  }
+                  onChange={(e) =>
+                    handleAddressChange(
+                      "permanentAddress",
+                      "city",
+                      e.target.value,
+                    )
+                  }
+                />
+              </div>
+            </div>
           </div>
-        ))}
+        </div>
 
-        <button className="add-btn" onClick={addEducation}>
-          + Add Education
-        </button>
-      </div>
+        {/* EDUCATION */}
 
-      {/* 🔹 EXPERIENCE */}
-      <div className="card">
-        <h3>Experience</h3>
+        <div className="cec-card">
 
-        {form.experiences.map((exp, i) => (
-          <div key={i} className="sub-card">
-            <input
-              placeholder="Company"
-              value={exp.companyName}
-              onChange={(e) =>
-                updateExperience(i, "companyName", e.target.value)
-              }
-            />
-            <input
-              placeholder="Role"
-              value={exp.role}
-              onChange={(e) => updateExperience(i, "role", e.target.value)}
-            />
-            <input
-              type="date"
-              value={exp.startDate || ""}
-              onChange={(e) => updateExperience(i, "startDate", e.target.value)}
-            />
+          <div className="cec-section-header">
 
-            <input
-              type="date"
-              value={exp.endDate || ""}
-              onChange={(e) => updateExperience(i, "endDate", e.target.value)}
-            />
-            <button onClick={() => removeExperience(i)}>❌</button>
+            <h3>Education</h3>
+
+            <button
+              className="cec-add-btn"
+              onClick={addEducation}
+            >
+              + Add Education
+            </button>
           </div>
-        ))}
 
-        <button className="add-btn" onClick={addExperience}>
-          + Add Experience
-        </button>
+          {form.educations.map((edu, i) => (
+            <div
+              key={i}
+              className="cec-sub-card"
+            >
+
+              <div className="cec-grid-3">
+
+                <input
+                  className="cec-input"
+                  placeholder="Degree"
+                  value={edu.degree}
+                  onChange={(e) =>
+                    updateEducation(
+                      i,
+                      "degree",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <input
+                  className="cec-input"
+                  placeholder="Institution"
+                  value={edu.institution}
+                  onChange={(e) =>
+                    updateEducation(
+                      i,
+                      "institution",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <input
+                  className="cec-input"
+                  type="date"
+                  value={
+                    edu.courseStartDate ||
+                    ""
+                  }
+                  onChange={(e) =>
+                    updateEducation(
+                      i,
+                      "courseStartDate",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <input
+                  className="cec-input"
+                  type="date"
+                  value={
+                    edu.courseEndDate ||
+                    ""
+                  }
+                  onChange={(e) =>
+                    updateEducation(
+                      i,
+                      "courseEndDate",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <button
+                  className="cec-remove-btn"
+                  onClick={() =>
+                    removeEducation(i)
+                  }
+                >
+                  Remove
+                </button>
+
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* EXPERIENCE */}
+
+        <div className="cec-card">
+
+          <div className="cec-section-header">
+
+            <h3>Experience</h3>
+
+            <button
+              className="cec-add-btn"
+              onClick={addExperience}
+            >
+              + Add Experience
+            </button>
+          </div>
+
+          {form.experiences.map((exp, i) => (
+            <div
+              key={i}
+              className="cec-sub-card"
+            >
+
+              <div className="cec-grid-3">
+
+                <input
+                  className="cec-input"
+                  placeholder="Company"
+                  value={exp.companyName}
+                  onChange={(e) =>
+                    updateExperience(
+                      i,
+                      "companyName",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <input
+                  className="cec-input"
+                  placeholder="Role"
+                  value={exp.role}
+                  onChange={(e) =>
+                    updateExperience(
+                      i,
+                      "role",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <input
+                  className="cec-input"
+                  type="date"
+                  value={
+                    exp.startDate || ""
+                  }
+                  onChange={(e) =>
+                    updateExperience(
+                      i,
+                      "startDate",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <input
+                  className="cec-input"
+                  type="date"
+                  value={
+                    exp.endDate || ""
+                  }
+                  onChange={(e) =>
+                    updateExperience(
+                      i,
+                      "endDate",
+                      e.target.value,
+                    )
+                  }
+                />
+
+                <button
+                  className="cec-remove-btn"
+                  onClick={() =>
+                    removeExperience(i)
+                  }
+                >
+                  Remove
+                </button>
+
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-
-      <button className="update-btn" onClick={update}>
-        Update Candidate
-      </button>
     </div>
   );
 }

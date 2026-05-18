@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
-import "../../styles/VerificationsDepartments.css";
+import "../styles/VerificationsDepartments.css";
 
 export default function VerificationDepartments() {
   const [data, setData] = useState([]);

@@ -1,180 +1,471 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
-import { getSlaMeta, formatTimeLeft } from "../../../../utils/SlaHelper";
-import { Client } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 import "../../styles/VerificationCX.css";
 
 export default function VerificationCX() {
-  const [newItems, setNewItems] = useState({});
-  const { orgId, deptId } = useParams();
-  const navigate = useNavigate();
-  const [notifications, setNotifications] = useState({});
+  const { orgId } = useParams();
 
-  const [now, setNow] = useState(Date.now());
+  const navigate = useNavigate();
+
+  const [notifications, setNotifications] =
+    useState({});
+
   const [data, setData] = useState([]);
+
   const [search, setSearch] = useState("");
 
-  console.log("org", orgId);
+  const [menuOpen, setMenuOpen] =
+    useState(null);
+
+  const [showDeleteModal, setShowDeleteModal] =
+    useState(false);
+
+  const [selectedVerification, setSelectedVerification] =
+    useState(null);
+
+  const [confirmText, setConfirmText] =
+    useState("");
+
+  /* =========================
+     FETCH DATA
+  ========================= */
+
   const fetchData = async () => {
     try {
-      // console.log("Calling API with:", orgId, search);
       const res = await api.get(
-        `/vendor/platform/verifications/by-department?orgId=${orgId}&deptId=${deptId}&q=${search}`,
+        `/vendor/platform/verifications/by-client?orgId=${orgId}&q=${search}`,
       );
-      // console.log("API RES:", res);
+
       setData(Array.isArray(res) ? res : []);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const fetchVerificationNotifications = async () => {
-    try {
-      const data = await api.get(
-        `/vendor/notifications/count/verifications?orgId=${orgId}&deptId=${deptId}`,
-      );
+  /* =========================
+     FETCH NOTIFICATIONS
+  ========================= */
 
-      if (!data || Object.keys(data).length === 0) return;
+  const fetchVerificationNotifications =
+    async () => {
+      try {
+        const data = await api.get(
+          `/vendor/notifications/count/verifications?orgId=${orgId}`,
+        );
 
-      const normalized = {};
-      Object.keys(data).forEach((key) => {
-        normalized[String(key)] = data[key];
-      });
+        if (
+          !data ||
+          Object.keys(data).length === 0
+        )
+          return;
 
-      setNotifications(normalized);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+        const normalized = {};
+
+        Object.keys(data).forEach((key) => {
+          normalized[String(key)] = data[key];
+        });
+
+        setNotifications(normalized);
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
   useEffect(() => {
     fetchVerificationNotifications();
-  }, [orgId, deptId]);
+  }, [orgId]);
 
   useEffect(() => {
-    const interval = setInterval(fetchVerificationNotifications, 10000);
-    return () => clearInterval(interval);
-  }, [orgId, deptId]);
-
-  // ⏱ LIVE TIMER
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(Date.now());
-    }, 1000);
+    const interval = setInterval(
+      fetchVerificationNotifications,
+      10000,
+    );
 
     return () => clearInterval(interval);
-  }, []);
+  }, [orgId]);
 
   useEffect(() => {
     if (orgId) fetchData();
   }, [search, orgId]);
 
-  const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  /* =========================
+     CLOSE MENU
+  ========================= */
+
+  useEffect(() => {
+    const closeMenu = () => {
+      setMenuOpen(null);
+    };
+
+    document.addEventListener(
+      "click",
+      closeMenu,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "click",
+        closeMenu,
+      );
+    };
+  }, []);
+
+  /* =========================
+     HIGHLIGHT
+  ========================= */
+
+  const escapeRegex = (text) =>
+    text.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      "\\$&",
+    );
+
   const highlight = (text) => {
     if (!search || !text) return text;
-    const safeSearch = escapeRegex(search);
-    const regex = new RegExp(`(${safeSearch})`, "gi");
-    return text.replace(regex, "<mark>$1</mark>");
+
+    const safeSearch =
+      escapeRegex(search);
+
+    const regex = new RegExp(
+      `(${safeSearch})`,
+      "gi",
+    );
+
+    return text.replace(
+      regex,
+      "<mark>$1</mark>",
+    );
   };
 
-  // 🔥 SLA COLOR
+  /* =========================
+     SLA
+  ========================= */
+
   const getSlaDetails = (v) => {
-    if (!v.createdAt) return { class: "sla-normal", label: "🟢 On Time" };
+    if (!v.createdAt)
+      return {
+        class: "sla-normal",
+        label: "🟢 On Time",
+      };
+
     const created = new Date(v.createdAt);
+
     const now = new Date();
-    const diffDays = (now - created) / (1000 * 60 * 60 * 24);
-    // 🔥 BREACHED (7 days passed OR backend flag)
-    if (v.slaBreached || diffDays > 7) {
-      return { class: "sla-breached", label: "🔥 SLA Breached" };
+
+    const diffDays =
+      (now - created) /
+      (1000 * 60 * 60 * 24);
+
+    if (
+      v.slaBreached ||
+      diffDays > 7
+    ) {
+      return {
+        class: "sla-breached",
+        label: "🔥 SLA Breached",
+      };
     }
-    // ⚠️ AT RISK (5-7 days)
+
     if (diffDays >= 5) {
-      return { class: "sla-warning", label: "🟡 At Risk" };
+      return {
+        class: "sla-warning",
+        label: "🟡 At Risk",
+      };
     }
-    // ✅ ON TIME
-    return { class: "sla-normal", label: "🟢 On Time" };
+
+    return {
+      class: "sla-normal",
+      label: "🟢 On Time",
+    };
   };
+
+  /* =========================
+     DELETE VERIFICATION
+  ========================= */
+
+  const deleteVerification =
+    async () => {
+      if (
+        confirmText !== "CONFIRM"
+      ) {
+        alert(
+          "Please type CONFIRM to delete",
+        );
+        return;
+      }
+
+      try {
+        await api.delete(
+          `/vendor/verifications/${selectedVerification.id}`,
+        );
+
+        setShowDeleteModal(false);
+
+        setSelectedVerification(null);
+
+        setConfirmText("");
+
+        fetchData();
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
   return (
-    <div className="vr-page">
-      <div className="vr-header">
-        <div className="vr-left">
-          <button
-            className="back-btn"
-            onClick={() =>
-              navigate(`/platform/verifications/${orgId}/departments`)
-            }
-          >
-            ← Back
-          </button>
-          <h2>{data[0]?.organizationName || "Candidates"} - Department</h2>{" "}
+    <div className="vrc-page">
+      {/* HEADER */}
+      <div className="vrc-header">
+        <div className="vrc-left">
+          <div>
+            <button
+              className="vrc-back-btn"
+              onClick={() =>
+                navigate(`/platform/verifications`)}>
+              ← Back
+            </button>
+            <h2> {data[0]?.organizationName || "Candidates"} </h2>
+            <p> Manage verification candidates </p>
+          </div>
         </div>
-
-        <div className="vr-search">
-          <input
+        <div className="vrc-search">
+          <input className="vrc-search-input"
             placeholder="Search candidate..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) =>
+              setSearch(
+                e.target.value,
+              )
+            }
           />
         </div>
       </div>
 
-      {data.map((v) => {
-        const sla = getSlaDetails(v);
+      {/* LIST */}
+      <div className="candidate-list">
+        {data.map((v) => {
+          const sla =
+            getSlaDetails(v);
 
-        return (
-          <div
-            key={v.id}
-            className={`candidate-card ${sla.class}`}
-            onClick={async () => {
-              const key = String(v.id);
-              // ✅ remove notification locally
-              setNotifications((prev) => {
-                const copy = { ...prev };
-                copy[key] = 0;
-                return copy;
-              });
-              try {
-                await api.put(
-                  `/vendor/notifications/mark-read/${orgId}/${deptId}/verification/${v.id}`,
+          return (
+            <div
+              key={v.id}
+              className={`candidate-row ${sla.class}`}
+              onClick={async () => {
+                const key =
+                  String(v.id);
+
+                setNotifications(
+                  (prev) => {
+                    const copy = {
+                      ...prev,
+                    };
+
+                    copy[key] = 0;
+
+                    return copy;
+                  },
                 );
-              } catch (err) {
-                console.error(err);
-              }
-              navigate(`/platform/verifications/verificationCX/${v.id}`);
+
+                try {
+                  await api.put(
+                    `/vendor/notifications/mark-read/${orgId}/verification/${v.id}`,
+                  );
+                } catch (err) {
+                  console.error(
+                    err,
+                  );
+                }
+
+                navigate(
+                  `/platform/verifications/verificationCX/${v.id}`,
+                );
+              }}
+            >
+              {/* LEFT */}
+              <div className="candidate-info">
+                <div className="candidate-top">
+                  <h4
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        highlight(
+                          v.candidateName,
+                        ),
+                    }}
+                  />
+
+                  {notifications[
+                    v.id
+                  ] && (
+                      <span className="new-badge">
+                        NEW
+                      </span>
+                    )}
+                </div>
+
+                <p
+                  className="candidate-email"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      highlight(
+                        v.candidateEmail,
+                      ),
+                  }}
+                />
+
+                <span className="department-pill">
+                  {
+                    v.department
+                      ?.name
+                  }
+                </span>
+              </div>
+
+              {/* RIGHT */}
+              <div className="candidate-right">
+                <span
+                  className={`status ${v.status.toLowerCase()}`}
+                >
+                  {v.status}
+                </span>
+
+                <div
+                  className={`sla-badge ${sla.class}`}
+                >
+                  {sla.label}
+                </div>
+
+                {/* MENU */}
+                <div
+                  className="candidate-menu"
+                  onClick={(e) =>
+                    e.stopPropagation()
+                  }
+                >
+                  <span
+                    className="menu-icon"
+                    onClick={() =>
+                      setMenuOpen(
+                        menuOpen ===
+                          v.id
+                          ? null
+                          : v.id,
+                      )
+                    }
+                  >
+                    ⋮
+                  </span>
+
+                  {menuOpen ===
+                    v.id && (
+                      <div className="candidate-menu-dropdown">
+                        <button
+                          className="danger-item"
+                          onClick={() => {
+                            setSelectedVerification(
+                              v,
+                            );
+
+                            setShowDeleteModal(
+                              true,
+                            );
+
+                            setMenuOpen(
+                              null,
+                            );
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* DELETE MODAL */}
+      {
+        showDeleteModal && (
+          <div
+            className="client-modal-overlay"
+            onClick={() => {
+              setShowDeleteModal(
+                false,
+              );
+
+              setSelectedVerification(
+                null,
+              );
+
+              setConfirmText("");
             }}
           >
-            {/* 🔥 TOP ROW (BEST PLACE FOR BADGE) */}
-            <div className="card-header">
-              <h4
-                dangerouslySetInnerHTML={{
-                  __html: highlight(v.candidateName),
-                }}
+            <div
+              className="client-delete-modal"
+              onClick={(e) =>
+                e.stopPropagation()
+              }
+            >
+              <h3>
+                Delete Verification
+              </h3>
+
+              <p>
+                Type{" "}
+                <strong>
+                  CONFIRM
+                </strong>{" "}
+                to delete this
+                verification request.
+              </p>
+
+              <input
+                className="confirm-input"
+                placeholder="Type CONFIRM"
+                value={confirmText}
+                onChange={(e) =>
+                  setConfirmText(
+                    e.target.value,
+                  )
+                }
               />
-              {/* ✅ NEW BADGE HERE */}
-              {notifications[v.id] && <span className="new-badge">NEW</span>}
+
+              <div className="client-modal-actions">
+                <button
+                  className="cancel-btn"
+                  onClick={() => {
+                    setShowDeleteModal(
+                      false,
+                    );
+
+                    setSelectedVerification(
+                      null,
+                    );
+
+                    setConfirmText(
+                      "",
+                    );
+                  }}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  className="confirm-delete-btn"
+                  onClick={
+                    deleteVerification
+                  }
+                >
+                  Confirm
+                </button>
+              </div>
             </div>
-
-            {/* EMAIL */}
-            <p
-              className="email"
-              dangerouslySetInnerHTML={{
-                __html: highlight(v.candidateEmail),
-              }}
-            />
-
-            {/* STATUS */}
-            <span className={`status ${v.status.toLowerCase()}`}>
-              {v.status}
-            </span>
-
-            {/* SLA */}
-            <div className={`sla-badge ${sla.class}`}>{sla.label}</div>
           </div>
-        );
-      })}
-    </div>
+        )
+      }
+    </div >
   );
 }

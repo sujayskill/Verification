@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../../services/api/Api";
+import { api } from "../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
-import "../../styles/VerificationDepartments.css";
+import "./VerificationDepartments.css";
 
 export default function VerificationDepartments() {
   const [notifications, setNotifications] = useState({});
@@ -103,7 +103,7 @@ export default function VerificationDepartments() {
   };
 
   return (
-    <div className="vr-page">
+    <div className="vrd-page">
       <div className="vr-header">
         <h1>TEST CHANGE</h1>
         <button onClick={() => navigate("/platform/verifications")}>

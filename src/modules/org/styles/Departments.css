@@ -1,148 +1,228 @@
-/* PAGE */
-.page {
+/* =========================
+   PAGE
+========================= */
+
+.cpd-page {
   display: flex;
   flex-direction: column;
+
   height: 100%;
   min-height: 0;
+
   background: #f8fafc;
-  font-family: "Inter", "Poppins", sans-serif;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
-.client-dept-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
+.cpd-header {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: #fff;
-  padding: 16px 5px;
-  border-bottom: 1px solid #eee;
-}
-
-.dept-header h2 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #1e293b;
-}
-
-/* ACTIONS */
-.actions {
   display: flex;
-  gap: 12px;
+  justify-content: space-between;
   align-items: center;
-  margin-right: 40px;
+  padding: 18px 22px;
+  background: rgba(248, 250, 252, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e5e7eb;
 }
 
-/* INPUTS */
-.actions input {
-  padding: 10px 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  outline: none;
+/* LEFT */
+
+.cpd-header-left h2 {
+  margin: 0;
+
+  font-size: 24px;
+
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.cpd-header-left p {
+  margin-top: 5px;
+
+  color: #6b7280;
+
   font-size: 14px;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.cpd-header-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+/* SEARCH */
+
+.cpd-search-input {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #dbe1ea;
   background: white;
+  font-size: 14px;
   transition: 0.2s;
 }
 
-.actions input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+.cpd-search-input:focus {
+  outline: none;
+  border-color: #7c6cf6;
+  box-shadow: 0 0 0 4px rgba(124, 108, 246, 0.12);
 }
 
 /* BUTTON */
-.actions button {
-  padding: 10px 16px;
+
+.cpd-add-btn {
+  height: 42px;
+
+  padding: 0 18px;
+
   border: none;
-  border-radius: 8px;
-  background: #2563eb;
+
+  border-radius: 12px;
+
+  background: linear-gradient(135deg,
+      #7c6cf6,
+      #8b5cf6);
+
   color: white;
-  font-weight: 500;
+
+  font-weight: 600;
+
   cursor: pointer;
+
   transition: 0.2s;
 }
 
-.actions button:hover {
-  background: #1d4ed8;
-}
+.cpd-add-btn:hover {
+  transform: translateY(-1px);
 
-.dept-row:active {
-  background: #e2e8f0;
-}
-
-/* LIST */
-/* ===== LIST CONTAINER ===== */
-/* =========================
-   DEPARTMENT GRID
-========================= */
-.dept{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  margin-top: 30px;
-  padding: 10px;
-  width: 100%;
+  box-shadow:
+    0 10px 25px rgba(124,
+      108,
+      246,
+      0.25);
 }
 
 /* =========================
-   DEPARTMENT CARD
+   GRID
 ========================= */
-.dept-row {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  min-height: 130px;
-  padding: 18px;
-  border-radius: 6px; /* 🔥 SHARP EDGES */
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  cursor: pointer;
-  transition: all 0.22s ease;
-}
 
-/* =========================
-   HOVER EFFECT
-========================= */
-.dept-row:hover {
-  transform: translateY(-4px);
-
-  border-color: #3b82f6;
-
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.04),
-    rgba(37, 99, 235, 0.02)
-  );
-}
-
-/* =========================
-   DEPARTMENT NAME
-========================= */
-.dept-name {
+.cpd-grid {
   flex: 1;
 
+  overflow-y: auto;
+
+  padding: 24px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4,
+      minmax(0, 1fr));
+
+  gap: 20px;
+
+  align-content: start;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.cpd-card {
+  position: relative;
+
+  min-height: 65px;
+
+  padding: 22px;
+
+  border-radius: 22px;
+
+  background: rgba(255,
+      255,
+      255,
+      0.78);
+
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255,
+      255,
+      255,
+      0.45);
+
+  box-shadow:
+    0 10px 30px rgba(15,
+      23,
+      42,
+      0.05);
+
+  transition: all 0.22s ease;
+
+  overflow: visible;
+}
+
+.cpd-card:hover {
+  transform: translateY(-5px);
+
+  border-color:
+    rgba(124,
+      108,
+      246,
+      0.22);
+
+  box-shadow:
+    0 20px 40px rgba(124,
+      108,
+      246,
+      0.12),
+    0 8px 20px rgba(15,
+      23,
+      42,
+      0.08);
+}
+
+/* INFO */
+
+.cpd-card-info {
   display: flex;
-  align-items: center;
 
-  height: 100%;
+  flex-direction: column;
+
+  gap: 8px;
 }
 
-.dept-name span {
-  font-size: 16px;
-  font-weight: 600;
+.cpd-card-info h3 {
+  margin: 0;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
   color: #111827;
-
-  line-height: 1.5;
 }
 
-/* SEARCH HIGHLIGHT */
-.dept-name mark {
-  background: #dbeafe;
-  color: #1d4ed8;
+.cpd-card-info span {
+  font-size: 13px;
+
+  color: #94a3b8;
+}
+
+/* HIGHLIGHT */
+
+.cpd-card-info mark {
+  background: #ede9fe;
+
+  color: #6d28d9;
 
   padding: 2px 5px;
 
@@ -150,230 +230,261 @@
 }
 
 /* =========================
-   MENU POSITION
+   CLICKABLE
 ========================= */
-.menu {
-  position: absolute;
 
-  top: 12px;
-  right: 10px;
-
-  width: auto;
+.cpd-clickable {
+  cursor: pointer;
 }
 
 /* =========================
-   EMPTY STATE
+   MENU
 ========================= */
-.dept-list:empty::after {
-  content: "No departments found";
 
-  grid-column: 1 / -1;
+.cpd-menu {
+  position: absolute;
 
-  padding: 40px;
+  top: 16px;
+  right: 16px;
 
-  text-align: center;
+  z-index: 300;
+}
 
-  color: #9ca3af;
+.cpd-menu-icon {
+  font-size: 20px;
 
-  border: 1px dashed #d1d5db;
+  padding: 6px 10px;
 
   border-radius: 8px;
-}
 
-/* HIGHLIGHT SEARCH */
-.dept-name mark {
-  background: #dbeafe;
-  color: #1d4ed8;
-  padding: 0 4px;
-  border-radius: 4px;
-}
-
-/* ===== MENU (⋮) ===== */
-.menu {
-  position: relative;
-  width: 40px;
-  display: flex;
-  justify-content: center;
-}
-
-/* DOT ICON */
-.menu span {
-  font-size: 18px;
   cursor: pointer;
-  color: #6b7280;
-  padding: 4px 8px;
-  border-radius: 6px;
+
   transition: 0.2s;
+
+  color: #6b7280;
 }
 
-.menu span:hover {
-  background: #e5e7eb;
+.cpd-menu-icon:hover {
+  background: #f3f4f6;
+
   color: #111827;
 }
 
-/* ===== DROPDOWN ===== */
-.menu-dropdown {
-  position: absolute;
-  right: 0;
-  top: -10px; /* 👈 move upwards */
-  transform: translateY(-100%); /* 🔥 forces it above */
+/* =========================
+   DROPDOWN
+========================= */
 
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  z-index: 999; /* 🔥 VERY IMPORTANT */
+.cpd-menu-dropdown {
+  position: absolute;
+
+  top: 42px;
+  right: 0;
+
+  width: 150px;
+
+  background: rgba(255,
+      255,
+      255,
+      0.95);
+
+  backdrop-filter: blur(14px);
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255,
+      255,
+      255,
+      0.4);
+
+  box-shadow:
+    0 14px 35px rgba(0,
+      0,
+      0,
+      0.12);
+
+  overflow: hidden;
+
+  z-index: 9999;
 }
 
-/* DROPDOWN BUTTONS */
-.menu-dropdown button {
+.cpd-menu-dropdown button {
   width: 100%;
-  padding: 10px 14px;
+
+  border: none;
+
+  background: transparent;
+
+  padding: 12px 16px;
 
   text-align: left;
-  border: none;
-  background: transparent;
+
   cursor: pointer;
 
   font-size: 14px;
-  color: #374151;
 
-  transition: background 0.2s;
+  transition: 0.2s;
 }
 
-/* HOVER */
-.menu-dropdown button:hover {
+.cpd-menu-dropdown button:hover {
   background: #f3f4f6;
 }
 
-/* DELETE STYLE */
-.menu-dropdown button:last-child {
+/* DANGER */
+
+.cpd-danger-item {
   color: #dc2626;
 }
 
-.menu-dropdown button:last-child:hover {
-  background: #fee2e2;
-}
-
-.dept-list:empty::after {
-  content: "No departments found";
-  display: block;
-  padding: 20px;
-  text-align: center;
-  color: #9ca3af;
-}
-
-/* =========================
-   DELETE MODAL OVERLAY
-========================= */
-.dept-delete-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(5px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
+.cpd-danger-item:hover {
+  background: #fee2e2 !important;
 }
 
 /* =========================
    MODAL
 ========================= */
-.dept-delete-modal {
-  width: 400px;
-  padding: 28px;
-  border-radius: 10px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
-  animation: deptModalFade 0.18s ease;
+
+.cpd-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(15,
+      23,
+      42,
+      0.45);
+
+  backdrop-filter: blur(6px);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999;
 }
 
-/* TITLE */
-.dept-delete-modal h3 {
+.cpd-delete-modal {
+  width: 420px;
+
+  padding: 28px;
+
+  border-radius: 20px;
+
+  background: rgba(255,
+      255,
+      255,
+      0.78);
+
+  backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(255,
+      255,
+      255,
+      0.4);
+
+  box-shadow:
+    0 25px 45px rgba(0,
+      0,
+      0,
+      0.12);
+}
+
+.cpd-delete-modal h3 {
   margin: 0 0 14px;
+
   font-size: 22px;
-  font-weight: 600;
+
+  font-weight: 700;
+
   color: #111827;
 }
 
-/* TEXT */
-.dept-delete-modal p {
+.cpd-delete-modal p {
   margin: 0;
-  line-height: 1.6;
+
   color: #4b5563;
-  font-size: 15px;
+
+  line-height: 1.6;
 }
 
-/* ACTIONS */
-.dept-delete-actions {
+.cpd-modal-actions {
   display: flex;
+
   justify-content: flex-end;
+
   gap: 12px;
-  margin-top: 26px;
+
+  margin-top: 28px;
 }
 
-/* CANCEL */
-.dept-cancel-btn {
+.cpd-cancel-btn {
   padding: 10px 16px;
-  border-radius: 8px;
+
+  border-radius: 10px;
+
   border: 1px solid #d1d5db;
+
   background: white;
+
   cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
 }
 
-.dept-cancel-btn:hover {
-  background: #f3f4f6;
-}
+.cpd-confirm-delete-btn {
+  padding: 10px 18px;
 
-/* DELETE */
-.dept-confirm-delete-btn {
-  padding: 10px 16px;
-  border-radius: 8px;
   border: none;
-  background: #dc2626;
+
+  border-radius: 10px;
+
+  background: linear-gradient(135deg,
+      #ef4444,
+      #dc2626);
+
   color: white;
-  font-weight: 600;
+
   cursor: pointer;
-  transition: 0.2s;
-}
 
-.dept-confirm-delete-btn:hover {
-  background: #b91c1c;
-}
-
-/* ANIMATION */
-@keyframes deptModalFade {
-  from {
-    opacity: 0;
-    transform: scale(0.96) translateY(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  font-weight: 600;
 }
 
 /* =========================
    RESPONSIVE
 ========================= */
-@media (max-width: 1200px) {
-  .dept-list {
-    grid-template-columns: repeat(3, 1fr);
+
+@media (max-width: 1400px) {
+  .cpd-grid {
+    grid-template-columns:
+      repeat(3,
+        minmax(0, 1fr));
   }
 }
 
-@media (max-width: 900px) {
-  .dept-list {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 1100px) {
+  .cpd-grid {
+    grid-template-columns:
+      repeat(2,
+        minmax(0, 1fr));
   }
 }
 
-@media (max-width: 600px) {
-  .dept-list {
+@media (max-width: 700px) {
+  .cpd-grid {
     grid-template-columns: 1fr;
+  }
+
+  .cpd-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 18px;
+  }
+
+  .cpd-header-actions {
+    width: 100%;
+  }
+
+  .cpd-search-input {
+    flex: 1;
   }
 }

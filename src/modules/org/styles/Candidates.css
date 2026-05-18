@@ -1,7 +1,7 @@
 /* =========================
    PAGE LAYOUT
 ========================= */
-.page {
+.c-page {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -13,7 +13,7 @@
 /* =========================
    STICKY HEADER
 ========================= */
-.page-header {
+.c-page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -27,50 +27,60 @@
 }
 
 /* BACK BUTTON */
-.back-btn {
-  width: fit-content;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: #f3f4f6;
-  border: none;
+.c-back-btn {
+  padding: 9px 14px;
+  border-radius: 12px;
+  border: 1px solid #dbe1ea;
+  background: white;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.c-back-btn:hover {
+  background: #f3f4f6;
 }
 
 /* Header title */
-.page-header h1 {
-  margin: 10px 10px;
+.c-page-header h1 {
+  margin: 0;
+  margin-top: 20px;
   font-size: 40px;
   font-weight: 600;
 
 }
 
-.header-left {
+.c-header-left {
   display: flex;
-  flex-direction: column; /* 🔥 stack */
+  flex-direction: column;
+  /* 🔥 stack */
   gap: 5px;
-  margin-left: 10px;
 }
 
 /* RIGHT SIDE */
-.header-right {
+.c-header-right {
   align-items: center;
   gap: 13px;
-  margin-left: 500px;
+  margin-left: 400px;
+  margin-right: 50px;
+  margin-top: 55px;
 }
 
 /* =========================
    INPUT FIELD (SEARCH)
 ========================= */
-.search-input {
+.c-search-input {
   padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid #ddd;
   width: 220px;
   margin-top: 12px;
+  height: 20px;
 }
 
 
-.search-input:focus {
+.c-search-input:focus {
   border-color: #6366f1;
   background: #fff;
 }
@@ -78,9 +88,10 @@
 /* =========================
    BUTTONS
 ========================= */
-.primary-btn {
+.c-primary-btn {
   padding: 10px 16px;
   border-radius: 10px;
+  height: 36px;
   border: none;
   background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
@@ -89,7 +100,7 @@
   margin-left: 20px;
 }
 
-.primary-btn:hover {
+.c-primary-btn:hover {
   opacity: 0.9;
 }
 
@@ -110,128 +121,203 @@
 /* =========================
    LIST ROW (GLASS STYLE)
 ========================= */
-.row {
-  display: flex;
-  justify-content: space-between;
+/* =========================
+   NEW ROW LAYOUT
+========================= */
+
+.candidate-row {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    1.3fr 1fr 1fr auto;
+
+  gap: 24px;
+
   align-items: center;
 
-  padding: 16px 18px;
-  border-radius: 14px;
+  padding: 24px;
 
-  /* 🔥 GLASS EFFECT */
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
+  border-radius: 22px;
 
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255,
+      255,
+      255,
+      0.78);
 
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(12px);
 
-  transition: 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.05);
+
+  transition: all 0.22s ease;
 }
 
-/* Hover effect */
-.row:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+/* HOVER */
+
+.candidate-row:hover {
+  transform: translateY(-4px);
+
+  border-color:
+    rgba(124, 108, 246, 0.22);
+
+  box-shadow:
+    0 20px 40px rgba(124, 108, 246, 0.12),
+    0 8px 20px rgba(15, 23, 42, 0.08);
 }
 
 /* =========================
-   LEFT INFO
+   COLUMNS
 ========================= */
-.info h4 {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
+
+.candidate-col {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
 }
 
-.info p {
-  margin: 4px 0;
-  font-size: 13px;
+/* =========================
+   PRIMARY
+========================= */
+
+.candidate-primary h4 {
+  margin: 0;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.candidate-primary p {
+  margin: 0;
+
+  font-size: 14px;
+
   color: #6b7280;
 }
 
 /* =========================
-   STATUS BADGES
+   STATUS
 ========================= */
-.status {
-  display: inline-block;
-  margin-top: 6px;
 
-  padding: 4px 10px;
-  border-radius: 20px;
+.candidate-status {
+  width: fit-content;
+
+  margin-top: 4px;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  background: #eef2ff;
+
+  color: #4338ca;
 
   font-size: 12px;
-  font-weight: 500;
-}
 
-/* STATUS COLORS */
-.status.completed {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.status.in_progress {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.status.initiated {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.status.rollback_requested {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-.status.created {
-  background: #f3f4f6;
-  color: #374151;
+  font-weight: 600;
 }
 
 /* =========================
-   ACTION BUTTONS
+   META
 ========================= */
-.actions {
+
+.candidate-meta {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.candidate-meta label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.candidate-meta span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* =========================
+   REMARKS
+========================= */
+
+.remarks-box {
+  max-width: 280px;
+}
+
+.remarks-title {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #7c6cf6;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.remarks-box p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.candidate-actions {
+  display: flex;
+
+  flex-direction: column;
+
   gap: 10px;
 }
 
-.actions button {
-  padding: 6px 12px;
-  border-radius: 8px;
+.candidate-actions button {
+  height: 40px;
+
+  min-width: 90px;
+
   border: none;
 
-  background: #6366f1;
-  color: white;
+  border-radius: 12px;
 
-  cursor: pointer;
   font-size: 13px;
-}
 
-.actions button:hover {
-  opacity: 0.9;
-}
+  font-weight: 600;
 
-/* Disabled */
-.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.blur {
-  filter: blur(1px);
-}
-
-.clickable-row {
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
-.clickable-row:hover {
-  transform: translateY(-2px);
-  border-color: #c7d2fe;
-  background: rgba(255, 255, 255, 0.9);
+.candidate-actions button:first-child {
+  background: #e0e7ff;
+
+  color: #4338ca;
+}
+
+.candidate-actions button:last-child {
+  background: #fee2e2;
+
+  color: #dc2626;
+}
+
+.candidate-actions button:hover {
+  transform: translateY(-1px);
 }
 
 /* =========================
@@ -344,5 +430,17 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 1100px) {
+  .candidate-row {
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+  }
+
+  .candidate-actions {
+    flex-direction: row;
   }
 }

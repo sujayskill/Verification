@@ -1,0 +1,416 @@
+/* =========================
+   PAGE
+========================= */
+
+.reports-page {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #f8fafc;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.reports-header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 24px;
+
+    background: rgba(248, 250, 252, 0.92);
+
+    backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.reports-header-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.reports-header-left h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.reports-header-left p {
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.reports-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.reports-content {
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    overflow-y: auto;
+}
+
+/* =========================
+   GLASS CARD
+========================= */
+
+.glass-card {
+    padding: 24px;
+
+    border-radius: 24px;
+
+    background: rgba(255,
+            255,
+            255,
+            0.76);
+
+    backdrop-filter: blur(14px);
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.05),
+        0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+/* =========================
+   SECTION HEADER
+========================= */
+
+.section-header {
+    margin-bottom: 20px;
+}
+
+.section-header h3 {
+    margin: 0;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    color: #111827;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.info-grid {
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit,
+            minmax(220px, 1fr));
+
+    gap: 20px;
+}
+
+.info-grid label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #94a3b8;
+}
+
+.info-grid p {
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    color: #111827;
+}
+
+/* =========================
+   PIPELINE
+========================= */
+
+.pipeline-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+.pipeline-wrapper {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+}
+
+.pipeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 120px;
+}
+
+.pipeline-circle {
+    width: 54px;
+    height: 54px;
+
+    border-radius: 50%;
+
+    background: #e5e7eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+
+    color: #6b7280;
+
+    transition: 0.2s ease;
+}
+
+.pipeline-step.active .pipeline-circle {
+    background: linear-gradient(135deg,
+            #2563eb,
+            #1d4ed8);
+
+    color: white;
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.25);
+}
+
+.pipeline-step span {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #6b7280;
+
+    text-align: center;
+}
+
+.pipeline-step.active span {
+    color: #111827;
+}
+
+.pipeline-line {
+    flex: 1;
+    height: 4px;
+
+    background: #e5e7eb;
+
+    border-radius: 999px;
+
+    margin: 0 12px;
+}
+
+.pipeline-line.active {
+    background: linear-gradient(135deg,
+            #2563eb,
+            #1d4ed8);
+}
+
+/* =========================
+   STATUS BADGE
+========================= */
+
+.report-status {
+    padding: 10px 16px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.report-status.completed {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.report-status.in_progress {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.report-status.initiated {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.report-status.failed {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn {
+    border: none;
+
+    background: linear-gradient(135deg,
+            #2563eb,
+            #1d4ed8);
+
+    color: white;
+
+    padding: 12px 22px;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+}
+
+.download-btn {
+    padding: 12px 20px;
+
+    border-radius: 14px;
+
+    background: #ecfdf5;
+
+    color: #059669;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+}
+
+.back-btn {
+    padding: 10px 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid #dbe4f0;
+
+    background: white;
+
+    cursor: pointer;
+}
+
+/* =========================
+   ACTION CARDS
+========================= */
+
+.report-actions-grid {
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit,
+            minmax(320px, 1fr));
+
+    gap: 20px;
+}
+
+.action-card {
+    padding: 24px;
+
+    border-radius: 20px;
+
+    background: rgba(248,
+            250,
+            252,
+            0.8);
+
+    border: 1px solid #e5e7eb;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+.action-card h4 {
+    margin: 0;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    color: #111827;
+}
+
+.action-card p {
+    margin: 0;
+
+    color: #6b7280;
+
+    line-height: 1.7;
+}
+
+/* =========================
+   LOADING
+========================= */
+
+.reports-loading {
+    padding: 40px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .reports-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+
+    .reports-header-right {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .pipeline-container {
+        flex-direction: column;
+    }
+
+    .pipeline-wrapper {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .pipeline-line {
+        width: 4px;
+        height: 40px;
+    }
+}

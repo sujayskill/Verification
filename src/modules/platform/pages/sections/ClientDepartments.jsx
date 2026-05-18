@@ -83,7 +83,7 @@ export default function ClientDepartments() {
   return (
     <div className="Client-Departments-page">
       {/* TOP HEADER */}
-      <div className="vendor-client-dept-header">
+      <div className="dept-header">
         {/* LEFT */}
         <div>
           <button

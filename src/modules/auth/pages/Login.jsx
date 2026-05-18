@@ -11,7 +11,7 @@ export default function Login() {
 
   const login = async () => {
     try {
-      console.log("LOGIN PAYLOAD:", form);
+      // console.log("LOGIN PAYLOAD:", form);
       const res = await api.post("/auth/login", form);
 
       const accessToken = res.accessToken;

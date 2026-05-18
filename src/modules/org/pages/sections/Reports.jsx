@@ -38,17 +38,17 @@ export default function Reports() {
   };
 
   return (
-    <div className="page">
+    <div className="c-reports-page">
       {/* HEADER */}
-      <div className="reports-header">
-        <div className="header-left">
-          <h2>Candidate Reports</h2>
+      <div className="c-reports-header">
+        <div className="c-reports-header-left">
+          <h1>Candidate Reports</h1>
           <p>View all verification reports</p>
         </div>
 
-        <div className="header-right">
+        <div className="c-reports-header-right">
           <input
-            className="reports-search"
+            className="c-reports-search"
             placeholder="Search candidate..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -57,46 +57,123 @@ export default function Reports() {
       </div>
 
       {/* LIST */}
-      <div className="reports-list">
+      <div className="c-reports-list">
         {data.length === 0 ? (
-          <div className="empty-state">
+          <div className="c-reports-empty">
             <p>No reports found</p>
           </div>
         ) : (
           data.map((v) => (
             <div
               key={v.id}
-              className="report-card"
-              onClick={() => navigate(`${base}/reports/reportDetails/${v.id}`)}
+              className="c-report-card"
+              onClick={() =>
+                navigate(
+                  `${base}/reports/reportDetails/${v.id}`,
+                )
+              }
             >
-              {/* LEFT */}
-              <div className="report-left">
+
+              {/* =========================
+            COLUMN 1
+        ========================= */}
+
+              <div className="c-report-column c-report-column-1">
+
                 <h4
                   dangerouslySetInnerHTML={{
-                    __html: highlight(v.candidateName),
+                    __html: highlight(
+                      v.candidateName,
+                    ),
                   }}
                 />
 
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: highlight(v.candidateEmail || ""),
+                    __html: highlight(
+                      v.candidateEmail || "",
+                    ),
                   }}
                 />
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: highlight(v.candidateEmail || ""),
-                  }}
-                />
-              </div>
 
-              {/* RIGHT */}
-              <div className="report-right">
-                <span className={`status ${v.status?.toLowerCase()}`}>
+                <span
+                  className={`c-report-status ${v.status?.toLowerCase()}`}
+                >
                   {v.status}
                 </span>
+              </div>
+
+              {/* =========================
+            COLUMN 2
+        ========================= */}
+
+            <div className="c-report-column c-report-column-2">
+
+                {/* MOBILE */}
+
+                <div className="c-report-meta-row">
+
+                  <span className="c-report-meta-label">
+                    Mobile: 
+                  </span>
+
+                  <span className="c-report-meta-value">
+                    {v.phone
+                      ? `${v.countryCode || ""} ${v.phone}`
+                      : " N/A"}
+                  </span>
+                </div>
+
+                {/* LOCATION */}
+
+                <div className="c-report-meta-row">
+
+                  <span className="c-report-meta-label">
+                    Location: 
+                  </span>
+
+                  <span className="c-report-meta-value">
+                    {v.location?.trim()
+                      ? v.location
+                      : " N/A"}
+                  </span>
+                </div>
+
+                {/* ROLE */}
+
+                <div className="c-report-meta-row">
+
+                  <span className="c-report-meta-label">
+                    Role:
+                  </span>
+
+                  <span className="c-report-meta-value">
+                    {v.role?.trim()
+                      ? v.role
+                      : " N/A"}
+                  </span>
+                </div>
+              </div>
+
+              {/* =========================
+            COLUMN 3
+        ========================= */}
+
+              <div className="c-report-column c-report-column-3">
+
+                <span className="c-report-remarks-title">
+                  Remarks
+                </span>
+
+                <p className="c-report-remarks-text">
+                  {v.remarks ||
+                    "N/A"}
+                </p>
 
                 {v.reportAvailable && (
-                  <span className="ready">✔ Report Ready</span>
+                  <span className="c-report-ready">
+                    ✔ Report Ready
+                  </span>
                 )}
               </div>
             </div>

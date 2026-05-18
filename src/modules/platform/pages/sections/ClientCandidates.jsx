@@ -54,14 +54,19 @@ export default function ClientDepartmentCandidates() {
   };
 
   return (
-    <div className="Client-Candidates-page">
+    <div className="cc-page">
       {/* HEADER */}
-      <div className="candidate-header">
+      <div className="cc-header">
+
         {/* LEFT */}
-        <div className="header-left">
+        <div>
           <button
-            className="back-btn"
-            onClick={() => navigate(`/platform/clients/${orgId}/departments`)}
+            className="cc-back-btn"
+            onClick={() =>
+              navigate(
+                `/platform/clients/${orgId}/departments`
+              )
+            }
           >
             ← Back
           </button>
@@ -72,30 +77,39 @@ export default function ClientDepartmentCandidates() {
         </div>
 
         {/* RIGHT */}
-        <div className="candidate-actions">
+        <div className="cc-actions">
           <input
+            className="cc-search-input"
             placeholder="Search candidate..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
           />
         </div>
       </div>
 
       {/* LIST */}
-      <div className="vr-list">
+      <div className="cc-list">
         {data.map((c) => (
           <div
             key={c.id}
-            className="candidate-card clickable-row"
+            className="cc-candidate-card cc-clickable-row"
             onClick={() =>
-              navigate(`/platform/clients/candidateDetails/${c.id}`)
+              navigate(
+                `/platform/clients/candidateDetails/${c.id}`
+              )
             }
           >
+
             {/* LEFT */}
-            <div className="info">
+            <div className="cc-info">
+
               <h4
                 dangerouslySetInnerHTML={{
-                  __html: highlight(`${c.firstName} ${c.lastName}`),
+                  __html: highlight(
+                    `${c.firstName} ${c.lastName}`,
+                  ),
                 }}
               />
 
@@ -105,7 +119,9 @@ export default function ClientDepartmentCandidates() {
                 }}
               />
 
-              <span className={`status ${c.status?.toLowerCase()}`}>
+              <span
+                className={`cc-status ${c.status?.toLowerCase()}`}
+              >
                 {c.status}
               </span>
             </div>
@@ -113,24 +129,33 @@ export default function ClientDepartmentCandidates() {
             {/* MENU */}
             {isAdmin && (
               <div
-                className="candidate-menu"
-                onClick={(e) => e.stopPropagation()}
+                className="cc-candidate-menu"
+                onClick={(e) =>
+                  e.stopPropagation()
+                }
               >
+
                 <span
-                  className="menu-icon"
+                  className="cc-menu-icon"
                   onClick={() =>
-                    setMenuOpen(menuOpen === c.id ? null : c.id)
+                    setMenuOpen(
+                      menuOpen === c.id
+                        ? null
+                        : c.id,
+                    )
                   }
                 >
                   ⋮
                 </span>
 
                 {menuOpen === c.id && (
-                  <div className="candidate-menu-dropdown">
+                  <div className="cc-candidate-menu-dropdown">
+
                     <button
+                      className="cc-menu-btn"
                       onClick={() =>
                         navigate(
-                          `/platform/clients/editCandidateDetails/${c.id}`
+                          `/platform/clients/editCandidateDetails/${c.id}`,
                         )
                       }
                     >
@@ -138,7 +163,7 @@ export default function ClientDepartmentCandidates() {
                     </button>
 
                     <button
-                      className="danger-item"
+                      className="cc-danger-item"
                       onClick={() => {
                         setSelectedCandidate(c);
 
@@ -149,6 +174,7 @@ export default function ClientDepartmentCandidates() {
                     >
                       Delete
                     </button>
+
                   </div>
                 )}
               </div>
@@ -160,17 +186,21 @@ export default function ClientDepartmentCandidates() {
       {/* DELETE MODAL */}
       {showDeleteModal && (
         <div
-          className="client-modal-overlay"
+          className="cc-modal-overlay"
           onClick={() => {
             setShowDeleteModal(false);
 
             setSelectedCandidate(null);
           }}
         >
+
           <div
-            className="client-delete-modal"
-            onClick={(e) => e.stopPropagation()}
+            className="cc-delete-modal"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
           >
+
             <h3>Delete Candidate</h3>
 
             <p>
@@ -182,9 +212,10 @@ export default function ClientDepartmentCandidates() {
               ?
             </p>
 
-            <div className="client-modal-actions">
+            <div className="cc-modal-actions">
+
               <button
-                className="cancel-btn"
+                className="cc-cancel-btn"
                 onClick={() => {
                   setShowDeleteModal(false);
 
@@ -195,11 +226,12 @@ export default function ClientDepartmentCandidates() {
               </button>
 
               <button
-                className="confirm-delete-btn"
+                className="cc-confirm-delete-btn"
                 onClick={deleteCandidate}
               >
                 Delete
               </button>
+
             </div>
           </div>
         </div>

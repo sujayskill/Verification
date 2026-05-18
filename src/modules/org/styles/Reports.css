@@ -1,234 +1,407 @@
 /* =========================
-   PAGE LAYOUT
+   PAGE
 ========================= */
-.page {
+
+.c-reports-page {
   display: flex;
   flex-direction: column;
+
   height: 100%;
   min-height: 0;
+
+  background: #f8fafc;
 }
 
 /* =========================
-   STICKY HEADER
+   HEADER
 ========================= */
-.reports-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
+.c-reports-header {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: #fff;
-  padding: 16px 5px;
-  border-bottom: 1px solid #eee;
-}
 
-/* LEFT SIDE */
-.header-left {
-  display: flex;
-  flex-direction: column; /* 🔥 stack */
-  gap: 5px;
-  margin-left: 10px;
-}
-
-.reports-header p {
-  margin-top: 4px;
-  font-size: 13px;
-  color: #6b7280;
-}
-
-/* Header title */
-.page-header h2 {
-  margin-right: 100px;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-/* RIGHT SIDE */
-.header-right {
-  align-items: center;
-  gap: 13px;
-  margin-left: 500px;
-}
-
-/* =========================
-   SEARCH INPUT
-========================= */
-.reports-search {
-  padding: 8px 12px;
-
-  border-radius: 8px;
-  border: 1px solid #ddd;
-
-  width: 240px;
-
-  transition: 0.2s;
-}
-
-.reports-search:focus {
-  outline: none;
-  border-color: #6366f1;
-  background: #fff;
-}
-
-/* =========================
-   LIST CONTAINER
-========================= */
-.reports-list {
-  display: flex;
-  flex-direction: column;
-
-  gap: 5px;
-
-  padding: 16px 20px;
-
-  overflow-y: auto;
-  flex: 1;
-}
-
-/* =========================
-   REPORT CARD
-========================= */
-.report-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 16px 18px;
+  padding: 18px 24px;
 
-  border-radius: 14px;
+  background: rgba(248, 250, 252, 0.92);
 
-  cursor: pointer;
+  backdrop-filter: blur(12px);
 
-  /* GLASS EFFECT */
-  background: rgba(255, 255, 255, 0.6);
+  border-bottom: 1px solid #e5e7eb;
+}
 
-  backdrop-filter: blur(10px);
+/* LEFT */
 
-  border: 1px solid rgba(255, 255, 255, 0.4);
+.c-reports-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+.c-reports-header-left h1 {
+  margin: 0;
+
+  font-size: 26px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.c-reports-header-left p {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #6b7280;
+}
+
+/* RIGHT */
+
+.c-reports-header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.c-reports-search {
+  width: 300px;
+
+  height: 44px;
+
+  padding: 0 14px;
+
+  border-radius: 12px;
+
+  border: 1px solid #dbe1ea;
+
+  background: white;
+
+  font-size: 14px;
 
   transition: 0.2s;
 }
 
-/* HOVER */
-.report-card:hover {
-  transform: translateY(-2px);
+.c-reports-search:focus {
+  outline: none;
 
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border-color: #7c6cf6;
+
+  box-shadow: 0 0 0 4px rgba(124, 108, 246, 0.12);
 }
 
 /* =========================
-   LEFT SIDE
+   LIST
 ========================= */
-.report-left h4 {
-  margin: 0;
 
-  font-size: 15px;
-  font-weight: 600;
-}
+.c-reports-list {
+  flex: 1;
 
-.report-left p {
-  margin: 4px 0;
+  overflow-y: auto;
 
-  font-size: 13px;
-  color: #6b7280;
-}
+  padding: 24px;
 
-/* =========================
-   RIGHT SIDE
-========================= */
-.report-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-
-  gap: 8px;
+  
+  gap: 10px;
 }
 
 /* =========================
-   STATUS BADGES
+   CARD
 ========================= */
-.status {
-  display: inline-block;
 
-  padding: 4px 10px;
+.c-report-card {
+  position: relative;
 
-  border-radius: 20px;
+  width: 100%;
 
-  font-size: 12px;
-  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 24px;
+
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.78);
+
+  backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255, 255, 255, 0.45);
+
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+
+  transition: all 0.22s ease;
+
+  cursor: pointer;
 }
 
-/* STATUS COLORS */
-.status.completed {
+/* HOVER */
+
+.c-report-card:hover {
+  transform: translateY(-4px);
+
+  border-color: rgba(124, 108, 246, 0.22);
+
+  box-shadow:
+    0 20px 40px rgba(124, 108, 246, 0.12),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+/* =========================
+   COLUMN
+========================= */
+
+.c-report-column {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+/* =========================
+   COLUMN 1
+========================= */
+
+.c-report-column-1 {
+  flex: 1.2;
+}
+
+.c-report-column-1 h4 {
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  color: #111827;
+
+  line-height: 1.4;
+
+  word-break: break-word;
+}
+
+.c-report-column-1 p {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #6b7280;
+
+  word-break: break-word;
+}
+
+/* =========================
+   COLUMN 2
+========================= */
+
+.c-report-column-2 {
+  flex: 1;
+
+  gap: 14px;
+}
+
+.c-report-info-row {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.c-report-label {
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #94a3b8;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+}
+
+.c-report-info-row p {
+  margin: 0;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  color: #374151;
+}
+
+/* =========================
+   COLUMN 3
+========================= */
+
+.c-report-column-3 {
+  flex: 1;
+
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.c-report-remarks-title {
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #94a3b8;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+}
+
+.c-report-remarks-text {
+  margin: 0;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+  color: #4b5563;
+
+  word-break: break-word;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.c-report-status {
+  width: fit-content;
+
+  margin-top: 8px;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  background: #eef2ff;
+
+  color: #4338ca;
+}
+
+.c-report-status.completed {
   background: #dcfce7;
   color: #166534;
 }
 
-.status.in_progress {
+.c-report-status.in_progress {
   background: #fef3c7;
   color: #92400e;
 }
 
-.status.initiated {
+.c-report-status.initiated {
   background: #dbeafe;
   color: #1e40af;
 }
 
-.status.rollback_requested {
+.c-report-status.rollback_requested {
   background: #fee2e2;
   color: #991b1b;
-}
-
-.status.created {
-  background: #f3f4f6;
-  color: #374151;
 }
 
 /* =========================
    READY BADGE
 ========================= */
-.ready {
-  font-size: 12px;
-  font-weight: 600;
 
-  color: #16a34a;
+.c-report-ready {
+  width: fit-content;
+
+  margin-top: 10px;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
 
   background: #dcfce7;
 
-  padding: 5px 10px;
+  color: #166534;
 
-  border-radius: 20px;
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+/* =========================
+   SEARCH HIGHLIGHT
+========================= */
+
+.c-report-card mark {
+  background: #ede9fe;
+
+  color: #6d28d9;
+
+  padding: 2px 5px;
+
+  border-radius: 4px;
 }
 
 /* =========================
    EMPTY STATE
 ========================= */
-.empty-state {
-  padding: 40px;
+
+.c-reports-empty {
+  padding: 60px 20px;
+
   text-align: center;
+
   color: #9ca3af;
+
+  font-size: 15px;
 }
 
 /* =========================
    SCROLLBAR
 ========================= */
-.reports-list::-webkit-scrollbar {
-  width: 6px;
+
+.c-reports-list::-webkit-scrollbar {
+  width: 7px;
 }
 
-.reports-list::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    180deg,
-    #7e7e86,
-    #6a736d
-  );
+.c-reports-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
 
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
-.reports-list::-webkit-scrollbar-track {
-  background: transparent;
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+  .c-report-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .c-reports-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .c-reports-search {
+    width: 100%;
+  }
+
+  .c-reports-header-right {
+    width: 100%;
+  }
 }

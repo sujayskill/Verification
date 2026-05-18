@@ -81,11 +81,15 @@ export default function Verifications() {
             <div
               key={c.id}
               className="row clickable-row"
-              onClick={() => navigate(`${base}/verifications/pipeline/${c.id}`)}
+              onClick={() =>
+                navigate(`${base}/verifications/pipeline/${c.id}`)
+              }
             >
-              {" "}
-              {/* LEFT */}
-              <div className="info">
+
+              {/* LEFT SECTION */}
+
+              <div className="verification-row-left">
+                {/* NAME */}
                 <h4
                   dangerouslySetInnerHTML={{
                     __html: highlight(
@@ -93,7 +97,7 @@ export default function Verifications() {
                     ),
                   }}
                 />
-
+                {/* EMAIL */}
                 <p
                   dangerouslySetInnerHTML={{
                     __html: highlight(c.email || ""),
@@ -101,30 +105,70 @@ export default function Verifications() {
                 />
 
                 {/* STATUS */}
-                <span className={`status ${c.status?.toLowerCase()}`}>
-                  {c.status === "COMPLETED" && "✅ Verification Completed"}
 
-                  {c.status === "IN_PROGRESS" && "🟡 In Progress"}
+                <span
+                  className={`status ${c.status?.toLowerCase()}`}
+                >
+                  {c.status === "COMPLETED" &&
+                    "✅ Verification Completed"}
 
-                  {c.status === "INITIATED" && "🔵 Initiated"}
+                  {c.status === "IN_PROGRESS" &&
+                    "🟡 In Progress"}
 
-                  {c.status === "ROLLBACK_REQUESTED" && "⚠ Rollback Requested"}
+                  {c.status === "INITIATED" &&
+                    "🔵 Initiated"}
 
-                  {c.status === "CREATED" && "⚪ Not Started"}
+                  {c.status ===
+                    "ROLLBACK_REQUESTED" &&
+                    "⚠ Rollback Requested"}
+
+                  {c.status === "CREATED" &&
+                    "⚪ Not Started"}
 
                   {!c.status && "⚪ Not Started"}
                 </span>
               </div>
-              {/* RIGHT */}
+
+              {/* CENTER SECTION */}
+
+              <div className="verification-row-center">
+
+                <div className="verification-meta-item">
+                  <span>Mobile</span>
+
+                  <p>{c.phone || "N/A"}</p>
+                </div>
+
+                <div className="verification-meta-item">
+                  <span>Location</span>
+
+                  <p>{c.location || "N/A"}</p>
+                </div>
+
+                <div className="verification-meta-item">
+                  <span>Role</span>
+
+                  <p>{c.role || "N/A"}</p>
+                </div>
+              </div>
+
+              {/* RIGHT SECTION */}
+
               <div className="actions">
+
                 <button
-                  className={`initiate-btn ${
-                    !canInitiateVerification(c.status) ? "initiated-btn" : ""
-                  }`}
-                  disabled={!canInitiateVerification(c.status)}
+                  className={`initiate-btn ${!canInitiateVerification(c.status)
+                      ? "initiated-btn"
+                      : ""
+                    }`}
+                  disabled={
+                    !canInitiateVerification(c.status)
+                  }
                   onClick={(e) => {
                     e.stopPropagation();
+
                     setSelectedCandidate(c);
+
                     setShowInitiateModal(true);
                   }}
                 >

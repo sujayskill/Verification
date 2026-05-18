@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
-import { useRef } from "react";
 import "../../styles/Departments.css";
 
 export default function Departments({ onSelect }) {
@@ -16,7 +15,6 @@ export default function Departments({ onSelect }) {
   const [selectedDept, setSelectedDept] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState("");
-  const menuRef = useRef(null);
 
   const fetchData = async () => {
     const res = await api.get(`/departments?q=${search}`);
@@ -63,7 +61,7 @@ export default function Departments({ onSelect }) {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest(".menu")) {
+      if (!e.target.closest(".cpd-menu")) {
         setMenuOpen(null);
       }
     };
@@ -79,118 +77,241 @@ export default function Departments({ onSelect }) {
   };
 
   return (
-    <div className="page">
-      <div className="client-dept-header">
-        <h2>Departments</h2>
+    <div className="cpd-page">
 
-        <div className="actions">
+      {/* =========================
+        HEADER
+    ========================= */}
+
+      <div className="cpd-header">
+
+        {/* LEFT */}
+        <div className="cpd-header-left">
+
+          <h2>Departments</h2>
+
+          <p>
+            {data.length} departments
+          </p>
+
+        </div>
+
+        {/* RIGHT */}
+        <div className="cpd-header-actions">
+
           <input
+            className="cpd-search-input"
             placeholder="Search department..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
           />
-          <button onClick={() => navigate(`${base}/departments/new`)}>
+
+          <button
+            className="cpd-add-btn"
+            onClick={() =>
+              navigate(
+                `${base}/departments/new`,
+              )
+            }
+          >
             + Add Department
           </button>
+
         </div>
       </div>
 
-      <div className="dept">
+      {/* =========================
+        GRID
+    ========================= */}
+
+      <div className="cpd-grid">
+
         {data.map((d) => (
           <div
             key={d.id}
-            className="dept-row"
+            className="cpd-card cpd-clickable"
             onClick={() => {
               if (editingId !== d.id) {
-                navigate(`${base}/candidates/${d.id}`);
+                navigate(
+                  `${base}/candidates/${d.id}`,
+                );
               }
             }}
           >
-            <div className="dept-name">
+
+            {/* INFO */}
+            <div className="cpd-card-info">
+
               {editingId === d.id ? (
                 <input
                   autoFocus
+                  className="cpd-inline-input"
                   value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
-                  onBlur={() => updateDepartment(d.id)}
+                  onChange={(e) =>
+                    setEditName(
+                      e.target.value,
+                    )
+                  }
+                  onBlur={() =>
+                    updateDepartment(d.id)
+                  }
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") updateDepartment(d.id);
-                    if (e.key === "Escape") setEditingId(null);
+                    if (
+                      e.key === "Enter"
+                    ) {
+                      updateDepartment(d.id);
+                    }
+
+                    if (
+                      e.key === "Escape"
+                    ) {
+                      setEditingId(null);
+                    }
                   }}
+                  onClick={(e) =>
+                    e.stopPropagation()
+                  }
                 />
               ) : (
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: highlight(d.name),
-                  }}
-                />
+                <>
+                  <h3
+                    dangerouslySetInnerHTML={{
+                      __html: highlight(
+                        d.name,
+                      ),
+                    }}
+                  />
+
+                  <span>
+                    Department
+                  </span>
+                </>
               )}
             </div>
-            {/* ⋮ MENU */}
-            <div className="menu" onClick={(e) => e.stopPropagation()}>
-              <span onClick={() => setMenuOpen(d.id)}>⋮</span>
+
+            {/* MENU */}
+            <div
+              className="cpd-menu"
+              onClick={(e) =>
+                e.stopPropagation()
+              }
+            >
+
+              <span
+                className="cpd-menu-icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+
+                  setMenuOpen(
+                    menuOpen === d.id
+                      ? null
+                      : d.id,
+                  );
+                }}
+              >
+                ⋮
+              </span>
+
               {menuOpen === d.id && (
-                <div className="menu-dropdown">
+                <div className="cpd-menu-dropdown">
+
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setEditingId(d.id);
                       setEditName(d.name);
                       setMenuOpen(null);
-                    }}
-                  >
+                    }}>
                     Edit
                   </button>
+
                   <button
-                    onClick={() => {
+                    className="cpd-danger-item"
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setSelectedDept(d);
                       setShowDeleteModal(true);
                       setMenuOpen(null);
-                    }}
-                  >
+                    }}>
                     Delete
                   </button>
+
                 </div>
               )}
             </div>
           </div>
         ))}
       </div>
+
+      {/* =========================
+        DELETE MODAL
+    ========================= */}
+
       {showDeleteModal && (
         <div
-          className="dept-delete-overlay"
+          className="cpd-modal-overlay"
           onClick={() => {
-            setShowDeleteModal(false);
-            setSelectedDept(null);
+            setShowDeleteModal(
+              false,
+            );
+
+            setSelectedDept(
+              null,
+            );
           }}
         >
+
           <div
-            className="dept-delete-modal"
-            onClick={(e) => e.stopPropagation()}
+            className="cpd-delete-modal"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
           >
-            <h3>Delete Department</h3>
+
+            <h3>
+              Delete Department
+            </h3>
 
             <p>
-              Are you sure you want to delete{" "}
-              <strong>{selectedDept?.name}</strong>?
+              Are you sure you want
+              to delete
+              <strong>
+                {" "}
+                {
+                  selectedDept?.name
+                }
+              </strong>
+              ?
             </p>
 
-            <div className="dept-delete-actions">
+            <div className="cpd-modal-actions">
+
               <button
-                className="dept-cancel-btn"
+                className="cpd-cancel-btn"
                 onClick={() => {
-                  setShowDeleteModal(false);
-                  setSelectedDept(null);
+                  setShowDeleteModal(
+                    false,
+                  );
+
+                  setSelectedDept(
+                    null,
+                  );
                 }}
               >
                 Cancel
               </button>
 
               <button
-                className="dept-confirm-delete-btn"
-                onClick={deleteDepartment}
+                className="cpd-confirm-delete-btn"
+                onClick={
+                  deleteDepartment
+                }
               >
                 Delete
               </button>
+
             </div>
           </div>
         </div>

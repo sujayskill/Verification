@@ -15,7 +15,7 @@
    HEADER
 ========================= */
 
-.vendor-client-dept-header {
+.dept-header {
   position: sticky;
   top: 0;
   z-index: 200;
@@ -32,19 +32,16 @@
 /* LEFT */
 
 .dept-header h2 {
-  margin: 12px 0 0;
-
+  margin: 20px 0 0;
   font-size: 24px;
   font-weight: 700;
-
   color: #111827;
 }
 
 .dept-header p {
   margin-top: 4px;
-
+  margin-bottom: 10px;
   color: #6b7280;
-
   font-size: 14px;
 }
 
@@ -71,15 +68,16 @@
    ACTIONS
 ========================= */
 
-.dept-actions {
+.dept-header .dept-actions {
   display: flex;
   align-items: center;
   gap: 14px;
+  margin-right: 20px;
 }
 
 /* SEARCH */
 
-.dept-actions input {
+.dept-header input {
   height: 42px;
   padding: 0 14px;
   border-radius: 12px;
@@ -89,7 +87,7 @@
   transition: 0.2s;
 }
 
-.dept-actions input:focus {
+.dept-header input:focus {
   outline: none;
 
   border-color: #7c6cf6;
@@ -101,7 +99,7 @@
    BUTTON
 ========================= */
 
-.secondary-btn {
+.dept-actions .secondary-btn {
   height: 42px;
   padding: 0 18px;
   border: none;
@@ -111,12 +109,10 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
-  margin-bottom:  13px;
 }
 
-.secondary-btn:hover {
+.dept-actions .secondary-btn:hover {
   transform: translateY(-1px);
-
   box-shadow: 0 10px 25px rgba(124, 108, 246, 0.25);
 }
 

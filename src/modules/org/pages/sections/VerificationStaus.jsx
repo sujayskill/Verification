@@ -55,13 +55,11 @@ export default function VerificationStatus() {
           >
             ← Back
           </button>
-
-          <div>
+          <div className="pipeline-header-info">
             <h1>Verification Pipeline</h1>
             <p>Track candidate verification progress</p>
           </div>
         </div>
-
         <div className={`pipeline-status ${data.status?.toLowerCase()}`}>
           {data.status || "NOT_STARTED"}
         </div>
