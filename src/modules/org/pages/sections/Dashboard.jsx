@@ -30,7 +30,7 @@ export default function Dashboard() {
     <div className="dashboard modern-dashboard">
       {/* HEADER */}
       <div className="dashboard-header">
-        <h2>Client Dashboard</h2>
+        <h2>Dashboard</h2>
         <span className="badge-live">● Live Data</span>
       </div>
 
@@ -71,19 +71,6 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* INSIGHT CARD */}
-        <div className="promo-card modern-promo">
-          <h3>⚡ Faster Verifications</h3>
-          <p>Upgrade to priority processing</p>
-
-          <div className="promo-stats">
-            <span>{stats.completed} Verified</span>
-            <span>{stats.inProgress} Ongoing</span>
-          </div>
-
-          <button className="upgrade-btn">Upgrade Plan</button>
         </div>
       </div>
     </div>

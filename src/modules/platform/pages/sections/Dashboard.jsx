@@ -30,7 +30,7 @@ export default function Dashboard() {
       : 0;
 
   return (
-  <div className="dashboard modern">
+  <div className="vendor-dashboard">
     {/* HEADER */}
     <div className="dashboard-header modern-header">
       <div className="header-left">

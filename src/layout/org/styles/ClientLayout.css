@@ -2,51 +2,58 @@
 .app-container {
   display: flex;
   height: 100vh;
-  overflow: hidden; /* prevents double scroll */
-  background: #f8fafc;
+  overflow: hidden;
 }
 
 /* 🔥 SIDEBAR */
 .sidebar-container {
   width: 240px;
   height: 100vh;
-  background: #111827;
-  color: white;
   position: fixed;
   left: 0;
   top: 0;
+  background: #111827;
+  color: white;
   display: flex;
   flex-direction: column;
-  z-index: 100;
+  padding: 20px;
+  overflow-y: auto;
 }
 
-/* 🔥 RIGHT SIDE (HEADER + CONTENT) */
+/* 🔥 RIGHT SIDE */
 .main-section {
-  margin-left: 240px; /* same as sidebar width */
-  width: calc(100% - 240px);
+  margin-left: 240px;
+  flex: 1;
   display: flex;
   flex-direction: column;
   height: 100vh;
+
+  /* ❌ DO NOT BLOCK */
+  overflow: visible; /* ✅ FIX */
 }
 
 /* 🔥 HEADER */
-.header-container {
+.client-header-container {
   height: 60px;
+  flex-shrink: 0;
   background: white;
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
-  z-index: 50;
-
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding: 0 20px;
+  margin-left: 40px;
 }
 
-/* 🔥 PAGE CONTENT */
+/* 🔥 PAGE CONTENT (SCROLL AREA) */
 .page-content {
   flex: 1;
-  overflow-y: auto;
-  padding: 20px;
+  overflow-y: auto; /* ✅ ONLY SCROLL HERE */
+  position: relative;
+  background: #f7f8fc;
+  margin-left: 40px;
+  margin-top: 1px;
 }

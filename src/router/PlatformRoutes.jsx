@@ -28,13 +28,13 @@ import ReportDetails from "../modules/platform/pages/sections/ReportDetails";
 import Notifications from "../modules/platform/pages/accounts/Notifications";
 import StatusClient from "../modules/platform/pages/sections/StatusCandidates";
 import StatusCandidate from "../modules/platform/pages/sections/StatusCandidateDetails";
-import ClientCandidates from "../modules/platform/pages/sections/ClientDepartmentCandidates";
+import ClientCandidates from "../modules/platform/pages/sections/ClientCandidates";
 import ClientDepartments from "../modules/platform/pages/sections/ClientDepartments";
 import VerificationDepartments from "../modules/platform/pages/sections/VerificationDepartments";
 import StatusDepartments from "../modules/platform/pages/sections/StatusDepartment";
 import ReportsDepartments from "../modules/platform/pages/sections/ReportsDepartments";
-import ClientCandidateDetails from "../modules/platform/pages/sections/ClientCandidateDetails";
-import EditClientCandidates from "../modules/platform/pages/sections/EditClientCandidates";
+import CandidateDetails from "../modules/platform/pages/sections/CandidateDetails";
+import EditCandidate from "../modules/platform/pages/sections/EditCandidate";
 
 export default function PlatformRoutes() {
   return (
@@ -54,7 +54,7 @@ export default function PlatformRoutes() {
         <Route path="clients/edit/:id/:orgId" element={<EditClient />} />
         <Route
           path="clients/editCandidateDetails/:id"
-          element={<EditClientCandidates />}
+          element={<EditCandidate />}
         />
         <Route
           path="clients/:orgId/departments/:deptId"
@@ -63,7 +63,7 @@ export default function PlatformRoutes() {
         <Route path="clients/new" element={<AddClient />} />
         <Route
           path="clients/candidateDetails/:id"
-          element={<ClientCandidateDetails />}
+          element={<CandidateDetails />}
         />
 
         <Route path="verifications" element={<VerificationRequests />} />

@@ -5,17 +5,17 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 20px;
   position: sticky;
   top: 0;
   z-index: 100;
+  margin-left: 40px;
 }
 
-.header-right {
-  margin-right: 200px;
+.vendor-main-header-right {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 30px;
+  margin-right: 30px;
 }
 
 .role-badge {

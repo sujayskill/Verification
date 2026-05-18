@@ -156,9 +156,9 @@ export default function EditCandidate() {
   };
 
   return (
-    <div className="edit-page">
-      <button onClick={() => navigate(`/${base}/candidates`)}>
-        ← Back to Candidates
+    <div className="page">
+      <button onClick={() => navigate(`/${base}/candidates/${form.department.id}`)}>
+        ← Back
       </button>
       <h2>Edit Candidate</h2>
 

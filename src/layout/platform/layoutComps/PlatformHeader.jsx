@@ -44,9 +44,9 @@ export default function VendorHeader() {
 
   return (
     <div className="header-container">
-      <div className="header-right">
+      <div className="vendor-main-header-right">
         {/* ROLE */}
-        <span className="role-badge">Vendor</span>
+        <span className="role-badge">Vendor_</span>
         {/* 🔔 NOTIFICATIONS */}
         <div
           className="icon-box"

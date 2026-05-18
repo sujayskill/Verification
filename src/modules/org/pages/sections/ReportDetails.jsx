@@ -3,14 +3,16 @@ import { api } from "../../../../services/api/Api";
 import { useParams } from "react-router-dom";
 import html2pdf from "html2pdf.js";
 import { getBasePath } from "../../../../utils/PathHelper";
+import { useNavigate } from "react-router-dom";
 import "../../styles/ReportDetails.css";
 
 export default function OrgReportDetails() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [verification, setVerification] = useState(null);
   const [candidate, setCandidate] = useState(null);
   const base = getBasePath();
-  
+
   const reportRef = useRef();
 
   useEffect(() => {
@@ -36,7 +38,11 @@ export default function OrgReportDetails() {
       {/* <button onClick={() =>  navigate(`${base}/reports/${d.id}`)}>
         ← Back to Candidates
       </button> */}
-      
+
+      <button className="back-btn" onClick={() => navigate(`${base}/reports`)}>
+        ← Back
+      </button>
+
       {/* DOWNLOAD */}
       <div className="report-header">
         <button className="download-btn" onClick={downloadPDF}>

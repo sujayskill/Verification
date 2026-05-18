@@ -21,8 +21,9 @@ import ManageAccounts from "../modules/org/pages/accounts/ManageAccounts";
 import ReportDetails from "../modules/org/pages/sections/ReportDetails";
 import Departments from "../modules/org/pages/sections/Departments";
 import AddDepartment from "../modules/org/pages/sections/AddDepartment";
-import VerificationDepartments from "../modules/org/pages/sections/VerificationDepartments";
-import ReportsDepartments from "../modules/org/pages/sections/ReportsDepartments";
+import VerificationDepartments from "../modules/org/pages/unused/VerificationDepartments";
+import ReportsDepartments from "../modules/org/pages/unused/ReportsDepartments";
+import VerificationStatus from "../modules/org/pages/sections/VerificationStaus";
 
 export default function OrgRoutes() {
   return (
@@ -41,15 +42,19 @@ export default function OrgRoutes() {
           element={<CandidateDetails />}
         />
 
-        <Route path="verifications" element={<VerificationDepartments />} />
-        <Route path="verifications/:deptId" element={<Verifications />} />
+        {/* <Route path="verifications" element={<VerificationDepartments />} /> */}
+        <Route path="verifications" element={<Verifications />} />
+        <Route
+          path="verifications/pipeline/:id"
+          element={<VerificationStatus />}
+        />
 
         <Route path="pull-hires" element={<PullHires />} />
 
         <Route path="documents" element={<Documents />} />
 
-        <Route path="reports" element={<ReportsDepartments />} />
-        <Route path="reports/:deptId" element={<Reports />} />
+        {/* <Route path="reports" element={<ReportsDepartments />} /> */}
+        <Route path="reports" element={<Reports />} />
         <Route path="reports/reportDetails/:id" element={<ReportDetails />} />
 
         <Route path="notifications" element={<Notifications />} />

@@ -1,28 +1,351 @@
-.container { padding: 20px; }
-
-.action-bar {
+/* ========================================
+   PAGE LAYOUT
+======================================== */
+.candidate-details-page {
   display: flex;
-  justify-content: flex-end;
-  margin: 15px 0;
+  flex-direction: column;
+  gap: 22px;
+  padding: 10px 8px 30px;
+  min-height: 100%;
+  background: #f8fafc;
+}
+
+/* ========================================
+   TOP SECTION
+======================================== */
+.candidate-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #f8fafc;
+  padding: 8px 0 18px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.top-section {
+  width: 100%;
+}
+
+.top-left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ========================================
+   BACK BUTTON
+======================================== */
+.back-btn {
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  border: none;
+  cursor: pointer;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column; /* 🔥 stack */
+  gap: 5px;
+  margin-left: 10px;
+}
+/* ========================================
+   VERIFIED BADGE
+======================================== */
+.verified-title {
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ========================================
+   GLASS CARD
+======================================== */
+.glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  transition: 0.2s ease;
+}
+
+.glass-card:hover {
+  border-color: #dbeafe;
+}
+
+/* ========================================
+   HERO SECTION
+======================================== */
+.hero-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 30px;
+}
+
+.hero-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ========================================
+   AVATAR
+======================================== */
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   HERO TEXT
+======================================== */
+.hero-left h1 {
+  margin: 0;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.hero-left p {
+  margin-top: 6px;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+/* ========================================
+   STATUS PILL
+======================================== */
+.status-pill {
+  display: inline-flex;
+
+  align-items: center;
+
+  margin-top: 10px;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  background: #e0e7ff;
+
+  color: #4338ca;
+}
+
+/* ========================================
+   ACTIONS
+======================================== */
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  gap: 12px;
+}
+
+/* ========================================
+   BUTTONS
+======================================== */
+.primary-btn,
+.warning-btn {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .primary-btn {
-  padding: 10px 15px;
-  border-radius: 10px;
-  background: #7c6cf6;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
   color: white;
 }
 
-.primary-btn.disabled {
-  background: #ccc;
+.primary-btn:hover {
+  transform: translateY(-1px);
 }
 
-.verified-title {
-  color: #16a34a;
-  background: #dcfce7;
-  padding: 10px 14px;
-  border-radius: 8px;
-  display: inline-block;
-  margin-bottom: 10px;
+.warning-btn {
+  background: #fef3c7;
+
+  color: #92400e;
+}
+
+.warning-btn:hover {
+  background: #fde68a;
+}
+
+/* DISABLED */
+.disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+  pointer-events: none;
+}
+
+/* ========================================
+   INFO TEXT
+======================================== */
+.info-text {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: #92400e;
+}
+
+/* ========================================
+   GRID SECTION
+======================================== */
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* ========================================
+   CARD HEADINGS
+======================================== */
+.glass-card h3 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 18px;
   font-weight: 600;
+  color: #111827;
+}
+
+/* ========================================
+   INFO GRID
+======================================== */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.info-grid label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.info-grid p {
+  margin: 0;
+  color: #111827;
+  font-size: 15px;
+}
+
+/* ========================================
+   ADDRESS
+======================================== */
+.address-block p {
+  margin: 8px 0;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* ========================================
+   SECTION CARDS
+======================================== */
+.section-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================
+   TIMELINE
+======================================== */
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 14px;
+}
+
+.timeline-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  margin-top: 7px;
+  background: #6366f1;
+  flex-shrink: 0;
+}
+
+.timeline-content {
+  flex: 1;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.timeline-content h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.timeline-content p {
+  margin: 6px 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.timeline-content span {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 900px) {
+  .hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-actions {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
 }

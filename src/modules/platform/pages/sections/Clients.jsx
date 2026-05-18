@@ -12,6 +12,9 @@ export default function Organizations() {
   const [size, setSize] = useState("");
   const debouncedSearch = useDebounce(search, 400);
   const role = getUserRole();
+  const [menuOpen, setMenuOpen] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(null);
 
   console.log(role);
 
@@ -34,10 +37,27 @@ export default function Organizations() {
     }
   };
 
-  const deleteClient = async (id) => {
-    await api.delete(`/clients/delete/${id}`);
-    fetchClients();
+  const deleteClient = async () => {
+    if (!selectedClient) return;
+    try {
+      await api.delete(`/clients/delete/${selectedClient.id}`);
+      setShowDeleteModal(false);
+      setSelectedClient(null);
+      fetchClients();
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+  useEffect(() => {
+    const closeMenu = () => {
+      setMenuOpen(null);
+    };
+    document.addEventListener("click", closeMenu);
+    return () => {
+      document.removeEventListener("click", closeMenu);
+    };
+  }, []);
 
   // 🔥 highlight text
   const highlight = (text) => {
@@ -49,9 +69,9 @@ export default function Organizations() {
   };
 
   return (
-    <div className="org-page">
+    <div className="clients-page">
       {/* HEADER */}
-      <div className="org-header">
+      <div className="client-header">
         <div>
           <h2>Clients</h2>
           <p>Manage all client organizations</p>
@@ -86,7 +106,7 @@ export default function Organizations() {
               className="primary-btn"
               onClick={() => navigate("/platform/clients/new")}
             >
-              + Add Organization
+              + Add Client
             </button>
           )}
         </div>
@@ -97,43 +117,102 @@ export default function Organizations() {
         {clients.length === 0 && <p>No clients found</p>}
 
         {clients.map((c) => (
-          <div key={c.id} className="org-card">
+          <div
+            key={c.id}
+            className="org-card clickable-row"
+            onClick={() => navigate(`/platform/clients/${c.orgId}/departments`)}
+          >
+            {/* LEFT */}
             <div className="org-info">
               <h3
-                className="link"
                 dangerouslySetInnerHTML={{
                   __html: highlight(c.companyName || ""),
                 }}
-                onClick={() =>
-                  navigate(`/platform/clients/${c.orgId}/departments`)
-                }
               />
+
               <p
                 dangerouslySetInnerHTML={{
                   __html: highlight(c.contactEmail || ""),
                 }}
               />
+
               <span
                 dangerouslySetInnerHTML={{
                   __html: highlight(c.location || ""),
                 }}
               />
             </div>
-            <div className="org-actions">
-              <button
-                className="edit-btn"
-                onClick={() => navigate(`/platform/clients/edit/${c.id}`)}
-              >
-                Edit
-              </button>
 
-              <button className="delete-btn" onClick={() => deleteClient(c.id)}>
-                Delete
-              </button>
+            {/* RIGHT MENU */}
+            <div className="org-menu" onClick={(e) => e.stopPropagation()}>
+              <span
+                className="menu-icon"
+                onClick={() => setMenuOpen(menuOpen === c.id ? null : c.id)}
+              >
+                ⋮
+              </span>
+
+              {menuOpen === c.id && (
+                <div className="org-menu-dropdown">
+                  <button
+                    onClick={() => navigate(`/platform/clients/edit/${c.id}`)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="danger-item"
+                    onClick={() => {
+                      setSelectedClient(c);
+                      setShowDeleteModal(true);
+                      setMenuOpen(null);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </div>
+      {showDeleteModal && (
+        <div
+          className="client-modal-overlay"
+          onClick={() => {
+            setShowDeleteModal(false);
+            setSelectedClient(null);
+          }}
+        >
+          <div
+            className="client-delete-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>Delete Client</h3>
+
+            <p>
+              Are you sure you want to delete{" "}
+              <strong>{selectedClient?.companyName}</strong>?
+            </p>
+
+            <div className="client-modal-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setSelectedClient(null);
+                }}
+              >
+                Cancel
+              </button>
+
+              <button className="confirm-delete-btn" onClick={deleteClient}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -71,59 +71,123 @@ export default function EditClientDetails() {
   };
 
   return (
-    <div className="container">
-      <button onClick={() => navigate(-1)}>← Back</button>
+    <div className="edit-client-page">
+      {/* STICKY HEADER */}
+      <div className="edit-client-header">
+        {/* LEFT */}
+        <div>
+          <button className="back-btn" onClick={() => navigate(-1)}>
+            ← Back
+          </button>
 
-      <div className="card form-card">
-        <h2>Edit Client</h2>
+          <h2>Edit Client</h2>
 
-        <div className="form-grid">
-          <input
-            placeholder="Company Name"
-            value={form.companyName}
-            onChange={(e) => handleChange("companyName", e.target.value)}
-          />
-
-          <input
-            placeholder="Company Slug"
-            value={form.companySlug}
-            onChange={(e) => handleChange("companySlug", e.target.value)}
-          />
-
-          <input
-            placeholder="Company Type"
-            value={form.companyType}
-            onChange={(e) => handleChange("companyType", e.target.value)}
-          />
-
-          <input
-            placeholder="Email"
-            value={form.contactEmail}
-            onChange={(e) => handleChange("contactEmail", e.target.value)}
-          />
-
-          <input
-            placeholder="Phone"
-            value={form.contactNumber}
-            onChange={(e) => handleChange("contactNumber", e.target.value)}
-          />
-
-          <input
-            placeholder="Location"
-            value={form.location}
-            onChange={(e) => handleChange("location", e.target.value)}
-          />
-
-          <input
-            placeholder="Employee Count"
-            value={form.employeeCount}
-            onChange={(e) => handleChange("employeeCount", e.target.value)}
-          />
+          <p>Update organization information</p>
         </div>
 
+        {/* RIGHT */}
         <button className="primary-btn" onClick={update}>
-          💾 Update Client
+          💾 Save Changes
         </button>
+      </div>
+
+      {/* BODY */}
+      <div className="edit-client-body">
+        <div className="glass-form-card">
+          {/* SECTION TITLE */}
+          <div className="section-title">
+            <h3>Organization Details</h3>
+
+            <p>Edit and manage client information</p>
+          </div>
+
+          {/* FORM */}
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Company Name</label>
+
+              <input
+                placeholder="Enter company name"
+                value={form.companyName}
+                onChange={(e) =>
+                  handleChange("companyName", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Company Slug</label>
+
+              <input
+                placeholder="Enter company slug"
+                value={form.companySlug}
+                onChange={(e) =>
+                  handleChange("companySlug", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Company Type</label>
+
+              <input
+                placeholder="Enter company type"
+                value={form.companyType}
+                onChange={(e) =>
+                  handleChange("companyType", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Email Address</label>
+
+              <input
+                placeholder="Enter email address"
+                value={form.contactEmail}
+                onChange={(e) =>
+                  handleChange("contactEmail", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Phone Number</label>
+
+              <input
+                placeholder="Enter phone number"
+                value={form.contactNumber}
+                onChange={(e) =>
+                  handleChange("contactNumber", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Location</label>
+
+              <input
+                placeholder="Enter company location"
+                value={form.location}
+                onChange={(e) =>
+                  handleChange("location", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Employee Count</label>
+
+              <input
+                placeholder="Enter employee count"
+                value={form.employeeCount}
+                onChange={(e) =>
+                  handleChange("employeeCount", e.target.value)
+                }
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

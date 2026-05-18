@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
+import { getBasePath } from "../../../../utils/PathHelper";
 import "../../styles/Departments.css";
 
 export default function AddDepartment() {
   const [name, setName] = useState("");
   const navigate = useNavigate();
+  const base = getBasePath();
 
   const createDepartment = async () => {
     if (!name.trim()) {
@@ -24,6 +26,8 @@ export default function AddDepartment() {
 
   return (
     <div className="dept-page">
+      <button onClick={() => navigate(`/${base}/departments`)}>← Back</button>
+
       <div className="dept-form-card">
         <h2>Create Department</h2>
 
