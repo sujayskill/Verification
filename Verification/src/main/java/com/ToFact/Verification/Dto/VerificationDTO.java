@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.ToFact.Verification.Dto;
 
 import java.time.LocalDateTime;
@@ -21,4 +22,29 @@ public class VerificationDTO {
     private boolean reportAvailable;
     private LocalDateTime createdAt;
     private LocalDateTime slaDeadline;
+=======
+package com.ToFact.Verification.Dto;
+
+import java.time.LocalDateTime;
+
+import com.ToFact.Verification.Entity.VerificationStatus;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class VerificationDTO {
+
+    private Long id;
+    private String candidateName;
+    private VerificationStatus status;
+    private boolean reportAvailable;
+    private LocalDateTime createdAt;
+    private LocalDateTime slaDeadline;
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 }

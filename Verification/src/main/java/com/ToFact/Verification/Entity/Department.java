@@ -19,6 +19,7 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+<<<<<<< HEAD
     private String name;
     private String orgId; // 🔥 link to client
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -27,4 +28,17 @@ public class Department {
     @JoinColumn(name = "client_id")
     @JsonIgnore
     private Client client;
+=======
+
+    private String name;
+
+    private String orgId; // 🔥 link to client
+    
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    @JsonIgnore
+    private Client client;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 }

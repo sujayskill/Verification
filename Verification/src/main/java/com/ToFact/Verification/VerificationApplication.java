@@ -10,5 +10,9 @@ public class VerificationApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(VerificationApplication.class, args);
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 }

@@ -23,6 +23,10 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 			    ORDER BY d.createdAt DESC
 			""")
 	List<Department> searchDepartments(@Param("orgId") String orgId, @Param("q") String q);
+<<<<<<< HEAD
+=======
+	
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 	List<Department> findByOrgId(String orgId);
 
 }

@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
 import com.ToFact.Verification.SecurityConfig.JwtUtil;
+=======
+import com.ToFact.Verification.Config.JwtUtil;
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 import com.ToFact.Verification.Service.ClientActivityService;
 
 import io.jsonwebtoken.Claims;

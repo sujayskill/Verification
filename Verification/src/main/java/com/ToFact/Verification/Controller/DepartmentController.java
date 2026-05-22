@@ -15,9 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
 import com.ToFact.Verification.Entity.Department;
 import com.ToFact.Verification.Entity.Verification;
 import com.ToFact.Verification.SecurityConfig.JwtUtil;
+=======
+import com.ToFact.Verification.Config.JwtUtil;
+import com.ToFact.Verification.Entity.Department;
+import com.ToFact.Verification.Entity.Verification;
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 import com.ToFact.Verification.Service.DepartmentService;
 import com.ToFact.Verification.Service.VendorActivityService;
 

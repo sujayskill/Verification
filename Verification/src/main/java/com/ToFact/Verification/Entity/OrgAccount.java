@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.ToFact.Verification.Entity;
 
 
@@ -28,4 +29,36 @@ public class OrgAccount {
     private String username;
 
     private String password;
+=======
+package com.ToFact.Verification.Entity;
+
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class OrgAccount {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String companyName;
+
+    @Column(unique = true)
+    private String username;
+
+    private String password;
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 }

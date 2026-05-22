@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.ToFact.Verification.Entity;
 
 import jakarta.persistence.Entity;
@@ -22,4 +23,30 @@ public class Address {
 	private String city;
 	private String state;
 	private String zipCode;
+=======
+package com.ToFact.Verification.Entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Address {
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	private String street;
+	private String city;
+	private String state;
+	private String zipCode;
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 }

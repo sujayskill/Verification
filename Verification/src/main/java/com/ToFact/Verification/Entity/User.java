@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.ToFact.Verification.Entity;
 
 import jakarta.persistence.Entity;
@@ -43,4 +44,49 @@ public class User {
 
 	private boolean isActive = true;
 
+=======
+package com.ToFact.Verification.Entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class User {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	private String firstName;
+	private String lastName;
+	private String username;
+	private String email;  	
+	private String password;
+
+	@Enumerated(EnumType.STRING)
+	private UserRole role;
+
+	@ManyToOne
+	@JoinColumn(name = "client_id")
+	private Client client;
+
+	private String orgId;
+
+	private boolean isActive = true;
+
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 }

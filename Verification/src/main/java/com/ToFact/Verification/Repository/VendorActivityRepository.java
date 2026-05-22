@@ -3,6 +3,7 @@ package com.ToFact.Verification.Repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+<<<<<<< HEAD
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -69,5 +70,16 @@ public interface VendorActivityRepository extends JpaRepository<Verification, Lo
 			""")
 	List<Verification> findByOrgAndDept(@Param("orgId") String orgId, @Param("deptId") Long deptId,
 			@Param("q") String q);
+=======
+
+import com.ToFact.Verification.Entity.Verification;
+import com.ToFact.Verification.Entity.VerificationStatus;
+
+public interface VendorActivityRepository extends JpaRepository<Verification, Long> {
+
+	long countByStatus(VerificationStatus status);
+
+	long countByStatusIn(List<VerificationStatus> statuses);
+>>>>>>> branch 'master' of https://github.com/sujayskill/Verification
 
 }
