@@ -164,9 +164,7 @@
 .c-report-column {
   display: flex;
   flex-direction: column;
-
   gap: 10px;
-
   min-width: 0;
 }
 
@@ -175,19 +173,15 @@
 ========================= */
 
 .c-report-column-1 {
-  flex: 1.2;
+  flex:0.5;
 }
 
 .c-report-column-1 h4 {
   margin: 0;
-
   font-size: 20px;
   font-weight: 700;
-
   color: #111827;
-
   line-height: 1.4;
-
   word-break: break-word;
 }
 
@@ -208,7 +202,7 @@
 .c-report-column-2 {
   flex: 1;
 
-  gap: 14px;
+  gap: 10px;
 }
 
 .c-report-info-row {
@@ -323,19 +317,13 @@
 
 .c-report-ready {
   width: fit-content;
-
-  margin-top: 10px;
-
+  margin-bottom: 60px;
+  margin-right: 5px;
   padding: 6px 12px;
-
   border-radius: 999px;
-
   background: #dcfce7;
-
   color: #166534;
-
   font-size: 12px;
-
   font-weight: 700;
 }
 

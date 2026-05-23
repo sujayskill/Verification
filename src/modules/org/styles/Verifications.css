@@ -1,7 +1,7 @@
 /* =========================
    PAGE LAYOUT
 ========================= */
-.page {
+.cv-page {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -11,7 +11,7 @@
 /* =========================
    STICKY HEADER
 ========================= */
-.page-header {
+.cv-page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,7 +24,7 @@
 }
 
 /* BACK BUTTON */
-.back-btn {
+.cv-back-btn {
   width: fit-content;
   padding: 6px 10px;
   border-radius: 8px;
@@ -34,13 +34,15 @@
 }
 
 /* Header title */
-.page-header h2 {
+.cv-page-header h1 {
+  margin: 0;
   margin-right: 100px;
-  font-size: 20px;
+  margin-top: 25px;
+  font-size: 35px;
   font-weight: 600;
 }
 
-.header-left {
+.cv-header-left {
   display: flex;
   flex-direction: column; /* 🔥 stack */
   gap: 5px;
@@ -48,24 +50,50 @@
 }
 
 /* RIGHT SIDE */
-.header-right {
+.cv-header-right {
+  display: flex;
   align-items: center;
   gap: 13px;
-  margin-left: 500px;
+  margin-left: 400px;
+  margin-right: 40px;
+  margin-top: 30px;
+}
+
+.cv-verification-filter {
+  height: 38px;
+  min-width: 180px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #dbe1ea;
+  background: white;
+  font-size: 14px;
+  color: #111827;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-top: 10px;
+}
+
+.cv-verification-filter:focus {
+  outline: none;
+
+  border-color: #7c6cf6;
+
+  box-shadow: 0 0 0 4px rgba(124, 108, 246, 0.12);
 }
 
 /* =========================
    INPUT FIELD (SEARCH)
 ========================= */
-.search-input {
+.cv-search-input {
   padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid #ddd;
   width: 220px;
   margin-top: 12px;
+  height: 20px;
 }
 
-.search-input:focus {
+.cv-search-input:focus {
   border-color: #6366f1;
   background: #fff;
 }
@@ -73,7 +101,7 @@
 /* =========================
    BUTTONS
 ========================= */
-.primary-btn {
+.cv-primary-btn {
   padding: 10px 16px;
   border-radius: 10px;
   border: none;
@@ -84,14 +112,14 @@
   margin-left: 20px;
 }
 
-.primary-btn:hover {
+.cv-primary-btn:hover {
   opacity: 0.9;
 }
 
 /* =========================
    LIST CONTAINER
 ========================= */
-.list {
+.cv-list {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -103,33 +131,32 @@
 /* =========================
    LIST ROW (GLASS STYLE)
 ========================= */
-.row {
+.candidate-row-style {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 30px;
-  padding: 16px 18px;
-  border-radius: 14px;
-  /* 🔥 GLASS EFFECT */
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
-  transition: 0.2s;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 10px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.45);
+  box-shadow: 0 10px 30px rgba(15,23,42,0.05);
+  transition: all 0.22s ease;
 }
 
-/* Hover effect */
-.row:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+.candidate-row-style:hover {
+  transform: translateY(-4px);
+  border-color: rgba(124,108,246,0.22); 
+  box-shadow: 0 20px 40px rgba(124,108,246,0.12), 0 8px 20px rgba(15,23,42,0.08);
 }
 
-.clickable-row {
+.cv-clickable-row {
   cursor: pointer;
   transition: 0.25s;
 }
 
-.clickable-row:hover {
+.cv-clickable-row:hover {
   transform: translateY(-2px);
   background: #f8fafc;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
@@ -138,20 +165,20 @@
 /* =========================
    LEFT INFO
 ========================= */
-.verification-row-left {
+.cv-verification-row-left {
   min-width: 280px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.verification-row-left h4 {
+.cv-verification-row-left h4 {
   margin: 0;
   font-size: 15px;
   font-weight: 600;
 }
 
-.verification-row-left p {
+.cv-verification-row-left p {
   margin: 4px 0;
   font-size: 13px;
   color: #6b7280;
@@ -160,58 +187,163 @@
 /* =========================
    STATUS BADGES
 ========================= */
-.status {
+.cv-status {
   display: inline-block;
   margin-top: 6px;
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 500;
+  width: 100px;
 }
 
 /* STATUS COLORS */
-.status.completed {
+.cv-status.completed {
   background: #dcfce7;
   color: #166534;
 }
 
-.status.in_progress {
+.cv-status.in_progress {
   background: #fef3c7;
   color: #92400e;
 }
 
-.status.initiated {
+.cv-status.initiated {
   background: #dbeafe;
   color: #1e40af;
 }
 
-.status.rollback_requested {
+.cv-status.rollback_requested {
   background: #fee2e2;
   color: #991b1b;
 }
 
-.status.created {
+.cv-status.created {
   background: #f3f4f6;
   color: #374151;
 }
 
 /* =========================
+   MIDDLE SECTION
+========================= */
+
+.cv-candidate-middle {
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cv-candidate-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid #edf2f7;
+}
+
+.cv-candidate-meta-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.cv-candidate-meta-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  text-align: right;
+  word-break: break-word;
+}
+
+/* =========================
+   REMARKS
+========================= */
+
+.cv-candidate-remarks {
+  width: 260px;
+}
+
+.cv-remarks-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid #edf2f7;
+}
+
+.cv-remarks-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cv-remarks-box p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #374151;
+  word-break: break-word;
+}
+
+.cv-add-remark-btn {
+  width: fit-content;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #7c6cf6;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cv-add-remark-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(124, 108, 246, 0.25);
+}
+
+/* TEXTAREA */
+
+.cv-remark-textarea {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #dbe1ea;
+  font-size: 14px;
+  outline: none;
+}
+
+/* =========================
    ACTION BUTTONS
 ========================= */
-.verification-row-center {
+.cv-verification-row-center {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
 
-.verification-meta-item {
+.cv-verification-meta-item {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.verification-meta-item span {
+.cv-verification-meta-item span {
   font-size: 12px;
   font-weight: 600;
   color: #94a3b8;
@@ -219,19 +351,19 @@
   letter-spacing: 0.5px;
 }
 
-.verification-meta-item p {
+.cv-verification-meta-item p {
   margin: 0;
   font-size: 15px;
   font-weight: 600;
   color: #111827;
 }
 
-.actions {
+.cv-actions {
   display: flex;
   gap: 10px;
 }
 
-.actions button {
+.cv-actions button {
   padding: 6px 12px;
   border-radius: 8px;
   border: none;
@@ -241,40 +373,40 @@
   font-size: 13px;
 }
 
-.actions button:hover {
+.cv-actions button:hover {
   opacity: 0.9;
 }
 
 /* Disabled */
-.disabled {
+.cv-disabled {
   opacity: 0.5;
   pointer-events: none;
 }
 
-.blur {
+.cv-blur {
   filter: blur(1px);
 }
 
 /* =========================
    SCROLLBAR (MODERN)
 ========================= */
-.list::-webkit-scrollbar {
+.cv-list::-webkit-scrollbar {
   width: 6px;
 }
 
-.list::-webkit-scrollbar-thumb {
+.cv-list::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #7e7e86, #6a736d);
   border-radius: 10px;
 }
 
-.list::-webkit-scrollbar-track {
+.cv-list::-webkit-scrollbar-track {
   background: transparent;
 }
 
 /* =========================
    INITIATE BUTTON
 ========================= */
-.initiate-btn {
+.cv-initiate-btn {
   padding: 10px 16px;
   border: none;
   border-radius: 10px;
@@ -287,12 +419,12 @@
   transition: 0.22s;
 }
 
-.initiate-btn:hover {
+.cv-initiate-btn:hover {
   transform: translateY(-1px);
 }
 
 /* INITIATED STATE */
-.initiated-btn {
+.cv-initiated-btn {
   opacity: 0.45;
   filter: blur(0.3px);
   cursor: not-allowed;
@@ -303,7 +435,7 @@
    VERIFICATION MODAL
 ========================= */
 
-.verification-modal-overlay {
+.cv-verification-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.45);
@@ -315,7 +447,7 @@
 }
 
 /* MODAL BOX */
-.verification-modal {
+.cv-verification-modal {
   width: 430px;
   padding: 28px;
   border-radius: 18px;
@@ -327,7 +459,7 @@
 }
 
 /* TITLE */
-.verification-modal h3 {
+.cv-verification-modal h3 {
   margin: 0 0 14px;
   font-size: 22px;
   font-weight: 700;
@@ -335,7 +467,7 @@
 }
 
 /* TEXT */
-.verification-modal p {
+.cv-verification-modal p {
   margin: 0;
   line-height: 1.6;
   font-size: 15px;
@@ -343,7 +475,7 @@
 }
 
 /* ACTIONS */
-.verification-modal-actions {
+.cv-verification-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -351,7 +483,7 @@
 }
 
 /* CANCEL BUTTON */
-.verification-cancel-btn {
+.cv-verification-cancel-btn {
   padding: 10px 16px;
   border-radius: 10px;
   border: 1px solid #d1d5db;
@@ -361,12 +493,12 @@
   transition: 0.2s;
 }
 
-.verification-cancel-btn:hover {
+.cv-verification-cancel-btn:hover {
   background: #f3f4f6;
 }
 
 /* CONFIRM BUTTON */
-.verification-confirm-btn {
+.cv-verification-confirm-btn {
   padding: 10px 18px;
   border: none;
   border-radius: 10px;
@@ -377,7 +509,7 @@
   transition: 0.2s;
 }
 
-.verification-confirm-btn:hover {
+.cv-verification-confirm-btn:hover {
   opacity: 0.92;
 }
 
@@ -395,21 +527,21 @@
 }
 
 @media (max-width: 950px) {
-  .row {
+  .cv-row {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .verification-row-center {
+  .cv-verification-row-center {
     width: 100%;
     grid-template-columns: 1fr;
   }
 
-  .actions {
+  .cv-actions {
     width: 100%;
   }
 
-  .initiate-btn {
+  .cv-initiate-btn {
     width: 100%;
   }
 }

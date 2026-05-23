@@ -100,8 +100,7 @@
 
   border: 1px solid rgba(255, 255, 255, 0.45);
 
-  box-shadow:
-    0 10px 30px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
 }
 
 .cac-card h3 {
@@ -123,9 +122,7 @@
 .cac-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(auto-fit,
-      minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 
   gap: 16px;
 }
@@ -158,8 +155,7 @@
 
   border-color: #7c6cf6;
 
-  box-shadow:
-    0 0 0 4px rgba(124, 108, 246, 0.12);
+  box-shadow: 0 0 0 4px rgba(124, 108, 246, 0.12);
 }
 
 /* =========================
@@ -236,12 +232,182 @@
 
 .cac-add-btn:hover {
   transform: translateY(-1px);
-  box-shadow:
-    0 10px 25px rgba(124, 108, 246, 0.24);
+  box-shadow: 0 10px 25px rgba(124, 108, 246, 0.24);
 }
 
 .cac-submit-btn:hover {
   transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(124, 108, 246, 0.24);
+}
+
+/* =========================
+   MODAL OVERLAY
+========================= */
+
+.cac-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(15, 23, 42, 0.45);
+
+  backdrop-filter: blur(8px);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 9999;
+
+  animation: cacFadeIn 0.2s ease;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.cac-modal {
+  width: 420px;
+
+  padding: 28px;
+
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.45);
+
   box-shadow:
-    0 10px 25px rgba(124, 108, 246, 0.24);
+    0 24px 60px rgba(15, 23, 42, 0.18),
+    0 10px 25px rgba(124, 108, 246, 0.12);
+
+  animation: cacModalPop 0.22s ease;
+}
+
+/* TITLE */
+
+.cac-modal h3 {
+  margin: 0 0 12px;
+
+  font-size: 22px;
+
+  font-weight: 700;
+
+  color: #111827;
+}
+
+/* TEXT */
+
+.cac-modal p {
+  margin: 0;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+
+  color: #6b7280;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.cac-modal-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  margin-top: 28px;
+}
+
+/* CANCEL */
+
+.cac-cancel-btn {
+  height: 42px;
+
+  padding: 0 18px;
+
+  border-radius: 12px;
+
+  border: 1px solid #dbe1ea;
+
+  background: white;
+
+  color: #374151;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.cac-cancel-btn:hover {
+  background: #f3f4f6;
+}
+
+/* CONFIRM */
+
+.cac-confirm-btn {
+  height: 42px;
+
+  padding: 0 18px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: linear-gradient(135deg, #7c6cf6, #6d5dfc);
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.22s ease;
+}
+
+.cac-confirm-btn:hover {
+  transform: translateY(-1px);
+
+  box-shadow: 0 12px 24px rgba(124, 108, 246, 0.28);
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes cacFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cacModalPop {
+  from {
+    opacity: 0;
+
+    transform: scale(0.95) translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: scale(1) translateY(0);
+  }
 }

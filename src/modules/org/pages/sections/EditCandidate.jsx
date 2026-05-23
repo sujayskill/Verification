@@ -8,6 +8,7 @@ export default function EditCandidate() {
   const { id } = useParams();
   const navigate = useNavigate();
   const base = getBasePath();
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   const [form, setForm] = useState({
     firstName: "",
@@ -157,23 +158,18 @@ export default function EditCandidate() {
 
   return (
     <div className="cec-page">
-
       {/* =========================
        HEADER
     ========================= */}
 
       <div className="cec-header">
-
         {/* LEFT */}
 
         <div className="cec-header-left">
-
           <button
             className="cec-back-btn"
             onClick={() =>
-              navigate(
-                `/${base}/candidates/${form.department.id}`,
-              )
+              navigate(`/${base}/candidates/${form.department.id}`)
             }
           >
             ← Back
@@ -182,10 +178,7 @@ export default function EditCandidate() {
           <div className="cec-header-info">
             <h2>Edit Candidate</h2>
 
-            <p>
-              Update candidate profile and
-              verification details
-            </p>
+            <p>Update candidate profile and verification details</p>
           </div>
         </div>
 
@@ -194,7 +187,7 @@ export default function EditCandidate() {
         <div className="cec-header-right">
           <button
             className="cec-update-btn"
-            onClick={update}
+            onClick={() => setShowUpdateModal(true)}
           >
             Update Candidate
           </button>
@@ -206,85 +199,52 @@ export default function EditCandidate() {
     ========================= */}
 
       <div className="cec-body">
-
         {/* BASIC DETAILS */}
 
         <div className="cec-card">
-
           <h3>Basic Details</h3>
 
           <div className="cec-grid-3">
-
             <input
               className="cec-input"
               placeholder="First Name"
               value={form.firstName || ""}
-              onChange={(e) =>
-                handleChange(
-                  "firstName",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("firstName", e.target.value)}
             />
 
             <input
               className="cec-input"
               placeholder="Last Name"
               value={form.lastName || ""}
-              onChange={(e) =>
-                handleChange(
-                  "lastName",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("lastName", e.target.value)}
             />
 
             <input
               className="cec-input"
               placeholder="Email"
               value={form.email || ""}
-              onChange={(e) =>
-                handleChange(
-                  "email",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("email", e.target.value)}
             />
 
             <input
               className="cec-input"
               placeholder="Phone"
               value={form.phone || ""}
-              onChange={(e) =>
-                handleChange(
-                  "phone",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("phone", e.target.value)}
             />
 
             <input
               className="cec-input"
               placeholder="Country Code"
               value={form.countryCode || ""}
-              onChange={(e) =>
-                handleChange(
-                  "countryCode",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("countryCode", e.target.value)}
             />
 
             <input
               className="cec-input"
               type="date"
               value={form.dob || ""}
-              onChange={(e) =>
-                handleChange(
-                  "dob",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("dob", e.target.value)}
             />
           </div>
         </div>
@@ -292,26 +252,19 @@ export default function EditCandidate() {
         {/* ADDRESS */}
 
         <div className="cec-card">
-
           <h3>Address</h3>
 
           <div className="cec-grid-2">
-
             {/* CURRENT */}
 
             <div className="cec-sub-card">
-
               <h4>Current Address</h4>
 
               <div className="cec-form-group">
-
                 <input
                   className="cec-input"
                   placeholder="Street"
-                  value={
-                    form.currentAddress
-                      ?.street || ""
-                  }
+                  value={form.currentAddress?.street || ""}
                   onChange={(e) =>
                     handleAddressChange(
                       "currentAddress",
@@ -324,10 +277,7 @@ export default function EditCandidate() {
                 <input
                   className="cec-input"
                   placeholder="City"
-                  value={
-                    form.currentAddress
-                      ?.city || ""
-                  }
+                  value={form.currentAddress?.city || ""}
                   onChange={(e) =>
                     handleAddressChange(
                       "currentAddress",
@@ -342,18 +292,13 @@ export default function EditCandidate() {
             {/* PERMANENT */}
 
             <div className="cec-sub-card">
-
               <h4>Permanent Address</h4>
 
               <div className="cec-form-group">
-
                 <input
                   className="cec-input"
                   placeholder="Street"
-                  value={
-                    form.permanentAddress
-                      ?.street || ""
-                  }
+                  value={form.permanentAddress?.street || ""}
                   onChange={(e) =>
                     handleAddressChange(
                       "permanentAddress",
@@ -366,10 +311,7 @@ export default function EditCandidate() {
                 <input
                   className="cec-input"
                   placeholder="City"
-                  value={
-                    form.permanentAddress
-                      ?.city || ""
-                  }
+                  value={form.permanentAddress?.city || ""}
                   onChange={(e) =>
                     handleAddressChange(
                       "permanentAddress",
@@ -386,38 +328,22 @@ export default function EditCandidate() {
         {/* EDUCATION */}
 
         <div className="cec-card">
-
           <div className="cec-section-header">
-
             <h3>Education</h3>
 
-            <button
-              className="cec-add-btn"
-              onClick={addEducation}
-            >
+            <button className="cec-add-btn" onClick={addEducation}>
               + Add Education
             </button>
           </div>
 
           {form.educations.map((edu, i) => (
-            <div
-              key={i}
-              className="cec-sub-card"
-            >
-
+            <div key={i} className="cec-sub-card">
               <div className="cec-grid-3">
-
                 <input
                   className="cec-input"
                   placeholder="Degree"
                   value={edu.degree}
-                  onChange={(e) =>
-                    updateEducation(
-                      i,
-                      "degree",
-                      e.target.value,
-                    )
-                  }
+                  onChange={(e) => updateEducation(i, "degree", e.target.value)}
                 />
 
                 <input
@@ -425,55 +351,34 @@ export default function EditCandidate() {
                   placeholder="Institution"
                   value={edu.institution}
                   onChange={(e) =>
-                    updateEducation(
-                      i,
-                      "institution",
-                      e.target.value,
-                    )
+                    updateEducation(i, "institution", e.target.value)
                   }
                 />
 
                 <input
                   className="cec-input"
                   type="date"
-                  value={
-                    edu.courseStartDate ||
-                    ""
-                  }
+                  value={edu.courseStartDate || ""}
                   onChange={(e) =>
-                    updateEducation(
-                      i,
-                      "courseStartDate",
-                      e.target.value,
-                    )
+                    updateEducation(i, "courseStartDate", e.target.value)
                   }
                 />
 
                 <input
                   className="cec-input"
                   type="date"
-                  value={
-                    edu.courseEndDate ||
-                    ""
-                  }
+                  value={edu.courseEndDate || ""}
                   onChange={(e) =>
-                    updateEducation(
-                      i,
-                      "courseEndDate",
-                      e.target.value,
-                    )
+                    updateEducation(i, "courseEndDate", e.target.value)
                   }
                 />
 
                 <button
                   className="cec-remove-btn"
-                  onClick={() =>
-                    removeEducation(i)
-                  }
+                  onClick={() => removeEducation(i)}
                 >
                   Remove
                 </button>
-
               </div>
             </div>
           ))}
@@ -482,37 +387,23 @@ export default function EditCandidate() {
         {/* EXPERIENCE */}
 
         <div className="cec-card">
-
           <div className="cec-section-header">
-
             <h3>Experience</h3>
 
-            <button
-              className="cec-add-btn"
-              onClick={addExperience}
-            >
+            <button className="cec-add-btn" onClick={addExperience}>
               + Add Experience
             </button>
           </div>
 
           {form.experiences.map((exp, i) => (
-            <div
-              key={i}
-              className="cec-sub-card"
-            >
-
+            <div key={i} className="cec-sub-card">
               <div className="cec-grid-3">
-
                 <input
                   className="cec-input"
                   placeholder="Company"
                   value={exp.companyName}
                   onChange={(e) =>
-                    updateExperience(
-                      i,
-                      "companyName",
-                      e.target.value,
-                    )
+                    updateExperience(i, "companyName", e.target.value)
                   }
                 />
 
@@ -520,59 +411,84 @@ export default function EditCandidate() {
                   className="cec-input"
                   placeholder="Role"
                   value={exp.role}
+                  onChange={(e) => updateExperience(i, "role", e.target.value)}
+                />
+
+                <input
+                  className="cec-input"
+                  type="date"
+                  value={exp.startDate || ""}
                   onChange={(e) =>
-                    updateExperience(
-                      i,
-                      "role",
-                      e.target.value,
-                    )
+                    updateExperience(i, "startDate", e.target.value)
                   }
                 />
 
                 <input
                   className="cec-input"
                   type="date"
-                  value={
-                    exp.startDate || ""
-                  }
+                  value={exp.endDate || ""}
                   onChange={(e) =>
-                    updateExperience(
-                      i,
-                      "startDate",
-                      e.target.value,
-                    )
-                  }
-                />
-
-                <input
-                  className="cec-input"
-                  type="date"
-                  value={
-                    exp.endDate || ""
-                  }
-                  onChange={(e) =>
-                    updateExperience(
-                      i,
-                      "endDate",
-                      e.target.value,
-                    )
+                    updateExperience(i, "endDate", e.target.value)
                   }
                 />
 
                 <button
                   className="cec-remove-btn"
-                  onClick={() =>
-                    removeExperience(i)
-                  }
+                  onClick={() => removeExperience(i)}
                 >
                   Remove
                 </button>
-
               </div>
             </div>
           ))}
         </div>
       </div>
+      {/* =========================
+   UPDATE CONFIRM MODAL
+========================= */}
+
+      {showUpdateModal && (
+        <div
+          className="cec-modal-overlay"
+          onClick={() => setShowUpdateModal(false)}
+        >
+          <div className="cec-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Update Candidate</h3>
+
+            <p>
+              Are you sure you want to update details for{" "}
+              <strong>
+                {form.firstName} {form.lastName}
+              </strong>
+              ?
+            </p>
+
+            <div className="cec-modal-actions">
+              <button
+                className="cec-cancel-btn"
+                onClick={() => setShowUpdateModal(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="cec-confirm-btn"
+                onClick={async () => {
+                  try {
+                    await update();
+
+                    setShowUpdateModal(false);
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }}
+              >
+                Update
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

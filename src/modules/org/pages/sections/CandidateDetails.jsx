@@ -130,6 +130,8 @@ export default function CandidateDetails() {
             </h1>
 
             <p>{data.email}</p>
+            <p>{data.role}</p>
+            <p>{data.department.name}</p>
 
             <span className={`status-pill ${data.status?.toLowerCase()}`}>
               {data.status}

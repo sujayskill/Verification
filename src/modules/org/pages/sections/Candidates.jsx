@@ -16,12 +16,18 @@ export default function Candidates() {
   const debouncedSearch = useDebounce(search, 400);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [showRemarksModal, setShowRemarksModal] = useState(false);
+  const [selectedRemark, setSelectedRemark] = useState("");
 
   const fetchCandidates = async () => {
     try {
-      let url = `/org/candidates/by-department/${deptId}`;
+      let url = `/org/candidates/getFullDetailsBy-department/${deptId}?`;
+
       if (debouncedSearch.trim()) {
-        url += `?q=${debouncedSearch}`;
+        url += `q=${encodeURIComponent(debouncedSearch)}&`;
+      }
+      if (status) {
+        url += `status=${status}`;
       }
       const res = await api.get(url);
       setData(Array.isArray(res) ? res : []);
@@ -33,7 +39,7 @@ export default function Candidates() {
 
   useEffect(() => {
     if (deptId) fetchCandidates();
-  }, [debouncedSearch, deptId]);
+  }, [debouncedSearch, deptId, status]);
   const deleteCandidate = async () => {
     if (!selectedCandidate) return;
     try {
@@ -55,11 +61,11 @@ export default function Candidates() {
     return text.replace(new RegExp(`(${safe})`, "gi"), "<mark>$1</mark>");
   };
 
-  const filtered = data.filter((item) => {
-    const text =
-      `${item.firstName} ${item.lastName} ${item.email}`.toLowerCase();
-    return text.includes(search.toLowerCase());
-  });
+  // const filtered = data.filter((item) => {
+  //   const text =
+  //     `${item.firstName} ${item.lastName} ${item.email}`.toLowerCase();
+  //   return text.includes(search.toLowerCase());
+  // });
 
   const isActionDisabled = (status) => {
     return !["CREATED", "ROLLED_BACK"].includes(status);
@@ -81,13 +87,29 @@ export default function Candidates() {
 
         {/* RIGHT */}
         <div className="c-header-right">
+          {/* STATUS FILTER */}
+          <select
+            className="c-status-filter"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <option value="">Select Status</option>
+            <option value="CREATED">Created</option>
+            <option value="INITIATED">Initiated</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="FAILED">Failed</option>
+          </select>
+
+          {/* SEARCH */}
           <input
             className="c-search-input"
-            placeholder="Search by name or email..."
+            placeholder="Search Candidates..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 
+          {/* BUTTON */}
           <button
             className="c-primary-btn"
             onClick={() => navigate(`${base}/candidates/new/${deptId}`)}
@@ -96,25 +118,23 @@ export default function Candidates() {
           </button>
         </div>
       </div>
-      <div className="list">
+      <div className="c-list">
         {data.length === 0 ? (
           <p>No candidates found</p>
         ) : (
-          filtered.map((c) => (
+          data.map((c) => (
             <div
               key={c.id}
-              className="candidate-row clickable-row"
+              className="c-candidate-row c-clickable-row"
               onClick={() =>
-                navigate(
-                  `${base}/candidates/candidateDetails/${c.id}/`)}>
+                navigate(`${base}/candidates/candidateDetails/${c.id}/`)
+              }
+            >
               {/* LEFT SECTION */}
-              <div className="candidate-col candidate-primary">
-
+              <div className="c-candidate-col c-candidate-primary">
                 <h4
                   dangerouslySetInnerHTML={{
-                    __html: highlight(
-                      `${c.firstName} ${c.lastName}`,
-                    ),
+                    __html: highlight(`${c.firstName} ${c.lastName}`),
                   }}
                 />
 
@@ -124,120 +144,90 @@ export default function Candidates() {
                   }}
                 />
 
-                <span className="candidate-status">
+                <span className="c-candidate-status">
+                  {c.status === "COMPLETED" && "✅ Verification Completed"}
 
-                  {c.status === "COMPLETED" &&
-                    "✅ Verification Completed"}
+                  {c.status === "IN_PROGRESS" && "🟡 In Progress"}
 
-                  {c.status === "IN_PROGRESS" &&
-                    "🟡 In Progress"}
+                  {c.status === "INITIATED" && "🔵 Initiated"}
 
-                  {c.status === "INITIATED" &&
-                    "🔵 Initiated"}
+                  {c.status === "ROLLBACK_REQUESTED" && "⚠ Rollback Requested"}
 
-                  {c.status ===
-                    "ROLLBACK_REQUESTED" &&
-                    "⚠ Rollback Requested"}
-
-                  {c.status === "CREATED" &&
-                    "⚪ Not Started"}
-
+                  {c.status === "CREATED" && "⚪ Created"}
                 </span>
               </div>
 
               {/* MIDDLE SECTION */}
 
-              <div className="candidate-col candidate-middle">
-
+              <div className="c-candidate-col c-candidate-middle">
                 {/* MOBILE */}
 
-                <div className="candidate-meta-row">
+                <div className="c-candidate-meta-row">
+                  <span className="c-candidate-meta-label">Mobile:</span>
 
-                  <span className="candidate-meta-label">
-                    Mobile: 
-                  </span>
-
-                  <span className="candidate-meta-value">
-                    {c.phone
-                      ? `${c.countryCode || ""} ${c.phone}`
-                      : "N/A"}
+                  <span className="c-candidate-meta-value">
+                    {c.phone ? `${c.countryCode || ""} ${c.phone}` : "N/A"}
                   </span>
                 </div>
 
                 {/* LOCATION */}
 
-                <div className="candidate-meta-row">
+                <div className="c-candidate-meta-row">
+                  <span className="c-candidate-meta-label">Location:</span>
 
-                  <span className="candidate-meta-label">
-                    Location: 
-                  </span>
-
-                  <span className="candidate-meta-value">
-                    {c.location?.trim()
-                      ? c.location
-                      : " N/A"}
+                  <span className="c-candidate-meta-value">
+                    {c.location?.trim() ? c.location : " N/A"}
                   </span>
                 </div>
 
                 {/* ROLE */}
 
-                <div className="candidate-meta-row">
+                <div className="c-candidate-meta-row">
+                  <span className="c-candidate-meta-label">Role:</span>
 
-                  <span className="candidate-meta-label">
-                    Role:
-                  </span>
-
-                  <span className="candidate-meta-value">
-                    {c.role?.trim()
-                      ? c.role
-                      : " N/A"}
+                  <span className="c-candidate-meta-value">
+                    {c.role?.trim() ? c.role : " N/A"}
                   </span>
                 </div>
               </div>
 
               {/* REMARKS SECTION */}
 
-              <div className="candidate-col candidate-remarks">
+              <div
+                className="c-candidate-col c-candidate-remarks"
+                onClick={(e) => {
+                  e.stopPropagation();
 
-                <div className="remarks-box">
+                  setSelectedRemark(c.remark || "No remarks available");
 
-                  <span className="remarks-title">
-                    Remarks
-                  </span>
+                  setShowRemarksModal(true);
+                }}
+              >
+                <div className="c-remarks-box">
+                  <span className="c-remarks-title">Remarks</span>
 
-                  <p>
-                    {c.remark?.trim()
-                      ? c.remark
-                      : "N/A"}
-                  </p>
+                  <p>{c.remark?.trim() ? c.remark : "N/A"}</p>
                 </div>
               </div>
               {/* ACTIONS */}
-              <div className="candidate-actions">
+              <div
+                className="c-candidate-actions"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <button
                   disabled={isActionDisabled(c.status)}
-                  className={
-                    isActionDisabled(c.status)
-                      ? "disabled blur"
-                      : ""
-                  }
+                  className={isActionDisabled(c.status) ? "disabled blur" : ""}
                   onClick={(e) => {
                     e.stopPropagation();
 
-                    navigate(
-                      `${base}/candidates/edit/${c.id}`,
-                    );
+                    navigate(`${base}/candidates/edit/${c.id}`);
                   }}
                 >
                   Edit
                 </button>
                 <button
                   disabled={isActionDisabled(c.status)}
-                  className={
-                    isActionDisabled(c.status)
-                      ? "disabled blur"
-                      : ""
-                  }
+                  className={isActionDisabled(c.status) ? "disabled blur" : ""}
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedCandidate(c);
@@ -253,13 +243,13 @@ export default function Candidates() {
       </div>
       {showDeleteModal && (
         <div
-          className="delete-modal-overlay"
+          className="c-delete-modal-overlay"
           onClick={() => {
             setShowDeleteModal(false);
             setSelectedCandidate(null);
           }}
         >
-          <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="c-delete-modal" onClick={(e) => e.stopPropagation()}>
             <h3>Delete Candidate</h3>
 
             <p>
@@ -270,9 +260,9 @@ export default function Candidates() {
               ?
             </p>
 
-            <div className="delete-modal-actions">
+            <div className="c-delete-modal-actions">
               <button
-                className="cancel-btn"
+                className="c-cancel-btn"
                 onClick={() => {
                   setShowDeleteModal(false);
                   setSelectedCandidate(null);
@@ -280,9 +270,45 @@ export default function Candidates() {
               >
                 Cancel
               </button>
-              <button className="confirm-delete-btn" onClick={deleteCandidate}>
+              <button
+                className="c-confirm-delete-btn"
+                onClick={deleteCandidate}
+              >
                 Delete
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showRemarksModal && (
+        <div
+          className="c-remarks-modal-overlay"
+          onClick={() => {
+            setShowRemarksModal(false);
+
+            setSelectedRemark("");
+          }}
+        >
+          <div className="c-remarks-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="c-remarks-modal-header">
+              <h3>Candidate Remarks</h3>
+
+              <button
+                className="c-remarks-close-btn"
+                onClick={() => {
+                  setShowRemarksModal(false);
+
+                  setSelectedRemark("");
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="c-remarks-modal-body">
+              {selectedRemark.split(",").map((item, index) => (
+                <p key={index}>• {item.trim()}</p>
+              ))}
             </div>
           </div>
         </div>

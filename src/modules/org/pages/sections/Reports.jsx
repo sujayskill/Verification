@@ -67,38 +67,26 @@ export default function Reports() {
             <div
               key={v.id}
               className="c-report-card"
-              onClick={() =>
-                navigate(
-                  `${base}/reports/reportDetails/${v.id}`,
-                )
-              }
+              onClick={() => navigate(`${base}/reports/reportDetails/${v.id}`)}
             >
-
               {/* =========================
             COLUMN 1
         ========================= */}
 
               <div className="c-report-column c-report-column-1">
-
                 <h4
                   dangerouslySetInnerHTML={{
-                    __html: highlight(
-                      v.candidateName,
-                    ),
+                    __html: highlight(v.candidateName),
                   }}
                 />
 
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: highlight(
-                      v.candidateEmail || "",
-                    ),
+                    __html: highlight(v.candidateEmail || ""),
                   }}
                 />
 
-                <span
-                  className={`c-report-status ${v.status?.toLowerCase()}`}
-                >
+                <span className={`c-report-status ${v.status?.toLowerCase()}`}>
                   {v.status}
                 </span>
               </div>
@@ -107,50 +95,34 @@ export default function Reports() {
             COLUMN 2
         ========================= */}
 
-            <div className="c-report-column c-report-column-2">
-
+              <div className="c-report-column c-report-column-2">
                 {/* MOBILE */}
 
                 <div className="c-report-meta-row">
-
-                  <span className="c-report-meta-label">
-                    Mobile: 
-                  </span>
+                  <span className="c-report-meta-label">Mobile:</span>
 
                   <span className="c-report-meta-value">
-                    {v.phone
-                      ? `${v.countryCode || ""} ${v.phone}`
-                      : " N/A"}
+                    {v.phone ? `${v.countryCode || ""} ${v.phone}` : " N/A"}
                   </span>
                 </div>
 
                 {/* LOCATION */}
 
                 <div className="c-report-meta-row">
-
-                  <span className="c-report-meta-label">
-                    Location: 
-                  </span>
+                  <span className="c-report-meta-label">Location:</span>
 
                   <span className="c-report-meta-value">
-                    {v.location?.trim()
-                      ? v.location
-                      : " N/A"}
+                    {v.location?.trim() ? v.location : " N/A"}
                   </span>
                 </div>
 
                 {/* ROLE */}
 
                 <div className="c-report-meta-row">
-
-                  <span className="c-report-meta-label">
-                    Role:
-                  </span>
+                  <span className="c-report-meta-label">Role:</span>
 
                   <span className="c-report-meta-value">
-                    {v.role?.trim()
-                      ? v.role
-                      : " N/A"}
+                    {v.role?.trim() ? v.role : " N/A"}
                   </span>
                 </div>
               </div>
@@ -160,20 +132,13 @@ export default function Reports() {
         ========================= */}
 
               <div className="c-report-column c-report-column-3">
+                <span className="c-report-remarks-title">Remarks</span>
 
-                <span className="c-report-remarks-title">
-                  Remarks
-                </span>
-
-                <p className="c-report-remarks-text">
-                  {v.remarks ||
-                    "N/A"}
-                </p>
-
+                <p className="c-report-remarks-text">{v.remarks || "N/A"}</p>
+              </div>
+              <div className="c-report-column c-report-badge">
                 {v.reportAvailable && (
-                  <span className="c-report-ready">
-                    ✔ Report Ready
-                  </span>
+                  <span className="c-report-ready">✔ Report Ready</span>
                 )}
               </div>
             </div>

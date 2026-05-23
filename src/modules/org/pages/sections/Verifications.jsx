@@ -11,16 +11,43 @@ export default function Verifications() {
   const [search, setSearch] = useState("");
   const [showInitiateModal, setShowInitiateModal] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [remarkModal, setRemarkModal] = useState(false);
+  const [remarkText, setRemarkText] = useState("");
 
   // FETCH
   const fetchData = async () => {
     try {
-      const res = await api.get(`/org/candidates/verifications?q=${search}`);
+      let url = `/org/candidates/verifications?q=${search}`;
+
+      if (statusFilter) {
+        url += `&status=${statusFilter}`;
+      }
+
+      const res = await api.get(url);
       setData(Array.isArray(res) ? res : []);
       console.log(res);
     } catch (err) {
       console.error(err);
       setData([]);
+    }
+  };
+
+  const saveRemark = async () => {
+    try {
+      await api.put(
+        `/org/verifications/${selectedCandidate.id}/remark?remark=${encodeURIComponent(remarkText)}`,
+      );
+
+      setRemarkModal(false);
+
+      setRemarkText("");
+
+      setSelectedCandidate(null);
+
+      fetchData();
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -42,7 +69,7 @@ export default function Verifications() {
 
   useEffect(() => {
     fetchData();
-  }, [search]);
+  }, [search, statusFilter]);
 
   // HIGHLIGHT
   const highlight = (text) => {
@@ -54,18 +81,40 @@ export default function Verifications() {
   };
 
   return (
-    <div className="page">
+    <div className="cv-page">
       {/* HEADER */}
-      <div className="page-header">
-        <div className="header-left">
+      <div className="cv-page-header">
+        <div className="cv-header-left">
           <h1>Verifications</h1>
         </div>
 
         {/* RIGHT */}
-        <div className="header-right">
+        <div className="cv-header-right">
+          {/* STATUS FILTER */}
+
+          <select
+            className="cv-verification-filter"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="">All Status</option>
+
+            <option value="CREATED">Created</option>
+
+            <option value="INITIATED">Initiated</option>
+
+            <option value="IN_PROGRESS">In Progress</option>
+
+            <option value="COMPLETED">Completed</option>
+
+            <option value="FAILED">Failed</option>
+          </select>
+
+          {/* SEARCH */}
+
           <input
-            className="search-input"
-            placeholder="Search by name or email..."
+            className="cv-search-input"
+            placeholder="Search Candidates..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -73,22 +122,19 @@ export default function Verifications() {
       </div>
 
       {/* LIST */}
-      <div className="list">
+      <div className="cv-list">
         {data.length === 0 ? (
           <p>No candidates found</p>
         ) : (
           data.map((c) => (
             <div
               key={c.id}
-              className="row clickable-row"
-              onClick={() =>
-                navigate(`${base}/verifications/pipeline/${c.id}`)
-              }
+              className="cv-row cv-clickable-row candidate-row-style"
+              onClick={() => navigate(`${base}/verifications/pipeline/${c.id}`)}
             >
-
               {/* LEFT SECTION */}
 
-              <div className="verification-row-left">
+              <div className="cv-verification-row-left">
                 {/* NAME */}
                 <h4
                   dangerouslySetInnerHTML={{
@@ -106,24 +152,16 @@ export default function Verifications() {
 
                 {/* STATUS */}
 
-                <span
-                  className={`status ${c.status?.toLowerCase()}`}
-                >
-                  {c.status === "COMPLETED" &&
-                    "✅ Verification Completed"}
+                <span className={`cv-status ${c.status?.toLowerCase()}`}>
+                  {c.status === "COMPLETED" && "✅ Verification Completed"}
 
-                  {c.status === "IN_PROGRESS" &&
-                    "🟡 In Progress"}
+                  {c.status === "IN_PROGRESS" && "🟡 In Progress"}
 
-                  {c.status === "INITIATED" &&
-                    "🔵 Initiated"}
+                  {c.status === "INITIATED" && "🔵 Initiated"}
 
-                  {c.status ===
-                    "ROLLBACK_REQUESTED" &&
-                    "⚠ Rollback Requested"}
+                  {c.status === "ROLLBACK_REQUESTED" && "⚠ Rollback Requested"}
 
-                  {c.status === "CREATED" &&
-                    "⚪ Not Started"}
+                  {c.status === "CREATED" && "⚪ Not Started"}
 
                   {!c.status && "⚪ Not Started"}
                 </span>
@@ -131,39 +169,69 @@ export default function Verifications() {
 
               {/* CENTER SECTION */}
 
-              <div className="verification-row-center">
+              <div className="cv-candidate-col cv-candidate-middle">
+                {/* MOBILE */}
 
-                <div className="verification-meta-item">
-                  <span>Mobile</span>
+                <div className="cv-candidate-meta-row">
+                  <span className="cv-candidate-meta-label">Mobile:</span>
 
-                  <p>{c.phone || "N/A"}</p>
+                  <span className="cv-candidate-meta-value">
+                    {c.phone ? `${c.countryCode || ""} ${c.phone}` : "N/A"}
+                  </span>
                 </div>
 
-                <div className="verification-meta-item">
-                  <span>Location</span>
+                {/* LOCATION */}
 
-                  <p>{c.location || "N/A"}</p>
+                <div className="cv-candidate-meta-row">
+                  <span className="cv-candidate-meta-label">Location:</span>
+
+                  <span className="cv-candidate-meta-value">
+                    {c.location?.trim() ? c.location : " N/A"}
+                  </span>
                 </div>
 
-                <div className="verification-meta-item">
-                  <span>Role</span>
+                {/* ROLE */}
 
-                  <p>{c.role || "N/A"}</p>
+                <div className="cv-candidate-meta-row">
+                  <span className="cv-candidate-meta-label">Role:</span>
+
+                  <span className="cv-candidate-meta-value">
+                    {c.role?.trim() ? c.role : " N/A"}
+                  </span>
                 </div>
               </div>
 
               {/* RIGHT SECTION */}
 
-              <div className="actions">
+              <div className="cv-candidate-remarks">
+                <div className="cv-remarks-box">
+                  <span className="cv-remarks-title">Remarks</span>
 
+                  <p>{c.remark?.trim() ? c.remark : "No remarks added"}</p>
+
+                  <button
+                    className="cv-add-remark-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      setSelectedCandidate(c);
+
+                      setRemarkText(c.remark || "");
+
+                      setRemarkModal(true);
+                    }}
+                  >
+                    Add Remark
+                  </button>
+                </div>
+              </div>
+
+              <div className="cv-actions">
                 <button
-                  className={`initiate-btn ${!canInitiateVerification(c.status)
-                      ? "initiated-btn"
-                      : ""
-                    }`}
-                  disabled={
-                    !canInitiateVerification(c.status)
-                  }
+                  className={`initiate-btn ${
+                    !canInitiateVerification(c.status) ? "initiated-btn" : ""
+                  }`}
+                  disabled={!canInitiateVerification(c.status)}
                   onClick={(e) => {
                     e.stopPropagation();
 
@@ -183,14 +251,14 @@ export default function Verifications() {
       </div>
       {showInitiateModal && (
         <div
-          className="verification-modal-overlay"
+          className="cv-verification-modal-overlay"
           onClick={() => {
             setShowInitiateModal(false);
             setSelectedCandidate(null);
           }}
         >
           <div
-            className="verification-modal"
+            className="cv-verification-modal"
             onClick={(e) => e.stopPropagation()}
           >
             <h3>Initiate Verification</h3>
@@ -203,9 +271,9 @@ export default function Verifications() {
               ?
             </p>
 
-            <div className="verification-modal-actions">
+            <div className="cv-verification-modal-actions">
               <button
-                className="verification-cancel-btn"
+                className="cv-verification-cancel-btn"
                 onClick={() => {
                   setShowInitiateModal(false);
                   setSelectedCandidate(null);
@@ -215,10 +283,52 @@ export default function Verifications() {
               </button>
 
               <button
-                className="verification-confirm-btn"
+                className="cv-verification-confirm-btn"
                 onClick={initiateVerification}
               >
                 Start Verification
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {remarkModal && (
+        <div
+          className="cv-verification-modal-overlay"
+          onClick={() => {
+            setRemarkModal(false);
+            setSelectedCandidate(null);
+          }}
+        >
+          <div
+            className="cv-verification-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>Candidate Remark</h3>
+
+            <textarea
+              className="cv-remark-textarea"
+              placeholder="Add remarks..."
+              value={remarkText}
+              onChange={(e) => setRemarkText(e.target.value)}
+            />
+
+            <div className="cv-verification-modal-actions">
+              <button
+                className="cv-verification-cancel-btn"
+                onClick={() => {
+                  setRemarkModal(false);
+                  setSelectedCandidate(null);
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="cv-verification-confirm-btn"
+                onClick={saveRemark}
+              >
+                Save Remark
               </button>
             </div>
           </div>

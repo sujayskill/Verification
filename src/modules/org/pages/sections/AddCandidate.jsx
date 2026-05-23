@@ -22,6 +22,7 @@ export default function AddCandidate() {
   const [educations, setEducations] = useState([]);
   const [experiences, setExperiences] = useState([]);
   const [documents, setDocuments] = useState({});
+  const [showSaveModal, setShowSaveModal] = useState(false);
 
   // ================= HANDLERS =================
 
@@ -115,6 +116,16 @@ export default function AddCandidate() {
 
   // ================= SAVE =================
 
+  const confirmSaveCandidate = async () => {
+    try {
+      await save();
+
+      setShowSaveModal(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const save = async () => {
     try {
       // 🔥 STEP 1: CREATE
@@ -198,15 +209,13 @@ export default function AddCandidate() {
         <div className="cac-header-left">
           <button
             className="cac-back-btn"
-            onClick={() => navigate( `/${base}/candidates/${deptId}`,)}>
+            onClick={() => navigate(`/${base}/candidates/${deptId}`)}
+          >
             ← Back
           </button>
           <div className="cac-header-info">
             <h2>Add Candidate</h2>
-            <p>
-              Create and manage candidate
-              verification profile
-            </p>
+            <p>Create and manage candidate verification profile</p>
           </div>
         </div>
 
@@ -214,7 +223,7 @@ export default function AddCandidate() {
         <div className="cac-header-right">
           <button
             className="cac-submit-btn"
-            onClick={save}
+            onClick={() => setShowSaveModal(true)}
           >
             Save Candidate
           </button>
@@ -226,98 +235,56 @@ export default function AddCandidate() {
     ========================= */}
 
       <div className="cac-body">
-
         {/* BASIC */}
         <div className="cac-card">
           <h3>Basic Information</h3>
 
           <div className="cac-grid">
-
             <input
               className="cac-input"
               placeholder="First Name"
-              onChange={(e) =>
-                handleChange(
-                  "firstName",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("firstName", e.target.value)}
             />
 
             <input
               className="cac-input"
               placeholder="Last Name"
-              onChange={(e) =>
-                handleChange(
-                  "lastName",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("lastName", e.target.value)}
             />
 
             <input
               className="cac-input"
               placeholder="Email"
-              onChange={(e) =>
-                handleChange(
-                  "email",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("email", e.target.value)}
             />
 
             <input
               className="cac-input"
               type="date"
-              onChange={(e) =>
-                handleChange(
-                  "dob",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("dob", e.target.value)}
             />
-
           </div>
 
           {/* PHONE */}
 
           <div className="cac-phone-group">
-
             <select
               className="cac-select"
-              onChange={(e) =>
-                handleChange(
-                  "countryCode",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("countryCode", e.target.value)}
             >
-              <option value="+91">
-                🇮🇳 +91
-              </option>
+              <option value="+91">🇮🇳 +91</option>
 
-              <option value="+1">
-                🇺🇸 +1
-              </option>
+              <option value="+1">🇺🇸 +1</option>
 
-              <option value="+44">
-                🇬🇧 +44
-              </option>
+              <option value="+44">🇬🇧 +44</option>
 
-              <option value="+61">
-                🇦🇺 +61
-              </option>
+              <option value="+61">🇦🇺 +61</option>
             </select>
 
             <input
               className="cac-input"
               placeholder="Phone Number"
-              onChange={(e) =>
-                handleChange(
-                  "phone",
-                  e.target.value,
-                )
-              }
+              onChange={(e) => handleChange("phone", e.target.value)}
             />
           </div>
         </div>
@@ -325,20 +292,14 @@ export default function AddCandidate() {
         {/* CURRENT ADDRESS */}
 
         <div className="cac-card">
-
           <h3>Current Address</h3>
 
           <div className="cac-grid">
-
             <input
               className="cac-input"
               placeholder="Street"
               onChange={(e) =>
-                handleNestedChange(
-                  "currentAddress",
-                  "street",
-                  e.target.value,
-                )
+                handleNestedChange("currentAddress", "street", e.target.value)
               }
             />
 
@@ -346,11 +307,7 @@ export default function AddCandidate() {
               className="cac-input"
               placeholder="City"
               onChange={(e) =>
-                handleNestedChange(
-                  "currentAddress",
-                  "city",
-                  e.target.value,
-                )
+                handleNestedChange("currentAddress", "city", e.target.value)
               }
             />
 
@@ -358,11 +315,7 @@ export default function AddCandidate() {
               className="cac-input"
               placeholder="State"
               onChange={(e) =>
-                handleNestedChange(
-                  "currentAddress",
-                  "state",
-                  e.target.value,
-                )
+                handleNestedChange("currentAddress", "state", e.target.value)
               }
             />
 
@@ -370,11 +323,7 @@ export default function AddCandidate() {
               className="cac-input"
               placeholder="Zip Code"
               onChange={(e) =>
-                handleNestedChange(
-                  "currentAddress",
-                  "zipCode",
-                  e.target.value,
-                )
+                handleNestedChange("currentAddress", "zipCode", e.target.value)
               }
             />
           </div>
@@ -383,20 +332,14 @@ export default function AddCandidate() {
         {/* PERMANENT ADDRESS */}
 
         <div className="cac-card">
-
           <h3>Permanent Address</h3>
 
           <div className="cac-grid">
-
             <input
               className="cac-input"
               placeholder="Street"
               onChange={(e) =>
-                handleNestedChange(
-                  "permanentAddress",
-                  "street",
-                  e.target.value,
-                )
+                handleNestedChange("permanentAddress", "street", e.target.value)
               }
             />
 
@@ -404,11 +347,7 @@ export default function AddCandidate() {
               className="cac-input"
               placeholder="City"
               onChange={(e) =>
-                handleNestedChange(
-                  "permanentAddress",
-                  "city",
-                  e.target.value,
-                )
+                handleNestedChange("permanentAddress", "city", e.target.value)
               }
             />
 
@@ -416,11 +355,7 @@ export default function AddCandidate() {
               className="cac-input"
               placeholder="State"
               onChange={(e) =>
-                handleNestedChange(
-                  "permanentAddress",
-                  "state",
-                  e.target.value,
-                )
+                handleNestedChange("permanentAddress", "state", e.target.value)
               }
             />
             <input
@@ -438,29 +373,17 @@ export default function AddCandidate() {
         </div>
         {/* KYC */}
         <div className="cac-card">
-          <h3>
-            KYC Documents
-          </h3>
+          <h3>KYC Documents</h3>
           <div className="cac-grid">
             <input
               className="cac-file-input"
               type="file"
-              onChange={(e) =>
-                handleFileChange(
-                  "PAN",
-                  e.target.files[0],
-                )
-              }
+              onChange={(e) => handleFileChange("PAN", e.target.files[0])}
             />
             <input
               className="cac-file-input"
               type="file"
-              onChange={(e) =>
-                handleFileChange(
-                  "AADHAR",
-                  e.target.files[0],
-                )
-              }
+              onChange={(e) => handleFileChange("AADHAR", e.target.files[0])}
             />
           </div>
         </div>
@@ -468,10 +391,7 @@ export default function AddCandidate() {
         <div className="cac-card">
           <div className="cac-section-header">
             <h3>Education</h3>
-            <button
-              className="cac-add-btn"
-              onClick={addEducation}
-            >
+            <button className="cac-add-btn" onClick={addEducation}>
               + Add Education
             </button>
           </div>
@@ -482,45 +402,28 @@ export default function AddCandidate() {
                   className="cac-input"
                   placeholder="Degree"
                   onChange={(e) =>
-                    handleEducationChange(
-                      i,
-                      "degree",
-                      e.target.value,
-                    )
+                    handleEducationChange(i, "degree", e.target.value)
                   }
                 />
                 <input
                   className="cac-input"
                   placeholder="Institution"
                   onChange={(e) =>
-                    handleEducationChange(
-                      i,
-                      "institution",
-                      e.target.value,
-                    )
+                    handleEducationChange(i, "institution", e.target.value)
                   }
                 />
                 <input
                   className="cac-input"
                   placeholder="Year"
                   onChange={(e) =>
-                    handleEducationChange(
-                      i,
-                      "graduationYear",
-                      e.target.value,
-                    )
+                    handleEducationChange(i, "graduationYear", e.target.value)
                   }
                 />
                 <input
                   className="cac-file-input"
                   type="file"
                   multiple
-                  onChange={(e) =>
-                    handleEducationFiles(
-                      i,
-                      e.target.files,
-                    )
-                  }
+                  onChange={(e) => handleEducationFiles(i, e.target.files)}
                 />
               </div>
             </div>
@@ -530,54 +433,66 @@ export default function AddCandidate() {
         <div className="cac-card">
           <div className="cac-section-header">
             <h3>Experience</h3>
-            <button
-              className="cac-add-btn"
-              onClick={addExperience}
-            >
+            <button className="cac-add-btn" onClick={addExperience}>
               + Add Experience
             </button>
           </div>
           {experiences.map((exp, i) => (
-            <div
-              key={i}
-              className="cac-sub-card"
-            >
+            <div key={i} className="cac-sub-card">
               <div className="cac-grid">
                 <input
                   className="cac-input"
                   placeholder="Company"
                   onChange={(e) =>
-                    handleExperienceChange(
-                      i,
-                      "companyName",
-                      e.target.value,
-                    )
+                    handleExperienceChange(i, "companyName", e.target.value)
                   }
                 />
                 <input
                   className="cac-input"
                   placeholder="Role"
                   onChange={(e) =>
-                    handleExperienceChange(
-                      i,
-                      "role",
-                      e.target.value,
-                    )
+                    handleExperienceChange(i, "role", e.target.value)
                   }
                 />
-                <input
-                  className="cac-input"
-                  type="date"
-                />
-                <input
-                  className="cac-input"
-                  type="date"
-                />
+                <input className="cac-input" type="date" />
+                <input className="cac-input" type="date" />
               </div>
             </div>
           ))}
         </div>
       </div>
+      {/* =========================
+   SAVE MODAL
+========================= */}
+
+      {showSaveModal && (
+        <div
+          className="cac-modal-overlay"
+          onClick={() => setShowSaveModal(false)}
+        >
+          <div className="cac-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Save Candidate</h3>
+
+            <p>Are you sure you want to save this candidate?</p>
+
+            <div className="cac-modal-actions">
+              <button
+                className="cac-cancel-btn"
+                onClick={() => setShowSaveModal(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="cac-confirm-btn"
+                onClick={confirmSaveCandidate}
+              >
+                Save Candidate
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

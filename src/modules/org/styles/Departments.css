@@ -24,7 +24,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 18px 22px;
-  background: rgba(248, 250, 252, 0.92);
+  background: #fff;
   backdrop-filter: blur(12px);
   border-bottom: 1px solid #e5e7eb;
 }
