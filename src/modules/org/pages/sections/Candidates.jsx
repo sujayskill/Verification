@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
 import { useParams } from "react-router-dom";
 import useDebounce from "../../../../services/hooks/DebounceEffect";
+import { useRef } from "react";
+import { Search, Bell, Filter, Download, MoreVertical, Users, UserCheck, ShieldCheck, FileCheck2, } from "lucide-react";
 import "../../styles/Candidates.css";
 
 export default function Candidates() {
@@ -18,6 +20,9 @@ export default function Candidates() {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [showRemarksModal, setShowRemarksModal] = useState(false);
   const [selectedRemark, setSelectedRemark] = useState("");
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const [confirmText, setConfirmText] = useState("");
+  const menuRef = useRef();
 
   const fetchCandidates = async () => {
     try {
@@ -55,6 +60,18 @@ export default function Candidates() {
     }
   };
 
+  useEffect(() => {
+    const closeMenu = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener("mousedown", closeMenu);
+    return () => {
+      document.removeEventListener("mousedown", closeMenu);
+    };
+  }, []);
+
   const highlight = (text) => {
     if (!search || !text) return text;
     const safe = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -72,243 +89,279 @@ export default function Candidates() {
   };
 
   return (
-    <div className="c-page">
-      <div className="c-page-header">
-        {/* LEFT */}
-        <div className="c-eader-left">
-          <button
-            className="c-back-btn"
-            onClick={() => navigate(`${base}/departments`)}
-          >
-            ← Back
-          </button>
+    <div className="candx-page">
+      {/* HEADER */}
+      <div className="candx-top-header">
+        <div>
           <h1>Candidates</h1>
+
+          <div className="candx-breadcrumb">
+            <span>Departments</span>
+            <span>›</span>
+            <span>Candidates</span>
+          </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="c-header-right">
-          {/* STATUS FILTER */}
-          <select
-            className="c-status-filter"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <option value="">Select Status</option>
-            <option value="CREATED">Created</option>
-            <option value="INITIATED">Initiated</option>
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="FAILED">Failed</option>
-          </select>
-
-          {/* SEARCH */}
-          <input
-            className="c-search-input"
-            placeholder="Search Candidates..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        <div className="candx-header-actions">
+          {/* NOTIFICATION */}
+          <div className="candx-notification">
+            <Bell size={20} />
+            <span>3</span>
+          </div>
 
           {/* BUTTON */}
           <button
-            className="c-primary-btn"
+            className="candx-add-btn"
             onClick={() => navigate(`${base}/candidates/new/${deptId}`)}
           >
             + Add Candidate
           </button>
         </div>
       </div>
-      <div className="c-list">
-        {data.length === 0 ? (
-          <p>No candidates found</p>
-        ) : (
-          data.map((c) => (
-            <div
-              key={c.id}
-              className="c-candidate-row c-clickable-row"
-              onClick={() =>
-                navigate(`${base}/candidates/candidateDetails/${c.id}/`)
-              }
-            >
-              {/* LEFT SECTION */}
-              <div className="c-candidate-col c-candidate-primary">
-                <h4
-                  dangerouslySetInnerHTML={{
-                    __html: highlight(`${c.firstName} ${c.lastName}`),
-                  }}
-                />
 
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: highlight(c.email),
-                  }}
-                />
+      {/* KPI CARDS */}
+      <div className="candx-cards-grid">
+        <div className="candx-stat-card">
+          <div className="candx-stat-icon purple">
+            <Users size={24} />
+          </div>
 
-                <span className="c-candidate-status">
-                  {c.status === "COMPLETED" && "✅ Verification Completed"}
+          <div>
+            <h5>Total Candidates</h5>
+            <h2>{data.length}</h2>
+            <p>Across all records</p>
+          </div>
+        </div>
 
-                  {c.status === "IN_PROGRESS" && "🟡 In Progress"}
+        <div className="candx-stat-card">
+          <div className="candx-stat-icon blue">
+            <UserCheck size={24} />
+          </div>
 
-                  {c.status === "INITIATED" && "🔵 Initiated"}
+          <div>
+            <h5>Active Verifications</h5>
+            <h2>{data.filter((d) => d.status === "IN_PROGRESS").length}</h2>
+            <p>Currently processing</p>
+          </div>
+        </div>
 
-                  {c.status === "ROLLBACK_REQUESTED" && "⚠ Rollback Requested"}
+        <div className="candx-stat-card">
+          <div className="candx-stat-icon green">
+            <ShieldCheck size={24} />
+          </div>
 
-                  {c.status === "CREATED" && "⚪ Created"}
-                </span>
-              </div>
+          <div>
+            <h5>Completed</h5>
+            <h2>{data.filter((d) => d.status === "COMPLETED").length}</h2>
+            <p>Verification completed</p>
+          </div>
+        </div>
 
-              {/* MIDDLE SECTION */}
+        <div className="candx-stat-card">
+          <div className="candx-stat-icon orange">
+            <FileCheck2 size={24} />
+          </div>
 
-              <div className="c-candidate-col c-candidate-middle">
-                {/* MOBILE */}
+          <div>
+            <h5>Initiated</h5>
+            <h2>{data.filter((d) => d.status === "INITIATED").length}</h2>
+            <p>Verification started</p>
+          </div>
+        </div>
+      </div>
 
-                <div className="c-candidate-meta-row">
-                  <span className="c-candidate-meta-label">Mobile:</span>
+      {/* TABLE CONTAINER */}
+      <div className="candx-table-container">
+        {/* FILTER BAR */}
+        <div className="candx-table-header">
+          <div className="candx-table-search">
+            <Search size={16} />
 
-                  <span className="c-candidate-meta-value">
-                    {c.phone ? `${c.countryCode || ""} ${c.phone}` : "N/A"}
-                  </span>
-                </div>
+            <input
+              placeholder="Search by candidate..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
-                {/* LOCATION */}
+          <div className="candx-filter-actions">
+            <div className="candx-filter-box">
+              <Filter size={16} />
 
-                <div className="c-candidate-meta-row">
-                  <span className="c-candidate-meta-label">Location:</span>
-
-                  <span className="c-candidate-meta-value">
-                    {c.location?.trim() ? c.location : " N/A"}
-                  </span>
-                </div>
-
-                {/* ROLE */}
-
-                <div className="c-candidate-meta-row">
-                  <span className="c-candidate-meta-label">Role:</span>
-
-                  <span className="c-candidate-meta-value">
-                    {c.role?.trim() ? c.role : " N/A"}
-                  </span>
-                </div>
-              </div>
-
-              {/* REMARKS SECTION */}
-
-              <div
-                className="c-candidate-col c-candidate-remarks"
-                onClick={(e) => {
-                  e.stopPropagation();
-
-                  setSelectedRemark(c.remark || "No remarks available");
-
-                  setShowRemarksModal(true);
-                }}
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
               >
-                <div className="c-remarks-box">
-                  <span className="c-remarks-title">Remarks</span>
+                <option value="">All Status</option>
 
-                  <p>{c.remark?.trim() ? c.remark : "N/A"}</p>
-                </div>
-              </div>
-              {/* ACTIONS */}
-              <div
-                className="c-candidate-actions"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  disabled={isActionDisabled(c.status)}
-                  className={isActionDisabled(c.status) ? "disabled blur" : ""}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                <option value="CREATED">Created</option>
 
-                    navigate(`${base}/candidates/edit/${c.id}`);
-                  }}
-                >
-                  Edit
-                </button>
-                <button
-                  disabled={isActionDisabled(c.status)}
-                  className={isActionDisabled(c.status) ? "disabled blur" : ""}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedCandidate(c);
-                    setShowDeleteModal(true);
-                  }}
-                >
-                  Delete
-                </button>
+                <option value="INITIATED">Initiated</option>
+
+                <option value="IN_PROGRESS">In Progress</option>
+
+                <option value="COMPLETED">Completed</option>
+
+                <option value="FAILED">Failed</option>
+              </select>
+            </div>
+
+            <button className="candx-export-btn">
+              <Download size={16} />
+              Export
+            </button>
+          </div>
+        </div>
+
+        {/* TABLE HEADER */}
+        <div className="candx-list-header">
+          <span>Candidate</span>
+          <span>Details</span>
+          <span>Remarks</span>
+          <span>Status</span>
+          <span>Actions</span>
+        </div>
+
+        {/* LIST */}
+        {data.map((c) => (
+          <div
+            key={c.id}
+            className="candx-row"
+            onClick={() =>
+              navigate(`${base}/candidates/candidateDetails/${c.id}/`)
+            }
+          >
+            {/* CANDIDATE */}
+            <div className="candx-user-box">
+              <div className="candx-avatar">{c.firstName?.charAt(0)}</div>
+
+              <div>
+                <h4>
+                  {c.firstName} {c.lastName}
+                </h4>
+
+                <p>{c.email}</p>
               </div>
             </div>
-          ))
-        )}
+            {/* DETAILS */}
+            <div className="candx-details-box">
+              <div className="candx-detail-row">
+                <span className="candx-detail-label">Location:</span>
+                <span className="candx-detail-value">
+                  {c.location || "N/A"}
+                </span>
+              </div>
+              <div className="candx-detail-row">
+                <span className="candx-detail-label">Phone:</span>
+                <span className="candx-detail-value">
+                  {c.phone ? `${c.countryCode || ""} ${c.phone}` : "N/A"}
+                </span>
+              </div>
+              <div className="candx-detail-row">
+                <span className="candx-detail-label">Role:</span>
+                <span className="candx-detail-value">{c.role || "N/A"}</span>
+              </div>
+            </div>
+
+            {/* REMARKS */}
+            <div
+              className="candx-remarks-section"
+              onClick={(e) => { e.stopPropagation(); setSelectedRemark(c.remark || "No remarks available"); setShowRemarksModal(true); }} >
+              <div className="candx-remarks-card">
+                <span className="candx-remarks-title">Remarks</span>
+                <p>{c.remark?.trim() ? c.remark : "N/A"}</p>
+              </div>
+            </div>
+
+            {/* STATUS */}
+            <div>
+              <span className={`candx-status-badge ${c.status?.toLowerCase()}`}>
+                {c.status}
+              </span>
+            </div>
+
+            {/* ACTION */}
+            <div
+              className="candx-action-cell"
+              onClick={(e) => e.stopPropagation()}
+              ref={menuRef}
+            >
+              <button
+                className="candx-menu-btn"
+                onClick={() => setOpenMenuId(openMenuId === c.id ? null : c.id)}
+              >
+                <MoreVertical size={18} />
+              </button>
+
+              {openMenuId === c.id && (
+                <div className="candx-dropdown-menu">
+                  <button
+                    onClick={() => navigate(`${base}/candidates/edit/${c.id}`)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="delete"
+                    onClick={() => {
+                      setSelectedCandidate(c);
+
+                      setShowDeleteModal(true);
+
+                      setOpenMenuId(null);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
+
+      {/* DELETE MODAL */}
       {showDeleteModal && (
-        <div
-          className="c-delete-modal-overlay"
-          onClick={() => {
-            setShowDeleteModal(false);
-            setSelectedCandidate(null);
-          }}
-        >
-          <div className="c-delete-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Delete Candidate</h3>
+        <div className="candx-modal-overlay">
+          <div
+            className="candx-delete-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2>Delete Candidate</h2>
 
             <p>
-              Are you sure you want to delete{" "}
-              <strong>
-                {selectedCandidate?.firstName} {selectedCandidate?.lastName}
-              </strong>
-              ?
+              Type <strong>CONFIRM</strong> to delete this candidate.
             </p>
 
-            <div className="c-delete-modal-actions">
+            <input
+              placeholder="Enter CONFIRM"
+              value={confirmText}
+              onChange={(e) => setConfirmText(e.target.value)}
+            />
+
+            <div className="candx-modal-actions">
               <button
-                className="c-cancel-btn"
+                className="cancel"
                 onClick={() => {
                   setShowDeleteModal(false);
-                  setSelectedCandidate(null);
+
+                  setConfirmText("");
                 }}
               >
                 Cancel
               </button>
-              <button
-                className="c-confirm-delete-btn"
-                onClick={deleteCandidate}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {showRemarksModal && (
-        <div
-          className="c-remarks-modal-overlay"
-          onClick={() => {
-            setShowRemarksModal(false);
-
-            setSelectedRemark("");
-          }}
-        >
-          <div className="c-remarks-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="c-remarks-modal-header">
-              <h3>Candidate Remarks</h3>
 
               <button
-                className="c-remarks-close-btn"
+                className="confirm"
+                disabled={confirmText !== "CONFIRM"}
                 onClick={() => {
-                  setShowRemarksModal(false);
+                  deleteCandidate();
 
-                  setSelectedRemark("");
+                  setConfirmText("");
                 }}
               >
-                ✕
+                Confirm Delete
               </button>
-            </div>
-
-            <div className="c-remarks-modal-body">
-              {selectedRemark.split(",").map((item, index) => (
-                <p key={index}>• {item.trim()}</p>
-              ))}
             </div>
           </div>
         </div>

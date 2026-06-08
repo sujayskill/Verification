@@ -2,6 +2,17 @@ import { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
+import {
+  Search,
+  Bell,
+  Plus,
+  Building2,
+  Users,
+  ShieldCheck,
+  FileCheck,
+  Filter,
+  Download,
+} from "lucide-react";
 import "../../styles/Departments.css";
 
 export default function Departments({ onSelect }) {
@@ -77,241 +88,253 @@ export default function Departments({ onSelect }) {
   };
 
   return (
-    <div className="cpd-page">
-
+    <div className="cpd2-page">
       {/* =========================
-        HEADER
+        TOP HEADER
     ========================= */}
 
-      <div className="cpd-header">
-
+      <div className="cpd2-topbar">
         {/* LEFT */}
-        <div className="cpd-header-left">
+        <div className="cpd2-top-left">
+          <h1>Departments</h1>
 
-          <h2>Departments</h2>
-
-          <p>
-            {data.length} departments
-          </p>
-
+          <div className="cpd2-breadcrumb">
+            <span>Candidates</span>
+            <span>›</span>
+            <span>Departments</span>
+          </div>
         </div>
 
         {/* RIGHT */}
-        <div className="cpd-header-actions">
+        <div className="cpd2-top-right">
+          {/* NOTIFICATION */}
+          <div className="cpd2-notification">
+            <Bell size={20} strokeWidth={2} />
 
-          <input
-            className="cpd-search-input"
-            placeholder="Search department..."
-            value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
-          />
+            <span>3</span>
+          </div>
 
+          {/* ADD BTN */}
           <button
-            className="cpd-add-btn"
-            onClick={() =>
-              navigate(
-                `${base}/departments/new`,
-              )
-            }
+            className="cpd2-add-btn"
+            onClick={() => navigate(`${base}/departments/new`)}
           >
-            + Add Department
+            <Plus size={18} />
+            Add Department
           </button>
-
         </div>
       </div>
 
       {/* =========================
-        GRID
+        STATS
     ========================= */}
 
-      <div className="cpd-grid">
-
-        {data.map((d) => (
-          <div
-            key={d.id}
-            className="cpd-card cpd-clickable"
-            onClick={() => {
-              if (editingId !== d.id) {
-                navigate(
-                  `${base}/candidates/${d.id}`,
-                );
-              }
-            }}
-          >
-
-            {/* INFO */}
-            <div className="cpd-card-info">
-
-              {editingId === d.id ? (
-                <input
-                  autoFocus
-                  className="cpd-inline-input"
-                  value={editName}
-                  onChange={(e) =>
-                    setEditName(
-                      e.target.value,
-                    )
-                  }
-                  onBlur={() =>
-                    updateDepartment(d.id)
-                  }
-                  onKeyDown={(e) => {
-                    if (
-                      e.key === "Enter"
-                    ) {
-                      updateDepartment(d.id);
-                    }
-
-                    if (
-                      e.key === "Escape"
-                    ) {
-                      setEditingId(null);
-                    }
-                  }}
-                  onClick={(e) =>
-                    e.stopPropagation()
-                  }
-                />
-              ) : (
-                <>
-                  <h3
-                    dangerouslySetInnerHTML={{
-                      __html: highlight(
-                        d.name,
-                      ),
-                    }}
-                  />
-
-                  <span>
-                    Department
-                  </span>
-                </>
-              )}
-            </div>
-
-            {/* MENU */}
-            <div
-              className="cpd-menu"
-              onClick={(e) =>
-                e.stopPropagation()
-              }
-            >
-
-              <span
-                className="cpd-menu-icon"
-                onClick={(e) => {
-                  e.stopPropagation();
-
-                  setMenuOpen(
-                    menuOpen === d.id
-                      ? null
-                      : d.id,
-                  );
-                }}
-              >
-                ⋮
-              </span>
-
-              {menuOpen === d.id && (
-                <div className="cpd-menu-dropdown">
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setEditingId(d.id);
-                      setEditName(d.name);
-                      setMenuOpen(null);
-                    }}>
-                    Edit
-                  </button>
-
-                  <button
-                    className="cpd-danger-item"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedDept(d);
-                      setShowDeleteModal(true);
-                      setMenuOpen(null);
-                    }}>
-                    Delete
-                  </button>
-
-                </div>
-              )}
-            </div>
+      <div className="cpd2-stats-grid">
+        {/* TOTAL */}
+        <div className="cpd2-stat-card">
+          <div className="cpd2-stat-icon purple">
+            <Building2 size={28} strokeWidth={2.2} />
           </div>
-        ))}
+
+          <div>
+            <p>Total Departments</p>
+            <h2>{data.length}</h2>
+          </div>
+        </div>
+
+        {/* ACTIVE */}
+        <div className="cpd2-stat-card">
+          <div className="cpd2-stat-icon blue">
+            <Users size={28} strokeWidth={2.2} />
+          </div>
+
+          <div>
+            <p>Active Departments</p>
+            <h2>{data.length}</h2>
+          </div>
+        </div>
+
+        {/* CANDIDATES */}
+        <div className="cpd2-stat-card">
+          <div className="cpd2-stat-icon green">
+            <ShieldCheck size={28} strokeWidth={2.2} />
+          </div>
+
+          <div>
+            <p>Total Candidates</p>
+            <h2>1,248</h2>
+          </div>
+        </div>
+
+        {/* VERIFICATIONS */}
+        <div className="cpd2-stat-card">
+          <div className="cpd2-stat-icon orange">
+            <FileCheck size={28} strokeWidth={2.2} />
+          </div>
+
+          <div>
+            <p>Verifications</p>
+            <h2>856</h2>
+          </div>
+        </div>
       </div>
 
       {/* =========================
-        DELETE MODAL
+        TABLE SECTION
     ========================= */}
+
+      <div className="cpd2-table-card">
+        {/* FILTER BAR */}
+        <div className="cpd2-filter-bar">
+          <div className="cpd2-filter-left">
+            <div className="cpd2-search-small">
+              <Search size={16} className="cpd2-search-svg" />
+
+              <input
+                placeholder="Search by department..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* RIGHT */}
+          <div className="cpd2-filter-actions"> 
+            <button className="cpd2-filter-btn"> <Filter size={17} /> Filters </button>
+
+            <button className="cpd2-export-btn"> <Download size={17} /> Export </button>
+          </div>
+        </div>
+
+        {/* TABLE HEADER */}
+        <div className="cpd2-table-header">
+          <span>Department Name</span>
+
+          <span>Status</span>
+
+          <span>Actions</span>
+        </div>
+
+        {/* ROWS */}
+        <div className="cpd2-table-body">
+          {data.map((d) => (
+            <div
+              key={d.id}
+              className="cpd2-row"
+              onClick={() => {
+                if (editingId !== d.id) {
+                  navigate(`${base}/candidates/${d.id}`);
+                }
+              }}
+            >
+              {/* NAME */}
+              <div className="cpd2-dept-info">
+
+                <div>
+                  {editingId === d.id ? (
+                    <input
+                      autoFocus
+                      className="cpd2-inline-input"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onBlur={() => updateDepartment(d.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          updateDepartment(d.id);
+                        }
+
+                        if (e.key === "Escape") {
+                          setEditingId(null);
+                        }
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  ) : (
+                    <h4
+                      dangerouslySetInnerHTML={{
+                        __html: highlight(d.name),
+                      }}
+                    />
+                  )}
+
+                  <p>Department</p>
+                </div>
+              </div>
+
+              {/* STATUS */}
+              <div className="cpd2-status">Active</div>
+
+              {/* ACTIONS */}
+              <div className="cpd2-menu" onClick={(e) => e.stopPropagation()}>
+                <button
+                  className="cpd2-menu-btn"
+                  onClick={() => setMenuOpen(menuOpen === d.id ? null : d.id)}
+                >
+                  ⋮
+                </button>
+
+                {menuOpen === d.id && (
+                  <div className="cpd2-menu-dropdown">
+                    <button
+                      onClick={() => {
+                        setEditingId(d.id);
+                        setEditName(d.name);
+                        setMenuOpen(null);
+                      }}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      className="danger"
+                      onClick={() => {
+                        setSelectedDept(d);
+                        setShowDeleteModal(true);
+                        setMenuOpen(null);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* DELETE MODAL */}
 
       {showDeleteModal && (
         <div
-          className="cpd-modal-overlay"
+          className="cpd2-modal-overlay"
           onClick={() => {
-            setShowDeleteModal(
-              false,
-            );
-
-            setSelectedDept(
-              null,
-            );
+            setShowDeleteModal(false);
+            setSelectedDept(null);
           }}
         >
-
-          <div
-            className="cpd-delete-modal"
-            onClick={(e) =>
-              e.stopPropagation()
-            }
-          >
-
-            <h3>
-              Delete Department
-            </h3>
+          <div className="cpd2-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Delete Department</h3>
 
             <p>
-              Are you sure you want
-              to delete
-              <strong>
-                {" "}
-                {
-                  selectedDept?.name
-                }
-              </strong>
-              ?
+              Are you sure you want to delete
+              <strong> {selectedDept?.name}</strong>?
             </p>
 
-            <div className="cpd-modal-actions">
-
+            <div className="cpd2-modal-actions">
               <button
-                className="cpd-cancel-btn"
+                className="cancel"
                 onClick={() => {
-                  setShowDeleteModal(
-                    false,
-                  );
-
-                  setSelectedDept(
-                    null,
-                  );
+                  setShowDeleteModal(false);
+                  setSelectedDept(null);
                 }}
               >
                 Cancel
               </button>
 
-              <button
-                className="cpd-confirm-delete-btn"
-                onClick={
-                  deleteDepartment
-                }
-              >
+              <button className="delete" onClick={deleteDepartment}>
                 Delete
               </button>
-
             </div>
           </div>
         </div>

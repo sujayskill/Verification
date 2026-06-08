@@ -3,11 +3,12 @@
   display: flex;
   height: 100vh;
   overflow: hidden;
+  background: #f7f8fc;
 }
 
 /* 🔥 SIDEBAR */
 .sidebar-container {
-  width: 240px;
+  width: 200px;
   height: 100vh;
   position: fixed;
   left: 0;
@@ -18,18 +19,20 @@
   flex-direction: column;
   padding: 20px;
   overflow-y: auto;
+  z-index: 1000;
 }
+
 
 /* 🔥 RIGHT SIDE */
 .main-section {
+  margin-top: 0;
   margin-left: 240px;
   flex: 1;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-
-  /* ❌ DO NOT BLOCK */
-  overflow: visible; /* ✅ FIX */
+  min-width: 0;
+  overflow: hidden;
 }
 
 /* 🔥 HEADER */
@@ -49,11 +52,10 @@
 }
 
 /* 🔥 PAGE CONTENT (SCROLL AREA) */
-.page-content {
+.client-page-content {
   flex: 1;
-  overflow-y: auto; /* ✅ ONLY SCROLL HERE */
-  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
   background: #f7f8fc;
-  margin-left: 40px;
-  margin-top: 1px;
+  min-width: 0;
 }

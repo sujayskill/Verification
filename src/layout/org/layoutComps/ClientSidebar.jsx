@@ -6,8 +6,11 @@ import "../styles/ClientSidebar.css";
 export default function OrgSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [showSettings, setShowSettings] = useState(false);
+
   const settingsRef = useRef();
+
   const base = getBasePath();
 
   useEffect(() => {
@@ -16,72 +19,114 @@ export default function OrgSidebar() {
         setShowSettings(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  useEffect(() => {
-    setShowSettings(false);
-  }, [location.pathname]);
-
   const menu = [
-    { name: "Home", path: `/${base}/home` },
-    { name: "Candidates", path: `/${base}/departments` },
-    { name: "Verifications", path: `/${base}/verifications` },
-    { name: "Pull Hires", path: `/${base}/pull-hires` },
-    { name: "Reports", path: `/${base}/reports` },
-    { name: "Documents", path: `/${base}/documents` },
+    {
+      name: "Dashboard",
+      path: `/${base}/home`,
+      icon: "📊",
+    },
+
+    {
+      name: "Candidates",
+      path: `/${base}/departments`,
+      icon: "👤",
+    },
+
+    {
+      name: "Verifications",
+      path: `/${base}/verifications`,
+      icon: "✔",
+    },
+
+    {
+      name: "Reports",
+      path: `/${base}/reports`,
+      icon: "📑",
+    },
+
+    {
+      name: "Documents",
+      path: `/${base}/documents`,
+      icon: "📂",
+    },
+
+    {
+      name: "Analytics",
+      path: `/${base}/analytics`,
+      icon: "📈",
+    },
+
+    {
+      name: "Settings",
+      path: `/${base}/settings`,
+      icon: "⚙",
+    },
   ];
 
   return (
-    <div className="sidebar-container">
-      {/* 🔥 COMPANY BRAND */}
-      <div className="company-box">
-        <h2>ToFact</h2>
-        <p>BGV Platform</p>
+    <div className="client-sidebar-container">
+      {/* BRAND */}
+      <div className="client-company-box">
+        <div className="client-logo">TF</div>
+
+        <div>
+          <h2>ToFact</h2>
+          <p>BGV Platform</p>
+        </div>
       </div>
 
       {/* MENU */}
-      <div className="menu-list">
+      <div className="client-menu-list">
         {menu.map((item) => (
           <div
             key={item.name}
-            className={`menu-item ${
+            className={`client-menu-item ${
               location.pathname.includes(item.path) ? "active" : ""
             }`}
             onClick={() => navigate(item.path)}
           >
-            {item.name}
+            <span className="menu-icon">{item.icon}</span>
+
+            <span>{item.name}</span>
           </div>
         ))}
       </div>
 
-      {/* 🔥 SETTINGS SECTION */}
-      <div className="sidebar-footer" ref={settingsRef}>
-        <button
-          className="settings-btn"
-          onClick={(e) => {
-            e.stopPropagation(); // ✅ VERY IMPORTANT
-            setShowSettings(!showSettings);
-          }}
+      {/* PROFILE */}
+      <div className="client-profile-section" ref={settingsRef}>
+        <div
+          className="client-profile-card"
+          onClick={() => setShowSettings(!showSettings)}
         >
-          ⚙ Settings
-        </button>
-        {/* 🔥 SLIDE PANEL */}
+          <div className="profile-avatar">S</div>
+
+          <div className="profile-info">
+            <h4>Sujay Reddy</h4>
+            <p>Super Admin</p>
+          </div>
+        </div>
+
+        {/* DROPDOWN */}
         {showSettings && (
-          <div className="settings-panel">
+          <div className="client-settings-panel">
             <button onClick={() => navigate(`/${base}/manageAccounts`)}>
               Manage Accounts
             </button>
 
             <button onClick={() => navigate(`/${base}/help&support`)}>
-              Help
+              Help & Support
             </button>
 
             <button
-              className="logout-btn"
+              className="client-logout-btn"
               onClick={() => {
                 localStorage.clear();
                 navigate("/login");

@@ -1,98 +1,194 @@
-.sidebar-container {
-  width: 240px;
+/* SIDEBAR */
+
+.client-sidebar-container {
+  width: 200px;
+  height: 100vh;
   background: #ffffff;
-  height: 95vh;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  border-right: 1px solid #eee;
+  padding: 25px 20px 20px 20px;
+  border-right: 1px solid #eef2ff;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  font-family: "Inter", sans-serif;
 }
 
-/* 🔥 BRAND */
-.company-box {
-  margin-bottom: 30px;
+/* BRAND */
+
+.client-company-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 40px;
 }
 
-.company-box h2 {
+.client-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #5b5ff6, #7c6cf6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.client-company-box h2 {
   font-size: 22px;
   font-weight: 700;
+  color: #111827;
+  margin: 0;
 }
 
-.company-box p {
+.client-company-box p {
   font-size: 12px;
-  color: #888;
+  color: #6b7280;
+  margin-top: 4px;
 }
 
 /* MENU */
-.menu-list {
+
+.client-menu-list {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
-.menu-item {
-  padding: 10px 14px;
-  border-radius: 10px;
+/* ITEM */
+
+.client-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 5px 5px;
+  border-radius: 14px;
+  cursor: pointer;
+  color: #374151;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.client-menu-item:hover {
+  background: #7d99ff;
+}
+
+.client-menu-item.active {
+  background: #c8c2e7;
+  color: #5b5ff6;
+  font-weight: 600;
+}
+
+/* ICON */
+
+.menu-icon {
+  font-size: 18px;
+  width: 22px;
+  display: flex;
+  justify-content: center;
+}
+
+/* PROFILE */
+
+.client-profile-section {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+/* PROFILE CARD */
+
+.client-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid #eef2ff;
+}
+
+.client-profile-card:hover {
+  background: #f8f9ff;
+}
+
+/* AVATAR */
+
+.profile-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5b5ff6, #8b5cf6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* PROFILE INFO */
+
+.profile-info h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.profile-info p {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* DROPDOWN */
+
+.client-settings-panel {
+  position: absolute;
+  bottom: 80px;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #eef2ff;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+
+.client-settings-panel button {
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 14px;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.menu-item:hover {
-  background: #f3f4f6;
+.client-settings-panel button:hover {
+  background: #f5f7ff;
 }
 
-.menu-item.active {
-  background: #7c6cf6;
-  color: white;
+/* LOGOUT */
+
+.client-logout-btn {
+  color: #ef4444;
 }
 
-/* SETTINGS */
-.sidebar-footer {
-  position: relative;
-  margin-bottom:30px;
+/* SCROLLBAR */
+
+.client-sidebar-container::-webkit-scrollbar {
+  width: 6px;
 }
 
-.settings-btn {
-  width: 100%;
-  padding: 10px;
+.client-sidebar-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
   border-radius: 10px;
-  border: none;
-  background: #f3f4f6;
-  cursor: pointer;
-}
-
-/* 🔥 PANEL */
-.settings-panel {
-  position: absolute;
-  bottom: 50px;
-  left: 0;
-  width: 200px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-}
-
-.settings-panel button {
-  padding: 10px;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-}
-
-.settings-panel button:hover {
-  background: #f3f4f6;
-}
-
-.logout-btn {
-  color: red;
-}
-
-.sidebar-container {
-  position: fixed;
-  height: 100vh;
-  overflow-y: auto;
 }

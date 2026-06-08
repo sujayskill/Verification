@@ -14,7 +14,7 @@ export default function AddOrganizations() {
 
   const save = async () => {
     await api.post("/clients/create", form);
-    navigate("/platform/organizations");
+    navigate("/platform/clients");
   };
 
   return (

@@ -1,391 +1,469 @@
-/* ========================================
-   PAGE LAYOUT
-======================================== */
-.candidate-details-page {
+/* PAGE */
+
+.candetailsx-page {
+  padding: 28px;
+
+  background: #f7f8fc;
+
+  min-height: 100vh;
+
+  font-family: "Inter", sans-serif;
+}
+
+/* TOPBAR */
+
+.candetailsx-topbar {
   display: flex;
-  flex-direction: column;
-  gap: 22px;
-  padding: 1px;
-  min-height: 100%;
-  background: #f8fafc;
-}
-/* ========================================
-   TOP SECTION
-======================================== */
-.candidate-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: spce-between;
-  align-items: center;
-  padding: 18px 22px;
-  background: #fff;
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #e5e7eb;
-}
 
-/* ========================================
-   LEFT SECTION
-======================================== */
-
-.candidate-header-left {
-  display: flex;
-  align-items: center;
-}
-
-/* ========================================
-   HEADER INFO
-======================================== */
-
-.candidate-header-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.candidate-topbar h1 {
-  margin: 0;
-  margin-top: 20px;
-  font-size: 26px;
-  font-weight: 700;
-  color: #111827;
-}
-
-.candidate-topbar p {
-   margin: 0;
-  margin-top: 5px;
-  font-size: 14px;
-  color: #6b7280;
-}
-
-/* ========================================
-   RIGHT SECTION
-======================================== */
-
-.candidate-header-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-/* ========================================
-   BACK BUTTON
-======================================== */
-
-.candidate-topbar .candidate-back-btn {
-  padding: 9px 14px;
-  border-radius: 12px;
-  border: 1px solid #dbe1ea;
-  background: white;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: 0.2s;
-}
-
-.candidate-back-btn:hover {
-  background: #f3f4f6;
-}
-
-/* ========================================
-   VERIFIED BADGE
-======================================== */
-
-.verified-title {
-  display: flex;
-  align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 999px;
-  background: #dcfce7;
-  color: #166534;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  border: 1px solid #bbf7d0;
-}
-
-/* ========================================
-   GLASS CARD
-======================================== */
-.glass-card {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
-  transition: 0.2s ease;
-}
-
-.glass-card:hover {
-  border-color: #dbeafe;
-}
-
-/* ========================================
-   HERO SECTION
-======================================== */
-.hero-card {
-  display: flex;
   justify-content: space-between;
+
   align-items: center;
+
+  margin-bottom: 24px;
+}
+
+.candetailsx-top-right {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+.candetailsx-search-box {
+  width: 320px;
+
+  background: white;
+
+  border: 1px solid #eceef5;
+
+  border-radius: 14px;
+
+  padding: 12px 18px;
+}
+
+.candetailsx-search-box input {
+  border: none;
+
+  outline: none;
+
+  width: 100%;
+
+  background: transparent;
+
+  font-size: 14px;
+}
+
+.candetailsx-back-btn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #5b5bd6;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  font-size: 14px;
+}
+
+.candetailsx-notification {
+  width: 46px;
+
+  height: 46px;
+
+  border-radius: 14px;
+
+  background: white;
+
+  border: 1px solid #eceef5;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  position: relative;
+
+  cursor: pointer;
+}
+
+.candetailsx-notification span {
+  position: absolute;
+
+  top: 8px;
+
+  right: 8px;
+
+  width: 16px;
+
+  height: 16px;
+
+  background: red;
+
+  border-radius: 50%;
+
+  color: white;
+
+  font-size: 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.candetailsx-primary-btn {
+  border: none;
+
+  background: linear-gradient(135deg, #6c63ff, #5b5bd6);
+
+  color: white;
+
+  padding: 14px 22px;
+
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+/* HERO */
+
+.candetailsx-hero-card {
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 26px;
+
+  border: 1px solid #eceef5;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 24px;
+}
+
+.candetailsx-hero-left {
+  display: flex;
+
+  align-items: center;
+
+  gap: 24px;
+}
+
+.candetailsx-avatar {
+  width: 100px;
+
+  height: 100px;
+
+  border-radius: 24px;
+
+  background: linear-gradient(135deg, #6c63ff, #8b7cff);
+
+  color: white;
+
+  font-size: 34px;
+
+  font-weight: 700;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.candetailsx-name-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin-bottom: 10px;
+}
+
+.candetailsx-name-row h1 {
+  font-size: 36px;
+
+  color: #101828;
+}
+
+.candetailsx-status {
+  padding: 6px 14px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  background: #dcfce7;
+
+  color: #16a34a;
+}
+
+.candetailsx-candidate-id {
+  color: #667085;
+
+  margin-bottom: 22px;
+}
+
+.candetailsx-contact-row {
+  display: flex;
+
+  gap: 28px;
+
+  flex-wrap: wrap;
+}
+
+.candetailsx-contact-row div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: #475467;
+
+  font-size: 14px;
+}
+
+/* SECTION */
+
+.candetailsx-section-card {
+  background: white;
+
+  border-radius: 24px;
+
+  border: 1px solid #eceef5;
+
+  padding: 28px;
+
+  margin-bottom: 24px;
+}
+
+.candetailsx-section-header {
+  margin-bottom: 24px;
+}
+
+.candetailsx-section-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.candetailsx-section-title h3 {
+  font-size: 22px;
+
+  color: #101828;
+}
+
+.candetailsx-info-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 30px;
 }
 
-.hero-left {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
+.candetailsx-info-grid label {
+  display: block;
 
-/* ========================================
-   AVATAR
-======================================== */
-.avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-/* ========================================
-   HERO TEXT
-======================================== */
-.hero-left h1 {
-  margin: 0;
-
-  font-size: 28px;
-  font-weight: 700;
-
-  color: #111827;
-}
-
-.hero-left p {
-  margin-top: 6px;
-
-  color: #6b7280;
-
-  font-size: 14px;
-}
-
-/* ========================================
-   STATUS PILL
-======================================== */
-.status-pill {
-  display: inline-flex;
-
-  align-items: center;
-
-  margin-top: 10px;
-
-  padding: 6px 12px;
-
-  border-radius: 999px;
-
-  font-size: 12px;
-  font-weight: 600;
-
-  background: #e0e7ff;
-
-  color: #4338ca;
-}
-
-/* ========================================
-   ACTIONS
-======================================== */
-.hero-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-
-  gap: 12px;
-}
-
-/* ========================================
-   BUTTONS
-======================================== */
-.primary-btn,
-.warning-btn {
-  border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.primary-btn {
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-}
-
-.primary-btn:hover {
-  transform: translateY(-1px);
-}
-
-.warning-btn {
-  background: #fef3c7;
-
-  color: #92400e;
-}
-
-.warning-btn:hover {
-  background: #fde68a;
-}
-
-/* DISABLED */
-.disabled {
-  opacity: 0.55;
-
-  cursor: not-allowed;
-
-  pointer-events: none;
-}
-
-/* ========================================
-   INFO TEXT
-======================================== */
-.info-text {
-  margin: 0;
+  color: #667085;
 
   font-size: 13px;
 
-  color: #92400e;
+  margin-bottom: 8px;
 }
 
-/* ========================================
-   GRID SECTION
-======================================== */
-.details-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 20px;
-}
+.candetailsx-info-grid p {
+  color: #101828;
 
-/* ========================================
-   CARD HEADINGS
-======================================== */
-.glass-card h3 {
-  margin-top: 0;
-  margin-bottom: 18px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
-}
-
-/* ========================================
-   INFO GRID
-======================================== */
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-}
-
-.info-grid label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 12px;
   font-weight: 500;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-}
 
-.info-grid p {
-  margin: 0;
-  color: #111827;
-  font-size: 15px;
-}
-
-/* ========================================
-   ADDRESS
-======================================== */
-.address-block p {
-  margin: 8px 0;
-  color: #374151;
   line-height: 1.6;
 }
 
-/* ========================================
-   SECTION CARDS
-======================================== */
-.section-card {
+/* TIMELINE */
+
+.candetailsx-timeline-list {
   display: flex;
+
   flex-direction: column;
+
+  gap: 18px;
 }
 
-/* ========================================
-   TIMELINE
-======================================== */
-.timeline-list {
+.candetailsx-timeline-item {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+
+  gap: 18px;
+
+  align-items: flex-start;
 }
 
-.timeline-item {
-  display: flex;
-  gap: 14px;
-}
+.candetailsx-timeline-dot {
+  width: 14px;
 
-.timeline-dot {
-  width: 11px;
-  height: 11px;
+  height: 14px;
+
   border-radius: 50%;
-  margin-top: 7px;
-  background: #6366f1;
-  flex-shrink: 0;
+
+  background: #6c63ff;
+
+  margin-top: 6px;
 }
 
-.timeline-content {
-  flex: 1;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #eef2f7;
+.candetailsx-timeline-content {
+  background: #f8f9fc;
+
+  border-radius: 16px;
+
+  padding: 18px;
+
+  width: 100%;
 }
 
-.timeline-content h4 {
-  margin: 0;
-  font-size: 15px;
+.candetailsx-timeline-content h4 {
+  margin-bottom: 8px;
+
+  color: #101828;
+}
+
+.candetailsx-timeline-content p {
+  color: #475467;
+
+  margin-bottom: 6px;
+}
+
+.candetailsx-timeline-content span {
+  color: #667085;
+
+  font-size: 13px;
+}
+
+/* SUMMARY */
+
+.candetailsx-summary-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+
+  margin-top: 20px;
+}
+
+.candetailsx-summary-card {
+  background: white;
+
+  border-radius: 20px;
+
+  border: 1px solid #eceef5;
+
+  padding: 24px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.candetailsx-summary-card h5 {
+  color: #667085;
+
+  margin-bottom: 10px;
+}
+
+.candetailsx-summary-card h2 {
+  font-size: 34px;
+
+  color: #101828;
+}
+
+/* WARNING BUTTON */
+
+.candetailsx-warning-btn {
+  border: none;
+
+  background: #fff4ed;
+
+  color: #ea580c;
+
+  padding: 12px 18px;
+
+  border-radius: 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  cursor: pointer;
+
   font-weight: 600;
 }
 
-.timeline-content p {
-  margin: 6px 0;
-  color: #6b7280;
-  font-size: 14px;
-}
+/* RESPONSIVE */
 
-.timeline-content span {
-  font-size: 13px;
-  color: #9ca3af;
-}
-
-/* ========================================
-   RESPONSIVE
-======================================== */
-@media (max-width: 900px) {
-  .hero-card {
-    flex-direction: column;
-    align-items: flex-start;
+@media (max-width: 1200px) {
+  .candetailsx-info-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .hero-actions {
-    width: 100%;
-    align-items: stretch;
-  }
-
-  .info-grid {
+  .candetailsx-summary-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .candetailsx-topbar,
+  .candetailsx-hero-card {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 20px;
+  }
+
+  .candetailsx-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .candetailsx-contact-row {
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .candetailsx-top-right {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .candetailsx-search-box {
+    width: 100%;
   }
 }

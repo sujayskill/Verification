@@ -69,15 +69,15 @@ export default function Organizations() {
   };
 
   return (
-    <div className="clients-page">
+    <div className="v-clients-page">
       {/* HEADER */}
-      <div className="client-header">
+      <div className="v-clients-header">
         <div>
           <h2>Clients</h2>
           <p>Manage all client organizations</p>
         </div>
 
-        <div className="org-actions">
+        <div className="v-clients-header-actions">
           {/* 🔍 SEARCH */}
           <input
             placeholder="Search organization..."
@@ -86,14 +86,15 @@ export default function Organizations() {
           />
 
           {/* 🔽 FILTERS */}
-          <div className="filters">
+          <div className="v-clients-search2">
             <input
               placeholder="Location"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
 
-            <select value={size} onChange={(e) => setSize(e.target.value)}>
+            <select className="v-clients-status-filter"
+            value={size} onChange={(e) => setSize(e.target.value)}>
               <option value="">All Sizes</option>
               <option value="50">Small</option>
               <option value="200">Medium</option>
@@ -103,7 +104,7 @@ export default function Organizations() {
 
           {role !== "ROLE_VENDOR" && (
             <button
-              className="primary-btn"
+              className="v-clients-primary-btn"
               onClick={() => navigate("/platform/clients/new")}
             >
               + Add Client
@@ -154,12 +155,6 @@ export default function Organizations() {
 
               {menuOpen === c.id && (
                 <div className="org-menu-dropdown">
-                  <button
-                    onClick={() => navigate(`/platform/clients/edit/${c.id}`)}
-                  >
-                    Edit
-                  </button>
-
                   <button
                     className="danger-item"
                     onClick={() => {

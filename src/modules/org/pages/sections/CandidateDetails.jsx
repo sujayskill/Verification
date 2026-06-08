@@ -2,6 +2,22 @@ import React, { useEffect, useState } from "react";
 import { api } from "../../../../services/api/Api";
 import { useParams, useNavigate } from "react-router-dom";
 import { getBasePath } from "../../../../utils/PathHelper";
+import {
+  ArrowLeft,
+  Bell,
+  Mail,
+  Phone,
+  CalendarDays,
+  User,
+  Briefcase,
+  MapPin,
+  GraduationCap,
+  Building2,
+  ShieldCheck,
+  Clock3,
+  RotateCcw,
+  FileText,
+} from "lucide-react";
 import "../../styles/CandidateDetails.css";
 
 export default function CandidateDetails() {
@@ -87,166 +103,236 @@ export default function CandidateDetails() {
   if (!data) return <p>Loading...</p>;
 
   return (
-    <div className="candidate-details-page">
-      {/* TOP BAR */}
-      <div className="candidate-topbar">
+    <div className="candetailsx-page">
+      {/* TOP HEADER */}
+      <div className="candetailsx-topbar">
         {/* LEFT */}
-        <div>
+        <div className="candetailsx-top-left">
           <button
-            className="candidate-back-btn"
+            className="candetailsx-back-btn"
             onClick={() =>
-              navigate(
-                `/${base}/candidates/${data.department.id}`,
-              )
+              navigate(`/${base}/candidates/${data.department.id}`)
             }
           >
-            ← Back
+            <ArrowLeft size={18} />
+            Back to Candidates
           </button>
-          <h1>Candidates</h1>
-          <p>
-            Candidate Verification Details
-          </p>
         </div>
+
         {/* RIGHT */}
-        <div className="candidate-header-right">
-          {isCompleted && (
-            <div className="verified-title">
-              ✅ VERIFIED
-            </div>
-          )}
-        </div>
-      </div>
-      {/* HERO SECTION */}
-      <div className="glass-card hero-card">
-        <div className="hero-left">
-          <div className="avatar">
-            {data.firstName?.charAt(0)}
-            {data.lastName?.charAt(0)}
+        <div className="candetailsx-top-right">
+          {/* SEARCH */}
+          <div className="candetailsx-search-box">
+            <input placeholder="Search anything..." />
           </div>
 
-          <div>
-            <h1>
-              {data.firstName} {data.lastName}
-            </h1>
+          {/* NOTIFICATION */}
+          <div className="candetailsx-notification">
+            <Bell size={20} />
 
-            <p>{data.email}</p>
-            <p>{data.role}</p>
-            <p>{data.department.name}</p>
-
-            <span className={`status-pill ${data.status?.toLowerCase()}`}>
-              {data.status}
-            </span>
+            <span>3</span>
           </div>
-        </div>
 
-        {/* ACTIONS */}
-        <div className="hero-actions">
+          {/* ACTION BUTTON */}
           <button
-            className={`primary-btn ${isCompleted || isInitiated ? "disabled" : ""
-              }`}
+            className={`candetailsx-primary-btn ${
+              isCompleted || isInitiated ? "disabled" : ""
+            }`}
             onClick={initiateVerification}
             disabled={isCompleted || isInitiated || loading}
           >
             {loading
               ? "Processing..."
               : isCompleted
-                ? "✅ Verification Completed"
+                ? "Verification Completed"
                 : isInitiated
                   ? "Verification Initiated"
-                  : "🚀 Initiate Verification"}
+                  : "+ New Verification"}
           </button>
+        </div>
+      </div>
 
-          {verification?.status === "ROLLBACK_REQUESTED" && (
-            <p className="info-text">⏳ Rollback requested</p>
-          )}
+      {/* HERO CARD */}
+      <div className="candetailsx-hero-card">
+        {/* LEFT */}
+        <div className="candetailsx-hero-left">
+          <div className="candetailsx-avatar">
+            {data.firstName?.charAt(0)}
+            {data.lastName?.charAt(0)}
+          </div>
 
+          <div className="candetailsx-hero-info">
+            <div className="candetailsx-name-row">
+              <h1>
+                {data.firstName} {data.lastName}
+              </h1>
+
+              <span
+                className={`candetailsx-status ${data.status?.toLowerCase()}`}
+              >
+                {data.status}
+              </span>
+            </div>
+
+            <p className="candetailsx-candidate-id">
+              Candidate ID: CND-{data.id}
+            </p>
+
+            <div className="candetailsx-contact-row">
+              <div>
+                <Mail size={16} />
+                {data.email}
+              </div>
+
+              <div>
+                <Phone size={16} />
+                {data.countryCode} {data.phone}
+              </div>
+
+              <div>
+                <CalendarDays size={16} />
+                Applied Recently
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <div className="candetailsx-hero-actions">
           {verification &&
             verification.status !== "COMPLETED" &&
             verification.status !== "ROLLBACK_REQUESTED" && (
-              <button className="warning-btn" onClick={requestRollback}>
-                🔁 Request Rollback
+              <button
+                className="candetailsx-warning-btn"
+                onClick={requestRollback}
+              >
+                <RotateCcw size={16} />
+                Request Rollback
               </button>
             )}
         </div>
       </div>
 
-      {/* GRID */}
-      <div className="details-grid">
-        {/* BASIC INFO */}
-        <div className="glass-card">
-          <h3>Basic Information</h3>
+      {/* PERSONAL INFO */}
+      <div className="candetailsx-section-card">
+        <div className="candetailsx-section-header">
+          <div className="candetailsx-section-title">
+            <User size={18} />
 
-          <div className="info-grid">
-            <div>
-              <label>Email</label>
-              <p>{data.email}</p>
-            </div>
-
-            <div>
-              <label>Phone</label>
-              <p>
-                {data.countryCode} {data.phone}
-              </p>
-            </div>
-
-            <div>
-              <label>Status</label>
-              <p>{data.status}</p>
-            </div>
+            <h3>Personal Information</h3>
           </div>
         </div>
 
-        {/* CURRENT ADDRESS */}
-        <div className="glass-card">
-          <h3>Current Address</h3>
-
-          <div className="address-block">
-            <p>{data.currentAddress?.street || "-"}</p>
+        <div className="candetailsx-info-grid">
+          <div>
+            <label>Full Name</label>
 
             <p>
-              {data.currentAddress?.city || "-"},{" "}
-              {data.currentAddress?.state || "-"}
+              {data.firstName} {data.lastName}
             </p>
+          </div>
 
-            <p>{data.currentAddress?.zipCode || "-"}</p>
+          <div>
+            <label>Email</label>
+
+            <p>{data.email}</p>
+          </div>
+
+          <div>
+            <label>Phone</label>
+
+            <p>
+              {data.countryCode} {data.phone}
+            </p>
+          </div>
+
+          <div>
+            <label>Department</label>
+
+            <p>{data.department?.name}</p>
+          </div>
+
+          <div>
+            <label>Current Address</label>
+
+            <p>
+              {data.currentAddress?.street || "-"},{" "}
+              {data.currentAddress?.city || "-"}
+            </p>
+          </div>
+
+          <div>
+            <label>Permanent Address</label>
+
+            <p>
+              {data.permanentAddress?.street || "-"},{" "}
+              {data.permanentAddress?.city || "-"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* APPLICATION INFO */}
+      <div className="candetailsx-section-card">
+        <div className="candetailsx-section-header">
+          <div className="candetailsx-section-title">
+            <Briefcase size={18} />
+
+            <h3>Application Information</h3>
           </div>
         </div>
 
-        {/* PERMANENT ADDRESS */}
-        <div className="glass-card">
-          <h3>Permanent Address</h3>
+        <div className="candetailsx-info-grid">
+          <div>
+            <label>Role</label>
 
-          <div className="address-block">
-            <p>{data.permanentAddress?.street || "-"}</p>
+            <p>{data.role || "-"}</p>
+          </div>
 
-            <p>
-              {data.permanentAddress?.city || "-"},{" "}
-              {data.permanentAddress?.state || "-"}
-            </p>
+          <div>
+            <label>Status</label>
 
-            <p>{data.permanentAddress?.zipCode || "-"}</p>
+            <p>{data.status}</p>
+          </div>
+
+          <div>
+            <label>Department</label>
+
+            <p>{data.department?.name}</p>
+          </div>
+
+          <div>
+            <label>Verification</label>
+
+            <p>{verification?.status || "Not Initiated"}</p>
           </div>
         </div>
       </div>
 
       {/* EDUCATION */}
-      <div className="glass-card section-card">
-        <h3>Education</h3>
+      <div className="candetailsx-section-card">
+        <div className="candetailsx-section-header">
+          <div className="candetailsx-section-title">
+            <GraduationCap size={18} />
 
-        <div className="timeline-list">
+            <h3>Education</h3>
+          </div>
+        </div>
+
+        <div className="candetailsx-timeline-list">
           {!data.educations || data.educations.length === 0 ? (
             <p>No education details available</p>
           ) : (
             data.educations.map((edu, index) => (
-              <div key={index} className="timeline-item">
-                <div className="timeline-dot" />
+              <div key={index} className="candetailsx-timeline-item">
+                <div className="candetailsx-timeline-dot" />
 
-                <div className="timeline-content">
+                <div className="candetailsx-timeline-content">
                   <h4>{edu.degree || "-"}</h4>
 
                   <p>{edu.institution || "-"}</p>
 
-                  <span>{edu.graduationYear || "-"}</span>
+                  <span>Graduation: {edu.graduationYear || "-"}</span>
                 </div>
               </div>
             ))
@@ -255,18 +341,24 @@ export default function CandidateDetails() {
       </div>
 
       {/* EXPERIENCE */}
-      <div className="glass-card section-card">
-        <h3>Experience</h3>
+      <div className="candetailsx-section-card">
+        <div className="candetailsx-section-header">
+          <div className="candetailsx-section-title">
+            <Building2 size={18} />
 
-        <div className="timeline-list">
+            <h3>Experience</h3>
+          </div>
+        </div>
+
+        <div className="candetailsx-timeline-list">
           {!data.experiences || data.experiences.length === 0 ? (
             <p>No experience details available</p>
           ) : (
             data.experiences.map((exp, index) => (
-              <div key={index} className="timeline-item">
-                <div className="timeline-dot" />
+              <div key={index} className="candetailsx-timeline-item">
+                <div className="candetailsx-timeline-dot" />
 
-                <div className="timeline-content">
+                <div className="candetailsx-timeline-content">
                   <h4>{exp.companyName || "-"}</h4>
 
                   <p>{exp.role || "-"}</p>
@@ -278,6 +370,44 @@ export default function CandidateDetails() {
               </div>
             ))
           )}
+        </div>
+      </div>
+
+      {/* VERIFICATION SUMMARY */}
+      <div className="candetailsx-summary-grid">
+        <div className="candetailsx-summary-card">
+          <div>
+            <h5>Total Verifications</h5>
+
+            <h2>{verification ? 1 : 0}</h2>
+          </div>
+
+          <ShieldCheck size={26} />
+        </div>
+
+        <div className="candetailsx-summary-card">
+          <div>
+            <h5>Completed</h5>
+
+            <h2>{verification?.status === "COMPLETED" ? 1 : 0}</h2>
+          </div>
+
+          <ShieldCheck size={26} />
+        </div>
+
+        <div className="candetailsx-summary-card">
+          <div>
+            <h5>In Progress</h5>
+
+            <h2>
+              {verification?.status === "IN_PROGRESS" ||
+              verification?.status === "INITIATED"
+                ? 1
+                : 0}
+            </h2>
+          </div>
+
+          <Clock3 size={26} />
         </div>
       </div>
     </div>
