@@ -43,7 +43,7 @@ public class JwtUtil {
 
 		return Jwts.builder().setSubject(user.getUsername()).claim("role", "ROLE_" + user.getRole().name())
 				.claim("orgId", user.getOrgId()).claim("slug", slug) // can be null for vendor
-				.setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
+				.setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
 				.signWith(getKey(), SignatureAlgorithm.HS256).compact();
 	}
 

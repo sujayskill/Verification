@@ -29,9 +29,9 @@ public class ClientService {
 	public Client createClient(ClientDTO dto) {
 		long nextId = clientRepository.count() + 1;
 		String orgId = String.format("TF%04d", nextId);
-
 		Client client = clientMapper.toEntity(dto, orgId);
 		client.setCompanySlug(generateSlug(client.getCompanyName()));
+		System.out.println("Creating client");
 		return clientRepository.save(client);
 	}
 
@@ -77,7 +77,7 @@ public class ClientService {
 	}
 
 //	This is for search clients in vendor client's section
-	public List<Client> searchClients(String q, String location, Integer size) {
+	public List<Client> searchClients(String q, String location, String size) {
 
 	    // default empty string for LIKE
 	    String query = (q == null) ? "" : q;

@@ -20,28 +20,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClientActivityController {
 
-	private final JwtUtil jwtUtil;
-	private final ClientActivityService clientActivityService;
-
-	private String extractOrgId(String authHeader) {
-		String token = authHeader.substring(7);
-		Claims claims = jwtUtil.extractClaims(token);
-
-		String orgId = claims.get("orgId", String.class);
-
-		if (orgId == null) {
-			throw new RuntimeException("Invalid token: orgId missing");
-		}
-
-		return orgId;
-	}
-
-	@GetMapping("/dashboard")
-	public Map<String, Object> getClientDashboard(@RequestHeader("Authorization") String authHeader) {
-
-		String orgId = extractOrgId(authHeader);
-
-		return clientActivityService.getClientDashboard(orgId);
-	}
+	
 
 }

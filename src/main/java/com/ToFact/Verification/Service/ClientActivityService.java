@@ -129,29 +129,7 @@ public class ClientActivityService {
 		return saved;
 	}
 
-	public Map<String, Object> getClientDashboard(String orgId) {
-
-		Map<String, Object> res = new HashMap<>();
-
-		// 🔹 TOTAL CANDIDATES
-		long totalCandidates = candidateRepo.countByClient_OrgId(orgId);
-		// 🔹 STATUS COUNTS
-		long inProgress = candidateRepo.countByClientOrgIdAndStatusIn(orgId,
-				List.of(ClientVerificationStatus.INITIATED, ClientVerificationStatus.IN_PROGRESS,
-						ClientVerificationStatus.ROLLBACK_REQUESTED, ClientVerificationStatus.ROLLED_BACK));
-
-		long completed = candidateRepo.countByClient_OrgIdAndStatus(orgId, ClientVerificationStatus.COMPLETED);
-
-		// 🔥 GRAPH DATA (LAST 6 MONTHS)
-		List<Map<String, Object>> hiringTrend = getMonthlyHiringData(orgId);
-
-		res.put("totalCandidates", totalCandidates);
-		res.put("inProgress", inProgress);
-		res.put("completed", completed);
-		res.put("hiringTrend", hiringTrend);
-
-		return res;
-	}
+	
 
 	public List<Map<String, Object>> getMonthlyHiringData(String orgId) {
 

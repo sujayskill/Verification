@@ -34,10 +34,11 @@ public class ClientController {
 	private final ClientRepository clientRepo;
 
 	// 🔹 Create
-	@PreAuthorize("hasole('VENDOR_ADMIN')")
+	@PreAuthorize("hasRole('VENDOR_ADMIN')")
 	@PostMapping("/create")
 	public ResponseEntity<Client> create(@RequestBody ClientDTO dto) {
 		Client created = clientService.createClient(dto);
+		System.out.println("Calling create client service");
 		return ResponseEntity.ok(created);
 	}
 
@@ -76,7 +77,7 @@ public class ClientController {
 	@PreAuthorize("hasAnyRole('VENDOR','VENDOR_ADMIN')")
 	@GetMapping("/search")
 	public List<Client> searchClients(@RequestParam(required = false) String q,
-			@RequestParam(required = false) String location, @RequestParam(required = false) Integer size) {
+			@RequestParam(required = false) String location, @RequestParam(required = false) String size) {
 		return clientService.searchClients(q, location, size);
 	}
 

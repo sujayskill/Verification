@@ -110,8 +110,9 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 	List<Candidate> searchForVerification(@Param("orgId") String orgId, @Param("q") String q,
 			@Param("status") ClientVerificationStatus status);
 
-//	This method is for search functionality in Candidates page in Candidates section in Client portal
-//	Search with Email, Location, Phone, Number, Role
+//  MYSQL
+//This method is for search functionality in Candidates page in Candidates section in Client portal
+//Search with Email, Location, Phone, Number, Role
 	@Query("""
 			    SELECT c FROM Candidate c
 			    WHERE c.department.id = :deptId
@@ -134,6 +135,30 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 			    )
 			    ORDER BY c.createdAt DESC
 			""")
-	List<Candidate> searchCandidates(@Param("deptId") Long deptId, @Param("q") String q,
-			@Param("status") ClientVerificationStatus status);
+	List<Candidate> searchCandidates(@Param("deptId") Long deptId, @Param("q") String q, @Param("status") ClientVerificationStatus status);
+
 }
+
+//PL-SQL
+//This method is for search functionality in Candidates page in Candidates section in Client portal
+//Search with Email, Location, Phone, Number, Role
+//@Query("""
+//		SELECT c
+//		FROM Candidate c
+//		WHERE c.department.id = :deptId
+//		AND (
+//		    :q IS NULL
+//		    OR LOWER(c.firstName)
+//		       LIKE LOWER(CONCAT('%', :q, '%'))
+//		    OR LOWER(c.lastName)
+//		       LIKE LOWER(CONCAT('%', :q, '%'))
+//		    OR LOWER(c.email)
+//		       LIKE LOWER(CONCAT('%', :q, '%'))
+//		    OR LOWER(COALESCE(c.location, ''))
+//		       LIKE LOWER(CONCAT('%', :q, '%'))
+//		    OR LOWER(COALESCE(c.role, ''))
+//		       LIKE LOWER(CONCAT('%', :q, '%'))
+//		    OR COALESCE(c.phone, '')
+//		       LIKE CONCAT('%', :q, '%')
+//		) AND ( :status IS NULL OR c.status = :status ) ORDER BY c.createdAt DESC """)
+//List<Candidate> searchCandidates(@Param("deptId") Long deptId, @Param("q") String q, @Param("status") ClientVerificationStatus status);

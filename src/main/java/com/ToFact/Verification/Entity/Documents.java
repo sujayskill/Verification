@@ -37,7 +37,7 @@ public class Documents {
 	private DocumentType fileType;
 
 	@Lob
-	@Column(columnDefinition = "BYTEA")
+	@Column(columnDefinition = "BLOB")
 	private byte[] data; // 🔥 FILE STORED IN DB
 
 	private String contentType; // image/png, application/pdf
